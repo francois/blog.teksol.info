@@ -44,7 +44,7 @@ I'm not in fact using git submodules, or anything fancy.  I'm cloning the reposi
 
 h3. samples/import_svn_svn.rb
 
-<textarea name="code" cols="55" rows="15" class="ruby">#!/usr/bin/env ruby
+<% code do -%>#!/usr/bin/env ruby
 #
 # Import an SVN repository into an SVN working copy.
 require File.dirname(__FILE__) + "/common"
@@ -83,11 +83,11 @@ wc.create
 wc.copy_from(commit)
 wc.remember(commit.remember_values)
 wc.finalize
-</textarea>
+<% end -%>
 
 h3. samples/import_git_svn.rb
 
-<textarea name="code" cols="55" rows="15" class="ruby">#!/usr/bin/env ruby
+<% code do -%>#!/usr/bin/env ruby
 #
 # Import a Git project into a Subversion working copy.
 require File.dirname(__FILE__) + "/common"
@@ -123,7 +123,7 @@ wc.create
 wc.copy_from(commit)
 wc.remember(commit.remember_values)
 wc.finalize
-</textarea>
+<% end -%>
 
 Do you see the differences ?  They're all in the setup code.  Once we hit <code>commit.checkout_to</code>, everything else is the same.
 

@@ -8,7 +8,7 @@ filter:
 --- 
 Hmmm, I know "Subversion":http://subversion.tigris.org/ doesn't do it any better, but I was led to believe "Git":http://git.or.cz/ tracked directory renames.  At least, it didn't behave as I expected.  Here's a reproduction recipe:
 
-<textarea name="code" cols="55" rows="15" class="shell" title="repro.sh">#!/bin/sh
+<% code("repro.sh", :lang => "bash") do -%>#!/bin/sh
 # This is repro.sh -- use at your own risks
 rm -rf recipe > /dev/null
 mkdir recipe
@@ -30,7 +30,7 @@ git commit -m "renamed"
 git checkout perf
 git merge master
 find | grep -v .git
-</textarea>
+<% end -%>
 
 <% code(:lang => "shell") do -%>$ . repro.sh 
 /home/francois/src/recipe

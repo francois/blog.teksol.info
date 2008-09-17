@@ -10,10 +10,10 @@ Rails deprecations are a nice thing.  They allow us to know what transition path
 
 If you have a decent test coverage, you might want to add this to your config/environments/test.rb:
 
-<textarea name="code" cols="55" rows="11" class="ruby" title="config/environments/test.rb">class DeprecatedFunctionality < SyntaxError; end
+<% code("config/environments/test.rb") do -%>class DeprecatedFunctionality < SyntaxError; end
 ActiveSupport::Deprecation.behavior = Proc.new {|message, callstack|
   raise DeprecatedFunctionality, message
 }
-</textarea>
+<% end -%>
 
 This will raise an exception instead of simply reporting the warning to the console.  If you have "CruiseControl.rb":http://cruisecontrolrb.thoughtworks.com/ installed, the messages will show up as errors there too.  This is a quick and easy way to force yourself to actually use the new functionality.

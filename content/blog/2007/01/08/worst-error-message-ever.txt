@@ -6,10 +6,10 @@ filter:
   - erb
   - textile
 --- 
-<textarea name="code" cols="55" rows="8" class="shell">$ svn commit
+<% code(:lang => "shell") do -%>$ svn commit
 svn: MKACTIVITY of '/!svn/act/313eea44-b740-40fe-8f1e-f02955f9868f':
 SSL negotiation failed: SSL error: decryption failed or bad record mac (https://svn.xlsuite.org)
-</textarea>
+<% end -%>
 
 There exists "When performing Subversion operations involving a lot of data over SSL, I get the error SSL negotiation failed: SSL error: decryption failed or bad record mac":http://subversion.tigris.org/faq.html#ssl-negotiation-error on the Subversion FAQ.  But I searched for that after the fact.
 

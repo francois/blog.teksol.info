@@ -8,10 +8,10 @@ filter:
 --- 
 The "Money":http://rubyforge.org/projects/money library is a useful.  Unfortunately, release 1.5.9 has an error.  One cannot substract an amount from the empty Money.
 
-<textarea name="code" cols="55" rows="15" class="ruby">def test_substract_from_zero
+<% code do -%>def test_substract_from_zero
   assert_equal -12.to_money, Money.empty - (12.to_money)
 end
-</textarea>
+<% end -%>
 
 The test case will fail with this:
 <% code(:lang => "shell") do -%>  1) Failure:
@@ -22,11 +22,11 @@ test_substract_from_zero(MoneyTest) [./test/unit/money_test.rb:29]:
 
 The error is caused by <code class="method">Money#-(other_money)</code>:
 
-<textarea name="code" cols="55" rows="15" class="ruby">def -(other_money)
+<% code do -%>def -(other_money)
   return other_money.dup if cents.zero?
   ...
 end
-</textarea>
+<% end -%>
 
 <code class="expression">return other_money.dup if cents.zero?</code> should be removed to allow the test case to pass.
 

@@ -12,5 +12,5 @@ A minor correction to "Piston":http://piston.rubyforge.org/:
 * The import subcommand could import another revision than what was intended, if HEAD was updated while the import is in progress.
 
 Install using:
-<textarea name="code" cols="55" rows="8" class="shell">$ gem install piston
-</textarea>
+<% code(:lang => "shell") do -%>$ gem install piston
+<% end -%>

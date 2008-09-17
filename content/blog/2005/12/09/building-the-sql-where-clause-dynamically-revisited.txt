@@ -7,7 +7,7 @@ filter:
   - textile
 --- 
 In "Building the SQL WHERE clause dynamically in Rails":http://blog.teksol.info/articles/2005/10/31/building-the-sql-where-clause-dynamically-in-rails, I showed how to build the WHERE clause like this:
-<textarea name="code" cols="55" rows="15" class="ruby">class SearchController < ApplicationController
+<% code do -%>class SearchController < ApplicationController
   def search
     conditions = ['1=1']
 
@@ -18,11 +18,11 @@ In "Building the SQL WHERE clause dynamically in Rails":http://blog.teksol.info/
         :conditions => [conditions.join(' AND '), params])
   end
 end
-</textarea>
+<% end -%>
 
 "Ezra Zygmuntowicz":http://brainspl.at/ of "brainsp.at":http://brainspl.at/ fame
 created a <code class="ruby module">Cond</code> module to make that even easier:
-<textarea name="code" cols="55" rows="15" class="ruby">class SearchController < ApplicationController
+<% code do -%>class SearchController < ApplicationController
   def search
     conditions = Cond::create do
       cond1 '=', params[:cond1]
@@ -33,7 +33,7 @@ created a <code class="ruby module">Cond</code> module to make that even easier:
         :conditions => conditions)
   end
 end
-</textarea>
+<% end -%>
 
 See "Build AR::Base.find's :conditions clause dynamically take one":http://brainspl.at/articles/2005/12/02/build-ar-base-finds-conditions-clause-dynamically-take-one for the full source code.
 

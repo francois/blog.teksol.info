@@ -17,7 +17,7 @@ I just got hit by this famous error again.  And I am not the only one:
 Now, I know I should put my patches where my mouth is.  And that's exactly what I'm trying to do here.  My application is on the 1.2 branch, and I get this error if I have the Response Logger plugin loaded.  Trying again with Edge Rails, I again get the error.  If I try with WEBrick or Mongrel, same error.  Loading the console produces the same error.  Using Windows or Linux changes nothing: same error.
 
 The exact backtrace is:
-<textarea name="code" cols="55" rows="15" class="shell">$ ruby script\console
+<% code(:lang => "shell") do -%>$ ruby script\console
 Loading development environment.
 ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:249:in `load_missing_constant': Expected ./script/../config/../config/../vendor/plugins/response_logger/lib/response_logger.rb to define ResponseLogger (LoadError)
         from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:452:in `const_missing'
@@ -33,6 +33,6 @@ Loading development environment.
         from C:/ruby/lib/ruby/1.8/irb/init.rb:21:in `setup'
         from C:/ruby/lib/ruby/1.8/irb.rb:54:in `start'
         from C:/ruby/bin/irb.bat:20
-</textarea>
+<% end -%>
 
 In this application, I am using "Engines":http://rails-engines.org/, along with LoginEngine.  You really need the right version of Engines with the right version of Rails for things to work out well:  "Rails 1.2":http://dev.rubyonrails.org/svn/rails/branches/1-2-stable requires "Engines 1.2":http://svn.rails-engines.org/engines/tags/rel_1.2.0/.

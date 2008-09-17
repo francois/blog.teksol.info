@@ -10,7 +10,7 @@ Now that I have a couple of minutes, let me tell you what I changed exactly in "
 
 Initially, app/models/comment.rb looked like this:
 
-<textarea name="code" cols="55" rows="15" class="ruby">class Comment < Content
+<% code do -%>class Comment < Content
   def check_approval(site, request)
     self.approved = site.approve_comments?
     if valid_comment_system?(site)
@@ -21,7 +21,7 @@ Initially, app/models/comment.rb looked like this:
     end
   end
 end
-</textarea>
+<% end -%>
 
 <p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/bugfixing/app/models/comment.rb#L62">app/models/comment.rb@bugfixing</a></p>
 
@@ -29,7 +29,7 @@ The original method was intimately tied to "Akismet":http://akismet.com/: it wou
 
 The code changed from the above to this:
 
-<textarea name="code" cols="55" rows="15" class="ruby">class Comment < Content
+<% code do -%>class Comment < Content
   def check_approval(site, request)
     self.approved = site.approve_comments? || spam_engine(site).ham?(article.permalink_url(site, request), self)
   end
@@ -38,20 +38,20 @@ The code changed from the above to this:
     site.spam_engine
   end
 end
-</textarea>
+<% end -%>
 
 <p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/app/models/comment.rb#L62">app/models/comment.rb@multiengine</a></p>
 
 So now, I had to get hold of an instance of SpamDetectionEngine.  I again turned to the "Gang of Four":http://en.wikipedia.org/wiki/Design_Patterns patterns, and this is when I realized I needed a "Strategy Pattern":http://en.wikipedia.org/wiki/Strategy_pattern.  The Site was the most obvious place to put this, as the configuration for storing Akismet details was already there.  I simply extended the concept further to allow any engine to store any configuration settings in Site, and made Site return an instance of my spam engine:
 
-<textarea name="code" cols="55" rows="15" class="ruby">class Site < ActiveRecord::Base
+<% code do -%>class Site < ActiveRecord::Base
   def spam_engine
     klass_name = read_attribute(:spam_detection_engine)
     return Mephisto::SpamDetectionEngines::NullEngine.new(self) if klass_name.blank?
     klass_name.constantize.new(self)
   end
 end
-</textarea>
+<% end -%>
 
 <p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/app/models/site.rb#L109">app/models/site.rb@multiengine</a></p>
 
@@ -61,7 +61,7 @@ So, I moved the old Akismet code to the AkismetEngine, and created a new Defensi
 
 Next, I needed a way to configure those different engines.  What I needed was a way to render templates, and have the engines provide the templates to the regular Rails views.  I made myself a custom Template class, which renders a simple ERB template.  I put the templates right next to the engine it's linked to.  Then it was just a matter of rendering the template.  Looking at the AkismetEngine, the <code>#settings_template</code> code looks like this:
 
-<textarea name="code" cols="55" rows="15" class="ruby">module Mephisto
+<% code do -%>module Mephisto
   module SpamDetectionEngines
     class AkismetEngine < Mephisto::SpamDetectionEngine::Base
       class << self
@@ -72,7 +72,7 @@ Next, I needed a way to configure those different engines.  What I needed was a 
     end
   end
 end
-</textarea>
+<% end -%>
 
 <p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/lib/mephisto/spam_detection_engines/akismet_engine.rb#L7">lib/mephisto/spam_detection_engines/akismet_engine.rb@multiengine</a></p>
 
@@ -82,7 +82,7 @@ Finally, Defensio provides statistics through it's API.  I wanted to show nice g
 
 I had a bit of discussion with "Carl Mercier":http://blog.carlmercier.com/ about the accuracy graph.  He said Defensio looked poor because the green bar is very low.  I countered that the difference between 95 and 96 percent, if the graph were 100 pixels high, would only be 1 pixel.  The graph's scale is actually 95 to 100%, so now the difference between 95 and 96 percent will be 20 pixels, if the bar is 100 pixels high.  Anyway, this is an unresolved issue, and I'd like to know what people feel.  You can change this yourself by cloning the repository and editing the Defensio statistics template:
 
-<textarea name="code" cols="55" rows="15" class="ruby"><#%
+<% code do -%><#%
   spam = @statistics.spam.to_i
   ham = @statistics.ham.to_i
   accuracy = @statistics.accuracy.to_f * 100.0
@@ -96,7 +96,7 @@ I had a bit of discussion with "Carl Mercier":http://blog.carlmercier.com/ about
   accuracy_chd = sprintf("t:%.1f|%.1f", mapped_accuracy, 100.0)
   retraining_chd = sprintf("t:%.1f,%.1f", false_positives_pct, false_negatives_pct)
 %>
-</textarea>
+<% end -%>
 
 <p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/lib/mephisto/spam_detection_engines/defensio_statistics.html.erb#L5">lib/mephisto/spam_detection_engines/defensio_statistics.html.erb@multiengine</a></p>
 
@@ -104,11 +104,11 @@ All in all, I really enjoyed refactoring a tool that I use regularly.  I didn't 
 
 So, what are you waiting for ?
 
-<textarea name="code" cols="55" rows="15" class="shell">git clone git://github.com/francois/mephisto.git mephisto_defensio
+<% code(:lang => "shell") do -%>git clone git://github.com/francois/mephisto.git mephisto_defensio
 cd mephisto_defensio
 git checkout multiengine
 rake db:bootstrap db:migrate
 thin start
-</textarea>
+<% end -%>
 
 NOTE:  There is a book called "Refactoring to Patterns":http://www.industriallogic.com/xp/refactoring/.  I haven't read it yet, but it seems like a good read.

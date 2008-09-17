@@ -13,7 +13,7 @@ Why should you switch to "Defensio":http://defensio.com/ instead of "Akismet":ht
 
 Defensio provides useful statistics to the blogger.  A typical response would look like:
 
-<textarea name="code" cols="55" rows="15" class="yaml">---
+<% code(:lang => "yaml") do -%>---
 defensio-result: 
   message: ""
   status: success
@@ -21,7 +21,7 @@ defensio-result:
   spaminess: 0.7
   api-version: "1.1"
   spam: true
-</textarea>
+<% end -%>
 
 Notice how Defensio returned the spaminess and a signature ?  The signature can be used to retrain Defensio.  When a false positive or negative comes through, the "Defensio API":http://defensio.com/api simply accepts a series of signatures, and will retrain itself.  Since the signature is a short-hand for the whole comment, *all* of the data is available for retraining:  IP, author email, author name, comment's body, etc.
 

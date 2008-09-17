@@ -27,7 +27,7 @@ It is *imperative* that you locally update your piston:local-revision property m
 
 An example is in order.
 
-<textarea name="code" cols="55" rows="15" class="shell">$ svn propget piston:local-revision vendor\rails
+<% code(:lang => "shell") do -%>$ svn propget piston:local-revision vendor\rails
 29
 
 $ svn log -r head:1 vendor/rails
@@ -45,6 +45,6 @@ $ svn propset piston:local-revision 31 vendor\rails
 property 'piston:local-revision' set on 'vendor\rails'
 
 $ svn commit --quiet --message "Updated piston:local-revision to 31, per ChangeLog instructions"
-</textarea>
+<% end -%>
 
 Visit "Piston's":http://piston.rubyforge.org/ website.

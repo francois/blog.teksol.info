@@ -30,24 +30,24 @@ Let's assume we are on <code class="branch">trunk/</code>.  The following migrat
     20061208111505_create_taggings.rb</pre>
 
 The migrations table I was talking about above would look something like this:
-<textarea name="code" cols="55" rows="15" class="ruby">create_table :schema_migrations, :force => true do |t|
+<% code do -%>create_table :schema_migrations, :force => true do |t|
   t.column :migration, :string, :limit => 20, :null => false
   t.column :migrated_at, :datetime
 end
 
 add_index :schema_migrations, :migration
-</textarea>
+<% end -%>
 
 We have another developer who was working on another branch, and he just merged back to <code class="branch">trunk/</code>.  Let's update:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ svn update
+<% code(:lang => "shell") do -%>$ svn update
 A db/migrate/20061208161723_create_links.rb
 A db/migrate/20061208111303_create_users.rb
-</textarea>
+<% end -%>
 
 Now that we have his code, let's migrate and run the tests
 
-<textarea name="code" cols="55" rows="15" class="shell">$ rake db:migrate test:recent
+<% code(:lang => "shell") do -%>$ rake db:migrate test:recent
 == CreateUsers: migrating
 ...
 == CreateLinks: migrating
@@ -56,7 +56,7 @@ Now that we have his code, let's migrate and run the tests
 ...
 
 87 tests, 125 assertions, 0 failures, 0 errors
-</textarea>
+<% end -%>
 
 CreateUsers was run because it's timestamp comes before CreatePosts.  CreatePosts, CreateTags and CreateTaggings weren't run because they had already been run.  Finally, CreateLinks was run because it hadn't been run yet.
 

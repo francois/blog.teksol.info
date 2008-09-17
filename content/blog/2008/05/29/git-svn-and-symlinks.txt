@@ -8,7 +8,7 @@ filter:
 --- 
 They just work.  Ain't that cool ?
 
-<textarea name="code" cols="55" rows="15" class="shell">$ ln -s a b
+<% code(:lang => "shell") do -%>$ ln -s a b
 $ git add b
 $ git commit
 $ git svn dcommit
@@ -20,6 +20,6 @@ Properties on 'b':
 $ ls -l
 lrwxr-xr-x  1 francois  staff  14 29 mai 15:10 a
 lrwxr-xr-x  1 francois  staff  14 29 mai 15:10 b -> a
-</textarea>
+<% end -%>
 
 Did you know symlinks were supported in Subversion since "1.1.0":http://svn.collab.net/repos/svn/tags/1.1.0/CHANGES ?  I certainly didn't remember.

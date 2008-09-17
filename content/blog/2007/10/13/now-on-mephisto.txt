@@ -10,14 +10,14 @@ Well, after a long time, I finally made the plunge.  This blog is now running on
 
 Mephisto handles most redirects itself, so here's my redirection section in <code class="file">config/environment.rb</code>:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="config/environment.rb">Mephisto::Routing.redirect  "articles/?/?/?/?" => "$1/$2/$3/$4",
+<% code("config/environment.rb") do -%>Mephisto::Routing.redirect  "articles/?/?/?/?" => "$1/$2/$3/$4",
                             "articles/tag/?" => "tags/$1",
                             "articles/category/?" => "tags/$1"
-</textarea>
+<% end -%>
 
 I had to use "Apache":http://httpd.apache.org/'s "RewriteRule":http://httpd.apache.org/docs/2.2/en/mod/mod_rewrite.html#rewriterule to take care of Typo's feeds:
 
-<textarea name="code" cols="55" rows="15" class="conf" title="vhost.conf"># Stick this in your .htaccess file
+<% code("vhost.conf", :lang => "conf") do -%># Stick this in your .htaccess file
 
 # Allow FeedBurner to index the site, but redirect everyone else to FeedBurder
 RewriteCond %{HTTP_USER_AGENT} !FeedBurner
@@ -25,7 +25,7 @@ RewriteRule ^/feed.* http://feeds.feedburner.com/teksol [R=301,L]
 
 # Redirect old feed URLs to FeedBurner
 RewriteRule ^/xml.* http://feeds.feedburner.com/teksol [R=301,L]
-</textarea>
+<% end -%>
 
 And I *finally* changed my blog's feed to "FeedBurder":http://feedburner.com/.  Subscribe to the new URL:  "http://feeds.feedburner.com/teksol":http://feeds.feedburner.com/teksol.  I configured Apache to take care of it automatically, so you shouldn't have to do anything to get your news reader to switch.
 

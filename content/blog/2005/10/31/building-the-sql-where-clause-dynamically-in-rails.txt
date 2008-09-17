@@ -11,7 +11,7 @@ Over on the "Rails mailing list":http://news.gmane.org/gmane.comp.lang.ruby.rail
 His problem is a form with four conditions.  Each may be applied, but any or all of them may be set to "All".
 
 The brute force way of doing this would be:
-<textarea name="code" cols="55" rows="15" class="ruby">class SearchController < ApplicationController
+<% code do -%>class SearchController < ApplicationController
   def search
     case
     when params[:cond1] && params[:cond2]
@@ -28,12 +28,12 @@ The brute force way of doing this would be:
     @results = Model.find(:all, :conditions => conditions)
   end
 end
-</textarea>
+<% end -%>
 
 Note that in this case, you have to pay attention to the order in which you evaluate your conditions.  If you put <code>params[:cond1]</code> before <code>params[:cond1] && params[:cond2]</code>, and <code>params[:cond1]</code> is <code>true</code>, "Ruby":http://www.ruby-lang.org/en/ will only evaluate the <code>params[:cond1]</code> branch.
 
 Instead, I prefer to do this:
-<textarea name="code" cols="55" rows="15" class="ruby">class SearchController < ApplicationController
+<% code do -%>class SearchController < ApplicationController
   def search
     conditions = ['1=1']
 
@@ -44,11 +44,11 @@ Instead, I prefer to do this:
         :conditions => [conditions.join(' AND '), params])
   end
 end
-</textarea>
+<% end -%>
 
 Note how I initialize the <var>conditions</var> array: <code>['1=1']</code>.  This is to prevent a problem later on when "Rails":http://www.rubyonrails.com/ evaluates the conditions option to "find":http://api.rubyonrails.com/classes/ActiveRecord/Base.html#M000684 .  If we leave the array empty, "Rails":http://www.rubyonrails.com/ will append the WHERE empty condition, generating something like this:
-<textarea name="code" cols="55" rows="15" class="sql">SELECT * FROM models WHERE 
-</textarea>
+<% code(:lang => "sql") do -%>SELECT * FROM models WHERE 
+<% end -%>
 
 The database backend will complain with a syntax error.
 

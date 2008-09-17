@@ -8,7 +8,7 @@ filter:
 --- 
 I just hit upon a technique which I haven't seen before.  It is akin to using modules to add behaviour to an object.  Let me just present the technique and discuss it afterwards:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/future.rb">class Future < ActiveRecord::Base
+<% code("app/models/future.rb") do -%>class Future < ActiveRecord::Base
   def execute
     # execute the Future
   end
@@ -24,7 +24,7 @@ I just hit upon a technique which I haven't seen before.  It is akin to using mo
 
   alias_method_chain :execute, :interval
 end
-</textarea>
+<% end -%>
 
 A "Future":http://en.wikipedia.org/wiki/Future_%28programming%29 is an object that promises to return a result sometime in the future.  I am using it here in the context of a Rails application.
 

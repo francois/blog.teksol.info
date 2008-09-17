@@ -10,7 +10,7 @@ I just found out about "Atomic Coding with Subversion":http://t-a-w.blogspot.com
 
 I ran TAW's svn_log_summary, and here are my results:
 
-<textarea name="code" cols="55" rows="15" class="shell">Activity of francois:
+<% code(:lang => "shell") do -%>Activity of francois:
 Time between commits distribution:
 * 10% - 28.205291s
 * 25% - 51.901505s
@@ -32,6 +32,6 @@ Median number of affected files: 2
 * 20 files - 1 time
 * 38 files - 1 time
 * 56 files - 1 time
-</textarea>
+<% end -%>
 
 Five minutes between commits ?  Why, I didn't know I was committing that often.

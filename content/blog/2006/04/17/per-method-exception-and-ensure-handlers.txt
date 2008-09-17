@@ -8,7 +8,7 @@ filter:
 --- 
 In Ruby, methods automatically define <code class="keyword">begin</code>/<code class="keyword">end</code> blocks.  That makes it easy to write exception handlers and ensure blocks:
 
-<textarea name="code" cols="55" rows="15" class="ruby">def access!(options={})
+<% code do -%>def access!(options={})
   raise AuthorizationFailure if self.email != options[:email]
   self.download_count += 1
 
@@ -19,6 +19,6 @@ In Ruby, methods automatically define <code class="keyword">begin</code>/<code c
   ensure
     self.save!
 end
-</textarea>
+<% end -%>
 
 It is important to re-raise the exception in the exception handler, or else the exception will be silently thrown away.

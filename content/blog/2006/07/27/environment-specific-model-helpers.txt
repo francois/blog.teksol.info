@@ -10,7 +10,7 @@ I just hit a case which I think will interest the community at large.
 
 Did you know it is possible to conditionnaly define methods ?  Something like this is quite possible:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/player.rb">class Player < User
+<% code("app/models/player.rb") do -%>class Player < User
   if 'test' == RAILS_ENV then
     # Conditional method definition to ease testing
     def play_in(tournament, final_score)
@@ -18,7 +18,7 @@ Did you know it is possible to conditionnaly define methods ?  Something like th
     end
   end
 end
-</textarea>
+<% end -%>
 
 Is that a code smell, or is it a really useful feature ?  I can't decide...
 

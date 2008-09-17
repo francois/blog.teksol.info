@@ -9,14 +9,14 @@ filter:
 Since 1.1.0, "Rails":http://www.rubyonrails.org/ includes grouping and calculation functions.  "maximum":http://api.rubyonrails.com/classes/ActiveRecord/Calculations/ClassMethods.html#M000826 is what we want to use here.
 
 The system I am building has many users, and each user has it's own invoice number sequence.  Here is the code in it's entirity:
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/invoice.rb">class Invoice < ActiveRecord::Base
+<% code("app/models/invoice.rb") do -%>class Invoice < ActiveRecord::Base
   belongs_to :user
 
   def self.find_next_available_number_for(user, default=999)
     (user.invoices.maximum(:no) || default).succ
   end
 end
-</textarea>
+<% end -%>
 
 This code is pretty simple to read.  In fact, in English, it translates to:
 

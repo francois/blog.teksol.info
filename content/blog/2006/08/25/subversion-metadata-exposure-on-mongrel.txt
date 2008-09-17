@@ -12,11 +12,11 @@ Like many, I am using "Capistrano":http://manuals.rubyonrails.com/read/book/17 t
 
 In "Preventing Subversion Exposure":http://hivelogic.com/articles/2006/04/30/preventing_svn_exposure, "Dan Benjamin":http://hivelogic.com/ talks about how to secure your server if you are using Apache:
 
-<blockquote cite="http://hivelogic.com/articles/2006/04/30/preventing_svn_exposure"><textarea name="code" cols="55" rows="15" title="httpd.conf"><directorymatch "^/.*/\.svn/">
+<blockquote cite="http://hivelogic.com/articles/2006/04/30/preventing_svn_exposure"><% code("httpd.conf", :lang => "conf") do -%><directorymatch "^/.*/\.svn/">
   Order deny,allow
   Deny from all
 </directorymatch>
-</textarea>
+<% end -%>
 </blockquote>
 
 I am using a clustered deployment environment as described on "Mongrel's LighTTPD":http://mongrel.rubyforge.org/docs/lighttpd.html page:
@@ -27,7 +27,7 @@ Except "LighTTP":http://lighttpd.net/ is replaced with "Pound":http://www.apsis.
 
 My <code class="filename">pound.cfg</code> contains this block of code:
 
-<textarea name="code" cols="55" rows="15" title="pound.cfg"># static file serving
+<% code("pound.cfg", :lang => "conf") do -%># static file serving
 Service
   URL ".*\.(jpe?g|gif|png|js|css|xml)"
   BackEnd
@@ -42,7 +42,7 @@ Service
     Port    12500
   End
 End
-</textarea>
+<% end -%>
 
 I thought I was not vulnerable to Dan's trick, but it turns out I am.
 
@@ -50,12 +50,12 @@ When "Pound":http://www.apsis.ch/pound/ receives the request, it attempts to mat
 
 Until I find how to correct the hole, I am now deploying using the export method:
 
-<textarea name="code" cols="55" rows="15" title="config/deploy.rb">set :checkout, "export"
-</textarea>
+<% code("config/deploy.rb") do -%>set :checkout, "export"
+<% end -%>
 
 *UPDATE (2006-08-25)*: Following "John's ":#comment-139 suggestion below, you can also change the "Pound":http://www.apsis.ch/pound/ configuration to this:
 
-<textarea name="code" cols="55" rows="15" title="pound.cfg"># static file serving
+<% code("pound.cfg", :lang => "conf") do -%># static file serving
 Service
   URL ".*\.(jpe?g|gif|png|js|css|xml|svn)"
   BackEnd
@@ -63,7 +63,7 @@ Service
     Port 12600
   End
 End
-</textarea>
+<% end -%>
 
 Note where "svn" was added to the end of the URL configuration line ?  That tells Pound to send requests for ".svn" to this service (Apache in my case) where the 403 can be processed.
 

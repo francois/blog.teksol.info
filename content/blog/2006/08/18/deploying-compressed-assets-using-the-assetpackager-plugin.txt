@@ -12,12 +12,12 @@ I disagree with that because as soon as the symlink is done, it means we're live
 
 Instead, I suggest doing it after updating the code.  So, his Capistrano task changes to this instead:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="config/deploy.rb">task :after_update_code, :roles => [:web] do
+<% code("config/deploy.rb") do -%>task :after_update_code, :roles => [:web] do
   run <<-EOF
     cd #{release_path} &&
     rake RAILS_ENV=production asset:packager:build_all
   EOF
 end
-</textarea>
+<% end -%>
 
 Unrelated note:  From the comments on Scott's "announcement":http://synthesis.sbecker.net/articles/2006/06/19/assetpackager-released#comments (see Timur Vafin's comments), I am not the only one writing asse*r*t_packager.  Must be all those darn assertions I write all day long...

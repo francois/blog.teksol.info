@@ -10,7 +10,7 @@ Bob Silva posted "Testing Gotchas in Rails":http://www.railtie.net/articles/2006
 
 Well, today I had a huge code base I needed to check.  I wrote the following Rake task:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/tasks/find_missing_fixtures.rake"># Find missing fixtures declarations from Rails tests
+<% code("lib/tasks/find_missing_fixtures.rake") do -%># Find missing fixtures declarations from Rails tests
 # Code by Francois Beausoleil (francois@teksol.info)
 # Released in the public domain.  Do as you wish.
 desc "Finds missing fixtures declarations from your tests"
@@ -45,15 +45,15 @@ task :find_missing_fixtures do
     end
   end
 end
-</textarea>
+<% end -%>
 
 Run it like this:
-<textarea name="code" cols="55" rows="15" class="shell">$ rake find_missing_fixtures
+<% code(:lang => "shell") do -%>$ rake find_missing_fixtures
 (in D:/wwwroot/wpul.staging.teksol.info)
 test/unit/name_test.rb: NameTest
 test/unit/application_helper_test.rb: ApplicationHelperTest
 test/unit/application_helper_test.rb: ApplicationHelperTruncationTest
-</textarea>
+<% end -%>
 
 Why do I report both the file and TestCase name ?  Because I put more than one TestCase per test file, as I reported in "Test fixtures and behavioral testing":http://blog.teksol.info/articles/2006/01/25/test-fixtures-and-behavioral-testing
 

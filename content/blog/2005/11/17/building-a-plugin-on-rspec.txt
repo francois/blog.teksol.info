@@ -15,15 +15,15 @@ Since this article is about writing specifications rather than on how to write a
 h2. Installation and setup
 
 I started by installing the gem.  Then, I created a Rails-like hierarchy: <code class="folder">lib/</code>, <code class="folder">test/</code> and <code class="folder">vendor/</code>.  I then unpacked the gem into vendor:
-<textarea name="code" cols="55" rows="15" class="shell">$ cd vendor
+<% code(:lang => "shell") do -%>$ cd vendor
 $ gem unpack rspec
 Unpacked gem: 'rspec-0.2.0'
-</textarea>
+<% end -%>
 
 That gave me the library's full source code right next to mine, for easy inspection and analysis.
 
 Next, I needed a way to run my _expectations_ (we'd usually call these tests, but since we're trying to move away from the testing terminology...).  I wrote the following Rakefile:
-<textarea name="code" cols="55" rows="15" class="ruby" title="Rakefile">require 'rake'
+<% code("Rakefile") do -%>require 'rake'
 
 task :default => [:test_behaviors]
 
@@ -50,12 +50,12 @@ task :test_behaviors => [:set_load_path] do
 
   Spec::TextRunner.new.run
 end
-</textarea>
+<% end -%>
 
 h2. First behavioral expectation
 
 The first expectation I wanted to write was to convert an empty <code class="class">String</code> into an empty <code class="class">Array</code>.  That lets us handle the case where no items are selected.  I chose to write this expectation first because we're going to need it anyway, and it was a good introduction to the RSpec framework for me.
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/specs/no_selected_entries.rb">require 'spec'
+<% code("test/specs/no_selected_entries.rb") do -%>require 'spec'
 require 'francois_beausoleil/habtm_helper_plugin/filter'
 
 class NoSelectedEntries < Spec::Context
@@ -71,7 +71,7 @@ class NoSelectedEntries < Spec::Context
     params[:contact][:group_ids].should_equal []
   end
 end
-</textarea>
+<% end -%>
 
 We start by requiring <code class="file">spec</code>, and then the filter's code.  Next, we create a new class that describes the context of this particular set of expectations.  This is the expectation's fixture, so to speak.  Notice we extend <code class="class">Spec::Context</code> (short for Specification Context) instead of <code class="class">Test::Unit::TestCase</code>.  Then, we make our lives easier by including the code under scrutiny in the context.
 
@@ -80,7 +80,7 @@ Then, we have the <code class="method">setup</code> method.  Notice I am executi
 The last item in the class is the actual specification.  We are asserting that when "No selected entries" we "should replace string with empty array".
 
 Let's write the minimum amount of code, just to get started:
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/francois_beausoleil/habtm_helper_plugin/filter.rb">module FrancoisBeausoleil
+<% code("lib/francois_beausoleil/habtm_helper_plugin/filter.rb") do -%>module FrancoisBeausoleil
   module HabtmHelperPlugin
     module Filter
       def habtm_filter
@@ -88,10 +88,10 @@ Let's write the minimum amount of code, just to get started:
     end
   end
 end
-</textarea>
+<% end -%>
 
 Let's see that in action:
-<textarea name="code" cols="55" rows="15" class="shell">$ rake
+<% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
 .X.
@@ -105,7 +105,7 @@ should be equal to:
 Finished in 0.016 seconds
 
 3 specifications, 3 expectations, 1 failures
-</textarea>
+<% end -%>
 
 _(I removed the Rake backtrace from this and all other example runs in the interest of shortening an already long article)_
 
@@ -114,7 +114,7 @@ What is this telling us ?  It's telling us that an empty string should have been
 h3. Naming conventions
 
 Reading further though, we see that <code class="class">Spec::TextRunner</code> has found *three* expectations to run, not just one.  Which ones are they ?  If we look at the <code class="class">Spec::Context</code> code, we'll find this:
-<textarea name="code" cols="55" rows="15" class="ruby" title="vendor/rspec-0.2.0/lib/spec/context.rb">module Spec
+<% code("vendor/rspec-0.2.0/lib/spec/context.rb") do -%>module Spec
   class Context
     private
     def self.my_methods
@@ -132,19 +132,19 @@ Reading further though, we see that <code class="class">Spec::TextRunner</code> 
     end
   end
 end
-</textarea>
+<% end -%>
 
 Ah !  There are *no* naming convention as in the xUnit case, so all methods are expectations, except the ones coming from our superclasses. That only means we have to move our code elsewhere.  After refactoring, we now have:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/spec_helper.rb">require 'spec'
+<% code("test/spec_helper.rb") do -%>require 'spec'
 require 'francois_beausoleil/habtm_helper_plugin/filter'
 
 class DummyController
   attr_accessor :params
   include FrancoisBeausoleil::HabtmHelperPlugin::Filter
 end
-</textarea>
+<% end -%>
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/specs/no_selected_entries.rb">require 'spec_helper'
+<% code("test/specs/no_selected_entries.rb") do -%>require 'spec_helper'
 
 class NoSelectedEntries < Spec::Context
   def setup
@@ -157,10 +157,10 @@ class NoSelectedEntries < Spec::Context
     @controller.params[:contact][:group_ids].should_equal []
   end
 end
-</textarea>
+<% end -%>
 
 Running that, we get:
-<textarea name="code" cols="55" rows="15" class="shell">$ rake
+<% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
 X
@@ -174,10 +174,10 @@ should be equal to:
 Finished in 0.015 seconds
 
 1 specifications, 1 expectations, 1 failures
-</textarea>
+<% end -%>
 
 Beautiful !  Only one specification was executed - let's make it pass:
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/francois_beausoleil/habtm_helper_plugin/filter.rb">module FrancoisBeausoleil
+<% code("lib/francois_beausoleil/habtm_helper_plugin/filter.rb") do -%>module FrancoisBeausoleil
   module HabtmHelperPlugin
     module Filter
       def habtm_filter
@@ -186,10 +186,10 @@ Beautiful !  Only one specification was executed - let's make it pass:
     end
   end
 end
-</textarea>
+<% end -%>
 
 Running:
-<textarea name="code" cols="55" rows="15" class="shell">
+<% code(:lang => "shell") do -%>
 $ rake
 (in D:/habtm)
 
@@ -198,14 +198,14 @@ $ rake
 Finished in 0.0 seconds
 
 1 specifications, 1 expectations, 0 failures
-</textarea>
+<% end -%>
 
 Even more beautiful:  green bar !
 
 h2. More expectations
 
 Let's implement a second behavioral specification, but we'll need a new context - we need to have something for the filter to work against.  This means we have to create a new context for the expectations to execute in:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/specs/one_selected_entry.rb">require 'spec_helper'
+<% code("test/specs/one_selected_entry.rb") do -%>require 'spec_helper'
 
 class OneSelectedEntry < Spec::Context
   def setup
@@ -222,12 +222,12 @@ class OneSelectedEntry < Spec::Context
     @controller.params[:contact][:group_ids][0].should_equal '624'
   end
 end
-</textarea>
+<% end -%>
 
 <a style="display:block; float:left; margin-right: .5em;" href="http://www.refactoring.com/catalog/extractSuperclass.html" title="Extract Superclass refactoring on the refactoring.com website"><img src="/assets/2007/10/13/refactoring-icon.gif" alt="Refactoring.com website logo"/></a>The setup method is very similar - in fact, it's nearly identical, the only difference being the value we assign to the params <code class="class">Hash</code>.  Probably something we can "extract superclass":http://www.refactoring.com/catalog/extractSuperclass.html from.  Let's wait for the fabled "three strikes and you refactor":http://c2.com/cgi/wiki?ThreeStrikesAndYouRefactor before we do so, though.
 
 Next, we get our behavioral specifications.  The first one says when we have "One selected entry" we "should have one element in the array".  This is all very readable and reasonable.  Then, when we have "One selected entry" we "should have the id as the first element".  Let's see this in action:
-<textarea name="code" cols="55" rows="15" class="shell">$ rake
+<% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
 XX.
@@ -247,10 +247,10 @@ should be equal to:
 Finished in 0.0 seconds
 
 3 specifications, 3 expectations, 2 failures
-</textarea>
+<% end -%>
 
 We get our two expected failures.  Let's "do the simplest thing that could possibly work":http://c2.com/cgi/wiki?DoTheSimplestThingThatCouldPossiblyWork:
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/francois_beausoleil/habtm_helper_plugin/filter.rb">module FrancoisBeausoleil
+<% code("lib/francois_beausoleil/habtm_helper_plugin/filter.rb") do -%>module FrancoisBeausoleil
   module HabtmHelperPlugin
     module Filter
       def habtm_filter
@@ -263,10 +263,10 @@ We get our two expected failures.  Let's "do the simplest thing that could possi
     end
   end
 end
-</textarea>
+<% end -%>
 
 Seeing it in action:
-<textarea name="code" cols="55" rows="15" class="shell">$ rake
+<% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
 ...
@@ -274,7 +274,7 @@ Seeing it in action:
 Finished in 0.016 seconds
 
 3 specifications, 3 expectations, 0 failures
-</textarea>
+<% end -%>
 
 Excellent, another green bar.  I will leave it as an exercise to the reader to write additional specifications, or else visit the "habtm_helper Rails plugin":https://opensvn.csie.org/traccgi/habtm_helper_plugin/trac.cgi and acquire the plugin through regular means.
 

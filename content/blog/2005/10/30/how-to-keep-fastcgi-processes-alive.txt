@@ -7,10 +7,10 @@ filter:
   - textile
 --- 
 I have the following CRON entries for one of my sites:
-<textarea name="code" cols="55" rows="13" class="cron">39 * * * * killall -9 dispatch.fcgi >/dev/null 2>&1
+<% code(:lang => "cron") do -%>39 * * * * killall -9 dispatch.fcgi >/dev/null 2>&1
 0,4,8,12,16,20,24,28,32,36,40,44,48,52,56 * * * * \
 curl http://www.weputlightsup.com/ >/dev/null 2>&1
-</textarea>
+<% end -%>
 
 What does this do ?  The first entry kills all of my FastCGI processes at 39 minutes past the hour.  The second one pings a specific URL to ensure the FastCGI processes are always up and running, every four minutes.
 

@@ -8,7 +8,7 @@ filter:
 --- 
 I just got a MacBook Pro (my first Mac!) and couldn't install many gems.  All had native dependencies.  All failed similarly:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ sudo gem install god
+<% code(:lang => "shell") do -%>$ sudo gem install god
 Password:
 Updating metadata for 1 gems from http://gems.rubyforge.org/
 .
@@ -23,7 +23,7 @@ can't find header files for ruby.
 
 Gem files will remain installed in /Library/Ruby/Gems/1.8/gems/god-0.7.6 for inspection.
 Results logged to /Library/Ruby/Gems/1.8/gems/god-0.7.6/ext/god/gem_make.out
-</textarea>
+<% end -%>
 
 I finally found the solution on the "MacRuby":http://ruby.macosforge.org/trac/wiki/MacRuby "Troubleshooting: can't find header files for ruby":http://ruby.macosforge.org/trac/wiki/Troubleshooting#cantfindheaderfilesforruby page.
 

@@ -14,7 +14,7 @@ In my applications, I always store the URL to the PayPal service in a Setting or
 
 Of course, I use "Migrations":http://api.rubyonrails.com/classes/ActiveRecord/Migration.html to generate my tables, or pre-populate them with data.  Here is a typical migration:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="db/migrate/023_setup_paypal_config.rb">class SetupPaypalConfig < ActiveRecord::Migration
+<% code("db/migrate/023_setup_paypal_config.rb") do -%>class SetupPaypalConfig < ActiveRecord::Migration
   def self.up
     config = Configuration.find_or_create_by_name('paypal.url')
     config.value = 'https://www.paypal.com/'
@@ -27,17 +27,17 @@ Of course, I use "Migrations":http://api.rubyonrails.com/classes/ActiveRecord/Mi
 
   class Configuration < ActiveRecord::Base; end
 end
-</textarea>
+<% end -%>
 
 Nothing prevents me from keying off <var class="environment">RAILS_ENV</var> like this:
 
-<textarea name="code" cols="55" rows="15" class="ruby">config.value = case RAILS_ENV
+<% code do -%>config.value = case RAILS_ENV
                when 'development'
                  'https://developer.paypal.com/'
                else
                  'https://www.paypal.com/'
                end
 config.save!
-</textarea>
+<% end -%>
 
 An alternative would be to store the PayPal URL in a constant, and initialize the constant in <code class="path">config/environments/*.rb</code>.  This means much less code.  But in my case, I usually have a need for a configuration-like object where admins of the system can change some values.

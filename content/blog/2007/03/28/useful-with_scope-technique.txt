@@ -9,48 +9,48 @@ filter:
 I just stumbled upon something very interesting.  In my application, we accept anonymous testimonials from the web, but they must not be shown until they have been reviewed and approved by an administrator.
 
 The first API I designed was this:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/testimonial_test.rb">def test_can_get_approved_only
+<% code("test/unit/testimonial_test.rb") do -%>def test_can_get_approved_only
   testimonials = Testimonial.find(:completed)
   assert_equal [@approved_testimonial], testimonials
 end
-</textarea>
+<% end -%>
 
 That worked well enough, even after I started adding code to take care of :all and :first, and modifying <code class="ruby method">#count</code> to also use the same scoping rules.
 
 But then, I hit a snag with scoped <code class="ruby method">#has_many</code> accesses.  The following failed:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/testimonial_test.rb">def test_can_count_approved_testimonials_for_a_single_contact
+<% code("test/unit/testimonial_test.rb") do -%>def test_can_count_approved_testimonials_for_a_single_contact
   testimonials = @contact.testimonials.count(:completed)
   assert_equal 1, testimonials
 end
-</textarea>
+<% end -%>
 
 This generated an invalid statement:
-<textarea name="code" cols="55" rows="15" class="shell">test_can_count_approved_testimonials_for_a_single_contact(TestimonialTest::AbilityToCountTest):
+<% code(:lang => "shell") do -%>test_can_count_approved_testimonials_for_a_single_contact(TestimonialTest::AbilityToCountTest):
 ActiveRecord::StatementInvalid: Mysql::Error: Unknown column 'approved' in 'where clause': SELECT count(*) AS count_all FROM testimonials WHERE (testimonials.contact_id = 1 AND (approved))
-</textarea>
+<% end -%>
 
 I did a bit of debugging and found that <code class="ruby method">#has_many</code> had already modified the <code class="ruby method">#count</code> parameters even before my <code class="ruby method">#count_with_extensions</code> method was called.  So I decided to change my API.  I decided I wanted something like this:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/testimonial_test.rb">def test_can_get_approved_only
+<% code("test/unit/testimonial_test.rb") do -%>def test_can_get_approved_only
   testimonials = Testimonial.completed.find
   assert_equal [@approved_testimonial], testimonials
 end
-</textarea>
+<% end -%>
 
 This new API first defines the scope, then calls a normal ActiveRecord::Base method.  My first implementation was:
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/testimonial.rb">def self.completed
+<% code("app/models/testimonial.rb") do -%>def self.completed
   with_scope(:find => {:conditions => ["approved_at IS NOT NULL"]}) do
     yield self
   end
 end
-</textarea>
+<% end -%>
 
 When I ran my tests, my error was immediately apparent:
-<textarea name="code" cols="55" rows="15" class="shell">test_can_get_approved_only(TestimonialTest::AbilityToCountTest):
+<% code(:lang => "shell") do -%>test_can_get_approved_only(TestimonialTest::AbilityToCountTest):
 LocalJumpError: no block given
-</textarea>
+<% end -%>
 
 Ooops...  So I thought a bit more.  What I wanted to return from <code class="ruby method">#completed</code> was an object that could stand in for my class (Testimonial in this case), but for which the scope had been defined.  I ended up with this implementation:
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/testimonial.rb">def completed
+<% code("app/models/testimonial.rb") do -%>def completed
   returning Object.new do |proxy|
     class << proxy
       def method_missing(method, *args)
@@ -62,7 +62,7 @@ Ooops...  So I thought a bit more.  What I wanted to return from <code class="ru
     end
   end
 end
-</textarea>
+<% end -%>
 
 What this implementation does is:
 
@@ -72,7 +72,7 @@ What this implementation does is:
 # Then the proxy object is returned.
 
 With that implementation, I get something nice:
-<textarea name="code" cols="55" rows="15" class="shell">$ rake test:recent
+<% code(:lang => "shell") do -%>$ rake test:recent
 (in /home/francois/src)
 /usr/local/bin/ruby -Ilib:test "/usr/local/lib/ruby/gems/1.8/gems/rake-0.7.2/lib/rake/rake_test_loader.rb" "test/unit/testimonial_test.rb"
 Started
@@ -80,4 +80,4 @@ Started
 Finished in 3.041738 seconds.
 
 15 tests, 31 assertions, 0 failures, 0 errors
-</textarea>
+<% end -%>

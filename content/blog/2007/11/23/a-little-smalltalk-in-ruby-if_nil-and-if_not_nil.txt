@@ -10,15 +10,15 @@ I really like Smalltalk's <code class="smalltalk method">ifNil:</code> and <code
 
 I immediately copied that to "XLsuite":http://xlsuite.com/ and wrote a couple of tests.  Here is sample of what the code feels like:
 
-<textarea name="code" cols="55" rows="15" class="ruby">>> Party.find_by_email_address("sam@gamgee.net").if_not_nil do |party|
+<% code do -%>>> Party.find_by_email_address("sam@gamgee.net").if_not_nil do |party|
 ?>   puts "Found Sam!"
 >> end
 => nil
-</textarea>
+<% end -%>
 
 Oh well, no Sam in my database.  The code is here:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/smalltalk_test.rb">require File.dirname(__FILE__) + "/../test_helper"
+<% code("test/unit/smalltalk_test.rb") do -%>require File.dirname(__FILE__) + "/../test_helper"
 
 class SmalltalkTest < Test::Unit::TestCase
   setup do
@@ -50,9 +50,9 @@ class SmalltalkTest < Test::Unit::TestCase
     end
   end
 end
-</textarea>
+<% end -%>
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/smalltalk.rb"># Copied and adapted from
+<% code("lib/smalltalk.rb") do -%># Copied and adapted from
 # http://recursive.ca/hutch/2007/11/22/a-little-unnecessary-smalltalk-envy/
 # Bob Huntchison
 class Object
@@ -76,4 +76,4 @@ class NilClass
     yield if block
   end
 end
-</textarea>
+<% end -%>

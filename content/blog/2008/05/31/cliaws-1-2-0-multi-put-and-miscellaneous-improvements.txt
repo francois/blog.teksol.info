@@ -8,11 +8,11 @@ filter:
 --- 
 I just pushed "1.2.0":http://github.com/francois/cliaws/tree/1.2.0 to "GitHub":http://github.com/ as well as "RubyForge":http://rubyforge.org/.  This release has a single major improvement:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ clis3 put A B local/C bucket/dir/
+<% code(:lang => "shell") do -%>$ clis3 put A B local/C bucket/dir/
 A => bucket/dir/A
 B => bucket/dir/B
 local/C => bucket/dir/C
-</textarea>
+<% end -%>
 
 <code>put</code> isn't yet recursive, and note the caveat above: all paths are flattened to their basenames.  Enjoy!
 

@@ -8,10 +8,10 @@ filter:
 --- 
 I just found about "Cerberus":http://cerberus.rubyforge.org/.  This looks like a nice tool, and very easy to setup and run:
 
-<textarea name="code" cols="55" rows="10" class="shell">$ sudo gem install --include-dependencies cerberus
+<% code(:lang => "shell") do -%>$ sudo gem install --include-dependencies cerberus
 $ cerberus add PROJECT_DIR|PROJECT_URL
 $ cerberus buildall
-</textarea>
+<% end -%>
 
 Very simple and clean.
 

@@ -12,7 +12,7 @@ If you want, you can register to <a href="http://github.com/feeds/francois/commi
 
 What have I got so far ?
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="piston/commands/import.rb">require "piston/commands/base"
+<% code("piston/commands/import.rb") do -%>require "piston/commands/base"
 
 module Piston
   module Commands
@@ -43,7 +43,7 @@ module Piston
     end
   end
 end
-</textarea>
+<% end -%>
 
 This is the new import command.  Everything is expressed in terms of high-level operations, and the different backends will take care of doing the right thing.  In the case of Subversion, checking out the repository will involve running "svn checkout".  For Git, this will be "git clone", and so on.
 

@@ -10,54 +10,54 @@ h2. The application's models
 
 We'll need a <code class="class">Todo</code>, <code class="class">TodoUser</code> and <code class="class">TodoUserDatabase</code>.  Each user will keep a copy of it's todos, and the database will give us methods to find and register new users.  Let's start with the user's database:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">Object subclass: #TodoUserDatabase
+<% code(:lang => "smalltalk") do -%>Object subclass: #TodoUserDatabase
 	instanceVariableNames: 'database'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-Model'
-</textarea>
+<% end -%>
 
 In case you never noticed, this is a message named <code class="method smalltalk">#subclass:instanceVariableNames:classVariableNames:poolDictionaries:category</code>, and the receiver is <code class="class">Object</code>.  Through the magic of code formatting, this looks like a class declaration, but it's just another "message":http://en.wikipedia.org/wiki/Smalltalk#Messages.
 
 The database object needs a way to initialize itself.  We have two ways to do it: either at instance initialization time, or on first access time.  Let's go the latter way, which is what seems most prevalent in Smalltalk / Seaside code I've read:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">database
+<% code(:lang => "smalltalk") do -%>database
 	^ database ifNil: [database := OrderedCollection new]
-</textarea>
+<% end -%>
 
 Put this method in protocol *private*.  Then, we need a way to add and remove users:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">addUser: aUser
+<% code(:lang => "smalltalk") do -%>addUser: aUser
 	(self findWithLogin: aUser login)
 		ifNil: [self database add: aUser. ^ aUser]
 		ifNotNil: [self raiseDuplicateLoginName]
 
 removeUser: aUser
 	database remove: aUser
-</textarea>
+<% end -%>
 
 These go in protocol *accessing*.  Notice <code class="method">#addUser:</code> calls <code class="method">#raiseDuplicateLoginName</code>.  Let's define that immediately:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">rraiseDuplicateLoginName
+<% code(:lang => "smalltalk") do -%>rraiseDuplicateLoginName
 	Error raiseSignal: 'Can''t have two users with the same login'
-</textarea>
+<% end -%>
 
 Put this method in protocol *error handling*.  <code class="method">#addUser:</code> calls another helper method:  <code class="method">#findWithLogin:</code>.  The implementation looks like this:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">findWithLogin: aLogin
+<% code(:lang => "smalltalk") do -%>findWithLogin: aLogin
 	^ self database detect: [:each | each login = aLogin] ifNone: [nil]
-</textarea>
+<% end -%>
 
 Again, put this method in protocol *accessing*.  We're done with the database side of things.  We can now switch to the user itself.
 
 h3. TodoUser model
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">Object subclass: #TodoUser
+<% code(:lang => "smalltalk") do -%>Object subclass: #TodoUser
 	instanceVariableNames: 'login password todos'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-Model'
-</textarea>
+<% end -%>
 
 As the class comment, enter this text:
 
@@ -65,7 +65,7 @@ bq. Instances of myself represent a user with a login and password, as well as a
 
 In protocol *accessing*, we define basic accessor methods:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">login
+<% code(:lang => "smalltalk") do -%>login
 	^ login
 
 login: anObject
@@ -79,18 +79,18 @@ password: anObject
 
 todos
 	^ todos ifNil: [todos := OrderedCollection new]
-</textarea>
+<% end -%>
 
 Again, note how the <var>todos</var> instance variable is initialized if it wasn't previously initialized.  Equivalent Ruby code uses the <code class="operator">||=</code> operator.
 
 Then, we need to add and remove todos from the user:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">addTodo: aTodo
+<% code(:lang => "smalltalk") do -%>addTodo: aTodo
 	self todos add: aTodo
 
 removeTodo: aTodo
 	self todos remove: aTodo
-</textarea>
+<% end -%>
 
 Pretty simple, as things go.  Put these in the *accessing* protocol.  The final model is the Todo itself.
 
@@ -98,12 +98,12 @@ h3. Todo model
 
 Let's declare the class:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">Object subclass: #Todo
+<% code(:lang => "smalltalk") do -%>Object subclass: #Todo
 	instanceVariableNames: 'createdAt completed description completedAt'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-Model'
-</textarea>
+<% end -%>
 
 And the class' comment:
 
@@ -111,13 +111,13 @@ bq. Instances of myself represent a task that should be done, a todo.  Todos are
 
 This time around, we need an <code class="method">#initialize</code> method:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">initialize
+<% code(:lang => "smalltalk") do -%>initialize
 	createdAt := DateAndTime now
-</textarea>
+<% end -%>
 
 Put this in the *initialization* protocol.  Next, in protocol *accessing*, we add a couple of basic accessors:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">createdAt
+<% code(:lang => "smalltalk") do -%>createdAt
 	^ createdAt
 
 description
@@ -137,30 +137,30 @@ completedAt: aDateTime
 
 markCompleted
 	completedAt := DateAndTime now.
-</textarea>
+<% end -%>
 
 h2. The Seaside UI:  controllers and views
 
 To kick things off, I define a new Seaside <code class="class">WAComponent</code> subclass which will be our root component:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">WAComponent subclass: #TodoComponent
+<% code(:lang => "smalltalk") do -%>WAComponent subclass: #TodoComponent
 	instanceVariableNames: ''
 	classVariableNames: 'UserDatabase'
 	poolDictionaries: ''
 	category: 'Todo-UI-Seaside'
-</textarea>
+<% end -%>
 
 We define ourselves a class variable named <var>UserDatabase</var> which will hold an instance of <code class="class">TodoUserDatabase</code>.  Let's give ourselves two accessor methods to the database:  one class side and the other instance side.  Put this one in *accessing*, *class side*:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">userDatabase
+<% code(:lang => "smalltalk") do -%>userDatabase
 	^ UserDatabase ifNil: [UserDatabase := TodoUserDatabase new]
-</textarea>
+<% end -%>
 
 Again, we see the same pattern: initialize unless already initialized.  Back on the *instance side*, add this method  in the *accessing* protocol:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">userDatabase
+<% code(:lang => "smalltalk") do -%>userDatabase
 	^ self class userDatabase
-</textarea>
+<% end -%>
 
 This is a simple call to the class side version of the method with the same name.
 
@@ -172,30 +172,30 @@ Seaside's decorators have an owner, which is the decorated component.  The decor
 
 Let's start by declaring the class:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">WADecoration subclass: #TodoAuthDecorator
+<% code(:lang => "smalltalk") do -%>WADecoration subclass: #TodoAuthDecorator
 	instanceVariableNames: 'login password passwordConfirmation authenticated authenticationMessage registrationMessage'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-UI-Seaside'
-</textarea>
+<% end -%>
 
 <var>login</var>, <var>password</var> and <var>passwordConfirmation</var> are used to hold the login and password during registration and authentication.  I use <var>authenticated</var> as a simple boolean to determine if authentication was successful or not.  <var>authenticationMessage</var> and <var>registrationMessage</var> are messages that will be shown to the user (think of Rail's "flash":http://api.rubyonrails.org/classes/ActionController/Flash.html).  I begin in the *initialization* protocol with:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">initialize
+<% code(:lang => "smalltalk") do -%>initialize
 	authenticated := false
-</textarea>
+<% end -%>
 
 All Seaside decorators that want a chance to render around their owner must provide a <code class="method">#renderContentOn:</code> method.  This goes in the *rendering* protocol:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderContentOn: html
+<% code(:lang => "smalltalk") do -%>renderContentOn: html
 	authenticated
 		ifTrue: [self renderOwnerOn: html]
 		ifFalse: [self renderAuthenticationFormOn: html]
-</textarea>
+<% end -%>
 
 When authenticated, we render our owner (the decorated component), else we call <code class="method">#renderAuthenticationFormOn:</code>, which looks like this:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderAuthenticationFormOn: html
+<% code(:lang => "smalltalk") do -%>renderAuthenticationFormOn: html
 	html heading: 'Todo List'.
 	(html div) id: 'auth'; with: [
 		(html div) class: 'column returning'; with: [
@@ -203,22 +203,22 @@ When authenticated, we render our owner (the decorated component), else we call 
 		(html div) class: 'column new'; with: [
 			self renderNewUserFormOn: html]].
 	html div class: 'clear'; with: [html space]
-</textarea>
+<% end -%>
 
 Most of this is setting up nested <a href="http://www.w3.org/TR/html401/struct/global.html#edef-DIV"><code class="html element">DIV</code></a>s to create a two-column layout.  Styling is handled by the <code class="method">#style</code> method:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">style
+<% code(:lang => "smalltalk") do -%>style
 	^ '
 #auth-area a#logout { float: right}
 #auth .column { width: 49%; float: left; }
 #auth form label, #auth form input { display: block; }
 .clear { clear: both; }
 '
-</textarea>
+<% end -%>
 
 p. <code class="method">#renderAuthenticationFormOn:</code> uses a couple of helper methods:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderNewUserFormOn: html
+<% code(:lang => "smalltalk") do -%>renderNewUserFormOn: html
 	html form: [
 		html heading: 'I am a new user' level: 2.
 		registrationMessage ifNotNilDo: [:msg|
@@ -246,11 +246,11 @@ renderReturningUserFormOn: html
 			(html label) for: 'password'; with: 'Password'.
 			(html passwordInput) id: 'password'; on: #password of: self].
 		(html submitButton) on: #authenticate of: self]
-</textarea>
+<% end -%>
 
 <code class="class">WATag</code>'s <code class="method">#on:of:</code> message is pretty powerful:  it sends the specified message to the specified object.  <code class="class">WATextInputTag</code> also sends a mutator message to the object when doing form submissions.  The returning user case calls <code class="method">#authenticate</code> on self, which is implemented as follows:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">authenticate
+<% code(:lang => "smalltalk") do -%>authenticate
 	| user |
 	user := self userDatabase findWithLogin: login.
 	user ifNil: [
@@ -263,11 +263,11 @@ renderReturningUserFormOn: html
 					authenticated := true]
 				ifFalse: [
 					self failAuthentication: 'Invalid credentials for user.']]
-</textarea>
+<% end -%>
 
 This goes in the *actions* protocol.  When registering, we instead call <code class="method">#register</code>:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">register
+<% code(:lang => "smalltalk") do -%>register
 	| user |
 	user := self userDatabase findWithLogin: login.
 	user
@@ -283,27 +283,27 @@ This goes in the *actions* protocol.  When registering, we instead call <code cl
 					self authenticate]
 				ifFalse: [
 					self failRegistration: 'Password and confirmation do not match']]
-</textarea>
+<% end -%>
 
 If the user doesn't already exist (as identified through the login), and the password and the confirmation match, we register the new user and immediately authenticate him.  Once the user is authenticated, we finally let the decorated component (the decorator's owner) render itself:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderOwnerOn: html
+<% code(:lang => "smalltalk") do -%>renderOwnerOn: html
 	(html div) id: 'auth-area'; with: [
 		(html anchor) id: 'logout'; on: #logout of: self.
 		html heading: login capitalized, '''s Todo List'].
 	super renderOwnerOn: html
-</textarea>
+<% end -%>
 
 Put this in the *rendering* protocol.  Here, we provide a logout link for authenticated users, as well as show who's list this is.  Then, we call our superclass' <code class="method">#renderOwnerOn:</code> to let the decorated component render itself.  The logout link callsback the <code class="method">#logout</code> method (in the *actions* protocol):
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">logout
+<% code(:lang => "smalltalk") do -%>logout
 	self owner user: nil.
 	self clearAuthenticationInfo
-</textarea>
+<% end -%>
 
 Above, we called a couple of convenience methods, which obviously go in the *convenience* protocol:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">clearAuthenticationInfo
+<% code(:lang => "smalltalk") do -%>clearAuthenticationInfo
 	login := nil.
 	password := nil.
 	passwordConfirmation := nil.
@@ -318,11 +318,11 @@ failRegistration: aMessage
 	registrationMessage := aMessage.
 	password := nil.
 	passwordConfirmation := nil.
-</textarea>
+<% end -%>
 
 Lastly, a couple of accessor methods:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">login
+<% code(:lang => "smalltalk") do -%>login
 	^ login
 
 login: aLogin
@@ -342,65 +342,65 @@ passwordConfirmation: aPassword
 
 userDatabase
 	^ TodoComponent userDatabase
-</textarea>
+<% end -%>
 
 h3. TodoApp: our first real component
 
 TodoApp is our root application component.  It should thus register itself as a Seaside root.  Let's begin by declaring the class:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">TodoComponent subclass: #TodoApp
+<% code(:lang => "smalltalk") do -%>TodoComponent subclass: #TodoApp
 	instanceVariableNames: 'viewers user'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-UI-Seaside'
-</textarea>
+<% end -%>
 
 Then, *class side*, in protocol *testing*, we implement <code class="method">#canBeRoot</code>:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">canBeRoot
+<% code(:lang => "smalltalk") do -%>canBeRoot
 	^ true
-</textarea>
+<% end -%>
 
 Still *class side*, in protocol *initialization*, add:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">initialize
+<% code(:lang => "smalltalk") do -%>initialize
 	super initialize.
 	self registerAsApplication: #todo
-</textarea>
+<% end -%>
 
 This registers <code class="class">TodoApp</code> as an application in Seaside, under <code class="uri">/seaside/todo</code>.  Back on the *instance side*, in protocol *initialization*, we implement:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">initialize
+<% code(:lang => "smalltalk") do -%>initialize
 	viewers := OrderedCollection new.
 	self addDecoration: (TodoAuthDecorator new).
 	self registerForBacktracking.
-</textarea>
+<% end -%>
 
 The root component knows that it needs authentication, so it immediately adds a decoration to itself.  Seaside requires a component to register itself for backtracking if it's collection of children will change during it's lifecycle.  Since the user will add and remove todos, our collection of <code class="class">TodoViewer</code> instances will change.
 
 Components render themselves, so put this in protocol *rendering*:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderContentOn: html
+<% code(:lang => "smalltalk") do -%>renderContentOn: html
 	html orderedList: [
 		self children do: [:each |
 			html listItem: [html render: each]]].
 	html paragraph: [
 		(html anchor) on: #newTodo of: self]
-</textarea>
+<% end -%>
 
 We render our collection of children, which is the <var>viewers</var> instance variable.  Again, we have a callback when creating a new todo.  In protocol *call/answer*, we add:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">newTodo
+<% code(:lang => "smalltalk") do -%>newTodo
 	| editor |
 	editor := TodoEditor new
 				todo: (Todo new);
 				yourself.
 	(self call: editor) ifNotNilDo: [:todo | self addTodo: todo]
-</textarea>
+<% end -%>
 
 Again, we have a couple of accessors which are pretty simple:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">addTodo: aTodo
+<% code(:lang => "smalltalk") do -%>addTodo: aTodo
 	user addTodo: aTodo.
 	viewers add: (TodoViewer new todo: aTodo)
 
@@ -417,7 +417,7 @@ user: aUser
 		ifNotNil: [
 			user todos do: [:each |
 				viewers add: (TodoViewer new todo: each)]]
-</textarea>
+<% end -%>
 
 p. <code class="method">#addTodo:</code> adds the todo to the user instance, and also registers a new <code class="class">TodoViewer</code> instance.  <code class="method">#user:</code> takes care of cleanup in case of logout (aUser isNil), and registers new <code class="class">TodoViewer</code> instances when logging in (aUser notNil).
 
@@ -425,26 +425,26 @@ h3. TodoViewer: A simple model viewer
 
 This class is pretty simple.  It's job is to display a todo and allow it to be marked completed.  Let's declare the class:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">TodoComponent subclass: #TodoViewer
+<% code(:lang => "smalltalk") do -%>TodoComponent subclass: #TodoViewer
 	instanceVariableNames: 'todo'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-UI-Seaside'
-</textarea>
+<% end -%>
 
 We begin by rendering the component:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderContentOn: html
+<% code(:lang => "smalltalk") do -%>renderContentOn: html
 	(html paragraph)
 		class: (todo isCompleted ifTrue: ['complete']);
 		with: [
 			self renderDescriptionOn: html.
 			self renderCompletionStatusOn: html]
-</textarea>
+<% end -%>
 
 The call to <code class="method">#class:</code> sets up an HTML class on the paragraph element, to help styling.  A couple more rendering methods:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderDescriptionOn: html
+<% code(:lang => "smalltalk") do -%>renderDescriptionOn: html
 	html html: todo description.
 	html space.
 
@@ -460,31 +460,31 @@ style
 .complete { color: #999; }
 .complete span { font-size: smaller; }
 }'
-</textarea>
+<% end -%>
 
 And the usual accessors:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">todo
+<% code(:lang => "smalltalk") do -%>todo
 	^ todo
 
 todo: anObject
 	todo := anObject
-</textarea>
+<% end -%>
 
 h3. TodoEditor: Create or edit a Todo instance
 
 The current version of the todo app doesn't use <code class="class">TodoEditor</code> to edit existing todos, but it does use it for creating new instances.  As usual, let's declare the class:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">TodoComponent subclass: #TodoEditor
+<% code(:lang => "smalltalk") do -%>TodoComponent subclass: #TodoEditor
 	instanceVariableNames: 'todo'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Todo-UI-Seaside'
-</textarea>
+<% end -%>
 
 Next, we render the component:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">renderContentOn: html
+<% code(:lang => "smalltalk") do -%>renderContentOn: html
 	html form: [
 		html div: [
 			(html label) for: 'description'; with: 'Description'.
@@ -492,34 +492,34 @@ Next, we render the component:
 		(html submitButton) on: #save of: self.
 		html space.
 		(html anchor) on: #cancel of: self]
-</textarea>
+<% end -%>
 
 Here is where things get interesting: <code class="method">#on:of:</code> is used to set a callback on the todo instance.  Seaside will call <code class="method">#description:</code> of the todo instance to set the value on form post.  We don't need a temporary variable to hold the description in the component: the todo instance takes care of that.
 
 In protocol *call/answer*, we add the following methods, which are called from <code class="method">#renderContentOn:</code>
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">save
+<% code(:lang => "smalltalk") do -%>save
 	self answer: todo
 
 cancel
 	self answer: nil
-</textarea>
+<% end -%>
 
 And the final accessors:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">todo
+<% code(:lang => "smalltalk") do -%>todo
 	^ todo
 
 todo: aTodo 
 	todo := aTodo
-</textarea>
+<% end -%>
 
 Total line count:  233 lines, thanks to:
 
-<textarea name="code" cols="55" rows="15" class="smalltalk">(Smalltalk allClasses
+<% code(:lang => "smalltalk") do -%>(Smalltalk allClasses
     select:[:each | each category beginsWith: 'Todo-'])
     inject: 0 into: [:sum :each | sum + each linesOfCode]
-</textarea>
+<% end -%>
 
 Print this to get the total.
 

@@ -10,12 +10,12 @@ Well, thanks to "Graeme Mathieson":http://woss.name/, "Piston":http://piston.rub
 
 As usual, installation is pretty simple:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ gem install piston
-</textarea>
+<% code(:lang => "shell") do -%>$ gem install piston
+<% end -%>
 
 What does piston diff report ?  Here it is:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ piston help diff
+<% code(:lang => "shell") do -%>$ piston help diff
 diff: Shows the differences between the local repository and the pristine upstream
 usage: diff [DIR [...]]
 
@@ -58,7 +58,7 @@ diff -urN --exclude=.svn vendor/rails.tmp/actionmailer/lib/action_mailer/base.rb
  
        begin
          send("perform_delivery_#{delivery_method}", mail) if perform_deliveries
-</textarea>
+<% end -%>
 
 *Caveat*:  piston diff uses the command line version of diff.  This means Windows users will need to install a compatible version, or write a wrapper script around some preferred tool that supports the same features.
 

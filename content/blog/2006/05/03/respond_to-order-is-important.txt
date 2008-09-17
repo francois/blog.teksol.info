@@ -8,7 +8,7 @@ filter:
 --- 
 This is the test I wrote.  You'll notice it is almost verbatim the scaffolded test.
 
-<textarea name="code" cols="55" rows="15" class="ruby">def test_create
+<% code do -%>def test_create
   num_blog_accounts = BlogAccount.count
 
   post :new,
@@ -18,11 +18,11 @@ This is the test I wrote.  You'll notice it is almost verbatim the scaffolded te
 
   assert_equal num_blog_accounts + 1, BlogAccount.count
 end
-</textarea>
+<% end -%>
 
 Interestingly, I made it fail with the following simple code:
 
-<textarea name="code" cols="55" rows="15" class="ruby">def new
+<% code do -%>def new
   return edit unless params[:id].blank?
   @title = 'Creating blog account'
   @blog_account = BlogAccount.new
@@ -43,10 +43,10 @@ def save_and_navigate
     end
   end
 end
-</textarea>
+<% end -%>
 
 The failure was:
-<textarea name="code" cols="55" rows="15" class="shell">$ ruby test\functional\admin\blog_accounts_controller_test.rb -n test_create
+<% code(:lang => "shell") do -%>$ ruby test\functional\admin\blog_accounts_controller_test.rb -n test_create
 Loaded suite test/functional/admin/blog_accounts_controller_test
 Started
 F
@@ -57,10 +57,10 @@ test_create(Admin::BlogAccountsControllerTest) [test/functional/admin/blog_accou
 Expected response to be a <:redirect>, but was <200>
 
 1 tests, 1 assertions, 1 failures, 0 errors
-</textarea>
+<% end -%>
 
 Flipping the order of my <code class="method">respond_to</code> block did the trick:
-<textarea name="code" cols="55" rows="15" class="ruby">respond_to do |wants|
+<% code do -%>respond_to do |wants|
   wants.html do
     redirect_to blog_accounts_url
   end
@@ -68,17 +68,17 @@ Flipping the order of my <code class="method">respond_to</code> block did the tr
     render :action => 'save', :content_type => 'text/javascript; charset=utf-8', :layout => false
   end
 end
-</textarea>
+<% end -%>
 
 This is partially logical.  Of course, the request doesn't have an <var>Accept</var> header, so Rails uses the default, which is to return in order the order of definition.
 
 Alternatively, setting the request's <var>Accept</var> header would do the trick:
 
-<textarea name="code" cols="55" rows="15" class="ruby">def setup
+<% code do -%>def setup
   @controller = Admin::BlogAccountsController.new
   @request    = ActionController::TestRequest.new
   @response   = ActionController::TestResponse.new
 
   @request.env['HTTP_ACCEPT'] = 'text/html'
 end
-</textarea>
+<% end -%>

@@ -13,14 +13,14 @@ Most of the Rails application I build these days have no use whatsoever for the 
 This attribute may be set to _on_ or _off_, indicating whether autocomplete should be enabled, on a field-per-field basis.
 
 In Rails, that translates to:
-<textarea name="code" cols="55" rows="15" class="rhtml"><#%= text_field :payment, :credit_card,
+<% code(:lang => "html") do -%><#%= text_field :payment, :credit_card,
         :autocomplete => 'off' %>
-</textarea>
+<% end -%>
 
 Obviously, if we have ten fields on the form, that would not be very "DRY":http://c2.com/cgi/wiki?DontRepeatYourself
 
 Instead, you can do the following:
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/helpers/application_helper.rb">module ApplicationHelper
+<% code("app/helpers/application_helper.rb") do -%>module ApplicationHelper
   def text_field(*args)
     unless args.last.kind_of?(Hash) then
       args << {}
@@ -31,15 +31,15 @@ Instead, you can do the following:
     super(*args)
   end
 end
-</textarea>
+<% end -%>
 
 This is great when most of your fields need to have autocomplete disabled.  But, while researching this topic, I stumbled on "How to Turn Off Form Autocompletion":http://developer.mozilla.org/en/docs/How_to_Turn_Off_Form_Autocompletion
  for "Mozilla":http://www.mozilla.com/ based browsers.
 
 You do it this way:
-<textarea name="code" cols="55" rows="15" class="rhtml"><#%= start_form_tag({}, {:autocomplete => 'off'}) %>
+<% code(:lang => "html") do -%><#%= start_form_tag({}, {:autocomplete => 'off'}) %>
   ...
 <#%= end_form_tag %>
-</textarea>
+<% end -%>
 
 The same trick as above for overriding <code class="method">text_field_tag</code> can be used to override <code class="method">form_tag</code>.

@@ -14,7 +14,7 @@ Since I'm working on the contact page, we need to add addresses and phones.  I h
 
 After reading a bit, I found/remembered about <code class="class javascript">Ajax.Responders</code>.  Here's what it looks like:
 
-<textarea name="code" cols="55" rows="15" class="javascript" title="public/javascripts/xl_suite/form_handler.js">XlSuite.FormHandler = Class.create();
+<% code("public/javascripts/xl_suite/form_handler.js", :lang => "javascript") do -%>XlSuite.FormHandler = Class.create();
 XlSuite.FormHandler.prototype = {
   initialize: function(root) {
     this.root = root;
@@ -46,7 +46,7 @@ XlSuite.FormHandler.prototype = {
 
   // rest of implementation omitted
 );
-</textarea>
+<% end -%>
 
 In <code class="method javascript">initialize</code>, we prepare ourselves a <code class="class javascript">Hash</code> to remember which fields were processed, and not add multiple event handlers for the same field.
 

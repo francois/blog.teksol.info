@@ -12,7 +12,7 @@ This makes it easier to know exactly what went up for a release.
 
 I would like to share the following "Capistrano":http://rubyforge.org/projects/capistrano recipe for your pleasure:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="config/deploy.rb">require 'uri'
+<% code("config/deploy.rb") do -%>require 'uri'
 task :after_deploy do
   source = repository
   dest = URI.parse(repository).merge("../releases/#{File.basename(release_path)}")
@@ -20,7 +20,7 @@ task :after_deploy do
   puts cmd
   `#{cmd}`
 end
-</textarea>
+<% end -%>
 
 First, we start by requiring "uri":http://www.ruby-doc.org/stdlib/libdoc/uri/rdoc/index.html, because "Subversion":http://subversion.tigris.org/ does not like relative URLs.
 

@@ -11,7 +11,7 @@ This plugin handles copying assets from your plugins to your <code class="folder
 
 I use "Piston":http://piston.rubyforge.org/ to manage my external dependencies, so I simply Pistoned the code from Aaron's repository:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ piston import \
+<% code(:lang => "shell") do -%>$ piston import \
     http://svn.pluginaweek.org/trunk/plugins/action_pack/plugin_assets \
     vendor/plugins/plugin_assets
 Exported r85 from 'http://svn.pluginaweek.org/trunk/plugins/action_pack/plugin_assets' to 'vendor/plugins/plugin_assets'
@@ -22,11 +22,11 @@ rake aborted!
 undefined method `require_plugin' for #<Object:0x27bfa3c>
 
 (See full trace by running task with --trace)
-</textarea>
+<% end -%>
 
 Oops, not good...  So, two dependencies later:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ piston import \
+<% code(:lang => "shell") do -%>$ piston import \
     http://svn.pluginaweek.org/trunk/plugins/rails/loaded_plugins \
     vendor/plugins/loaded_plugins
 Exported r85 from 'http://svn.pluginaweek.org/trunk/plugins/rails/loaded_plugins' to 'vendor/plugins/loaded_plugins'
@@ -44,10 +44,10 @@ $ rake --trace assets:update
 rake aborted!
 undefined method `require_plugin' for #<Object:0x27bfa3c>
 D:/staging.teksol.info/config/../vendor/plugins/plugin_assets/lib/plugin_assets.rb:1
-</textarea>
+<% end -%>
 
 Whoa, this is even worse.  I have to apply a known "workaround" to get <code>plugin_assets</code> to load:
-<textarea name="code" cols="55" rows="15" class="shell">$ mv vendor/plugins/plugin_dependencies \
+<% code(:lang => "shell") do -%>$ mv vendor/plugins/plugin_dependencies \
      vendor/plugins/aaa_plugin_dependencies
 $ mv vendor/plugins/loaded_plugins \
      vendor/plugins/aaa_loaded_plugins
@@ -56,7 +56,7 @@ $ rake assets:update
 
 Mirroring assets for link_with_icon:
 ...
-</textarea>
+<% end -%>
 
 It does look like the dependencies aren't well considered here.  Mind you, Aaron is doing a fantastic job.
 

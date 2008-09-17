@@ -8,7 +8,7 @@ filter:
 --- 
 <code>piston update</code> is coming.  I have the high-level workflow completed.  Conceptually, updating is pretty simple:
 
-<textarea name="code" cols="55" rows="15" class="ruby">module Piston
+<% code do -%>module Piston
   module Commands
     class Update < Piston::Commands::Base
       # +wcdir+ is the working copy we're going to change.
@@ -34,12 +34,12 @@ filter:
     end
   end
 end
-</textarea>
+<% end -%>
 
 Obviously, the devil's in the details...  Notice the last line above:
 
-<textarea name="code" cols="55" rows="15" class="ruby">working_copy.apply_differences(from_revision.differences_with(to_revision))
-</textarea>
+<% code do -%>working_copy.apply_differences(from_revision.differences_with(to_revision))
+<% end -%>
 
 <code>from_revision</code> will calculate a set of differences between itself and <code>to_revision</code>.  In Subversion speak, that would probably mean an svn log followed by an svn diff, to get all changes (copies + diffs).
 

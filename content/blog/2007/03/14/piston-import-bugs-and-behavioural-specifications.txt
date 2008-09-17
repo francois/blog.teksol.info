@@ -23,7 +23,7 @@ To that end, I have started adding behavioural specifications to Piston.  The sp
 
 Here is one specification:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="specs/convert_spec.rb">context "convert with no svn:externals" do
+<% code("specs/convert_spec.rb") do -%>context "convert with no svn:externals" do
   context_setup do
     @remote_repos = Repository.new
     @rwc = WorkingCopy.new(@remote_repos)
@@ -75,7 +75,7 @@ Here is one specification:
     @command.run
   end
 end
-</textarea>
+<% end -%>
 
 In "RSpec documentation":http://rspec.rubyforge.org/documentation/index.html, the developers of RSpec say about <code class="ruby method">#context_setup</code> and <code class="ruby method">#context_teardown</code>:
 
@@ -83,7 +83,7 @@ bq. The use of these is generally discouraged, because it introduces dependencie
 
 Well, I did find a use for it.  And thank god for that.  The specs run in 20 seconds, and I only have three specifications at this time:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ spec --format=specdoc
+<% code(:lang => "shell") do -%>$ spec --format=specdoc
 
 import with a valid repository URL
 - copies the files into a named directory
@@ -97,7 +97,7 @@ convert with one svn:externals
 Finished in 18.186754 seconds
 
 3 specifications, 0 failures
-</textarea>
+<% end -%>
 
 This journey has been interesting.  And interestingly enough, the code I am developing to help me in my specs will help me in the original implementation.  I now have real <code class="class">WorkingCopy</code> and <code class="class">Repository</code> objects.
 

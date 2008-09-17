@@ -10,7 +10,7 @@ Not sure if this falls into the useful or into the weird category, but I'm begin
 
 Take a look at the behavior specification:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="text/unit/transaction_state_test.rb">require File.dirname(__FILE__) + '/../test_helper'
+<% code("text/unit/transaction_state_test.rb") do -%>require File.dirname(__FILE__) + '/../test_helper'
 
 class TransactionStateOrderingTest < Test::Unit::TestCase
   TransactionState::StatusNames.each do |status|
@@ -22,11 +22,11 @@ class TransactionStateOrderingTest < Test::Unit::TestCase
     end
   end
 end
-</textarea>
+<% end -%>
 
 And the corresponding implementation:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/transaction_state.rb">class TransactionState
+<% code("app/models/transaction_state.rb") do -%>class TransactionState
   StatusNames = %w(started approved processed completed cancelled).freeze
 
   attr_reader :name, :index
@@ -59,6 +59,6 @@ And the corresponding implementation:
 
   Statuses = StatusNames.map {|status| TransactionState.send(status)}
 end
-</textarea>
+<% end -%>
 
 Nothing too earth shattering, except for the specs.  How do I ensure the specs were properly generated ?  I didn't, except for confirming that the number of  tests and assertions went up as expected.

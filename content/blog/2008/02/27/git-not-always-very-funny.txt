@@ -12,49 +12,49 @@ I have a new project which I want to track using "Git":http://git.or.cz/, but I 
 
 So, I started like any old project:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ svn checkout svn+ssh://fbos@rubyforge.org/var/svn/theproject
+<% code(:lang => "shell") do -%>$ svn checkout svn+ssh://fbos@rubyforge.org/var/svn/theproject
 $ svn mkdir tags branches
 $ newgem theproject
 $ mv theproject trunk
 $ svn add trunk
 $ svn commit -m "New project layout"
-</textarea>
+<% end -%>
 
 Then, I imported that into a fresh Git repository:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git svn clone svn+ssh://fbos@rubyforge.org/var/svn/theproject -T trunk -t tags -b branches theproject
-</textarea>
+<% code(:lang => "shell") do -%>$ git svn clone svn+ssh://fbos@rubyforge.org/var/svn/theproject -T trunk -t tags -b branches theproject
+<% end -%>
 
 I then started coding and commiting using Git.  All was well, and I was happy.  Then, I pushed to Subversion, like any good developer should:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git svn dcommit
-</textarea>
+<% code(:lang => "shell") do -%>$ git svn dcommit
+<% end -%>
 
 That worked well enough.  Then, I was ready to have a public Git repository.  I went to Github, where I have an account, and created a new repository.  I then did:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git remote add github git@github.com:francois/theproject.git
+<% code(:lang => "shell") do -%>$ git remote add github git@github.com:francois/theproject.git
 $ git push github master
-</textarea>
+<% end -%>
 
 That gave me a couple of errors:
 
-<textarea name="code" cols="55" rows="15" class="shell">error: remote 'refs/heads/master' is not a strict subset of local ref
+<% code(:lang => "shell") do -%>error: remote 'refs/heads/master' is not a strict subset of local ref
  'refs/heads/master'. maybe you are not up-to-date and need to pull first?
  error: failed to push to 'git@github.com:francois/theproject.git'
-</textarea>
+<% end -%>
 
 After some discussion with Jean-François, he told me to have a separate branch on which to do development, and merge to master when I am ready to dcommit.  So, I did:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git checkout -b mainline
+<% code(:lang => "shell") do -%>$ git checkout -b mainline
 # code again
 $ git checkout master
 $ git merge mainline
 $ git svn dcommit
-</textarea>
+<% end -%>
 
 That works well enough.  Now I want to push my mainline to Github.  So I do:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git remote add github git@github.com:francois/theproject.git
+<% code(:lang => "shell") do -%>$ git remote add github git@github.com:francois/theproject.git
 $ git push github mainline
 $ git push github mainline
 updating 'refs/heads/mainline'
@@ -68,13 +68,13 @@ Writing 201 objects...
  100% (201/201) done
 Total 201 (delta 100), reused 0 (delta 0)
 refs/heads/mainline: 0000000000000000000000000000000000000000 -> 31d6eee71b00f829b8568937ab3adaaa8831205c
-</textarea>
+<% end -%>
 
 Great!  It works.  Except...  The repository page on Github still shows I need to create the repository.  Just for fun, *without doing anything else* I created a new empty Git repository, touched README, added that, remoted Github and pushed.  Voilà, Github showed me the repository, with README being added.
 
 Can anyone shed some light on this ?  Here's a reproduction recipe:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ cat repro.sh
+<% code(:lang => "shell") do -%>$ cat repro.sh
 #!/bin/sh
 
 rm -rf repos wc theproject
@@ -103,11 +103,11 @@ git push github mainline
 git checkout master
 git merge mainline
 git svn dcommit
-</textarea>
+<% end -%>
 
 And here's a sample <code>bash +x</code> run:
 
-<textarea name="code" cols="55" rows="15" class="shell">+ rm -rf repos wc theproject
+<% code(:lang => "shell") do -%>+ rm -rf repos wc theproject
 + svnadmin create repos
 ++ pwd
 + svn checkout file:////home/francois/src/repro/repos wc
@@ -324,4 +324,4 @@ Automatic merge failed; fix conflicts and then commit the result.
 No changes between current HEAD and refs/remotes/git-svn
 Resetting to the latest refs/remotes/git-svn
 README: needs update
-</textarea>
+<% end -%>

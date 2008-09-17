@@ -8,25 +8,25 @@ filter:
 --- 
 I was writing a test for a method named <code class="method ruby">hit!</code> and I wrote the following:
 
-<textarea name="code" cols="55" rows="15" class="ruby">def test_calling_hit!_increments_hit_count
+<% code do -%>def test_calling_hit!_increments_hit_count
   # ...
 end
-</textarea>
+<% end -%>
 
 Running the tests didn't pick this up.  I renamed the method to:
 
-<textarea name="code" cols="55" rows="15" class="ruby">def test_calling_hit_bang_increments_hit_count
+<% code do -%>def test_calling_hit_bang_increments_hit_count
   # ...
 end
-</textarea>
+<% end -%>
 
 And that obviously worked.  So, Ruby accepts ! and ? as *suffixes*, but not anywhere else.  Of course, using "Shoulda":http://thoughtbot.com/projects/shoulda I wouldn't have had the problem, since I would have written:
 
-<textarea name="code" cols="55" rows="15" class="ruby">context "Calling #hit!" do
+<% code do -%>context "Calling #hit!" do
   should "increment the hit counter by one" do
     # ...
   end
 end
-</textarea>
+<% end -%>
 
 Notice the bang is within a String, so no problem there.

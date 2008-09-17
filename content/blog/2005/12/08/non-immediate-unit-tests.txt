@@ -9,9 +9,9 @@ filter:
 Sometimes, I have an idea for a test, but I am testing something else and I don't want to break my thought flow.
 
 In those cases, I will write myself a time bomb:
-<textarea name="code" cols="55" rows="9" class="ruby">def test_has_more_entries_after_update
+<% code do -%>def test_has_more_entries_after_update
   flunk if Time.now > Time.local(2005, 12, 9, 10, 0, 0)
 end
-</textarea>
+<% end -%>
 
 This test will pass, until Dec 9 2005, 10 AM.  Nice way to not forget to add some tests.

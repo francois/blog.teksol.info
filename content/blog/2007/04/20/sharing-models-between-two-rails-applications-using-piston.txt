@@ -21,7 +21,7 @@ h3. Example
 
 You have one application in your repository named flow/.  You are creating a new one named /bark.  Here are the steps ($REPOS_ROOT is obviously your repository root):
 
-<textarea name="code" cols="55" rows="15" class="shell">$ svn mkdir $REPOS_ROOT/shared $REPOS_ROOT/shared/app -m "Creating shared models root"
+<% code(:lang => "shell") do -%>$ svn mkdir $REPOS_ROOT/shared $REPOS_ROOT/shared/app -m "Creating shared models root"
 $ svn move $REPOS_ROOT/flow/trunk/app/models $REPOS_ROOT/shared/app/models
 $ svn move $REPOS_ROOT/flow/trunk/spec $REPOS_ROOT/shared/spec # or test/
 $ svn checkout $REPOS_ROOT/flow/trunk
@@ -29,4 +29,4 @@ $ cd trunk
 $ piston import $REPOS_ROOT/shared/app/models app/models
 $ piston import $REPOS_ROOT/shared/spec spec
 $ svn commit -m "Copied shared models back in using Piston"
-</textarea>
+<% end -%>

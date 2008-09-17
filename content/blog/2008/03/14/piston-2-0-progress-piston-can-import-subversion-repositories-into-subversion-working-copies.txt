@@ -20,15 +20,15 @@ This means Piston needs to provide an upgrade path.  I shall do like Subversion,
 
 Recapping, Pistonized directories will now have a new, hidden, file:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ ls -A1 vendor/rails
+<% code(:lang => "shell") do -%>$ ls -A1 vendor/rails
 .piston-metadata.yml
 activerecord/
 ...
-</textarea>
+<% end -%>
 
 And the <code class="file">.piston-metadata.yml</code> file would contain something like this:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ cat vendor/rails/.piston-metadata.yml
+<% code(:lang => "shell") do -%>$ cat vendor/rails/.piston-metadata.yml
 # What data can Piston expect from this file ?
 format: 1
 
@@ -43,7 +43,7 @@ handler-metadata:
   svn-root: http://dev.rubyonrails.org/svn/rails/trunk
   # Same as piston:uuid
   svn-uuid: 5ecf4fe2-1ee6-0310-87b1-e25e094e27de
-</textarea>
+<% end -%>
 
 If you were aware of how Piston was storing properties, you might not that the piston:local-revision property is gone.  Instead of hard-coding which revision we need to import, I'll instead use the last changed date/time.  It's less precise, but makes interoperability with different repository handlers much easier.  No need to map between revision 8920 of Subversion to Git commits.
 

@@ -10,7 +10,7 @@ The latest release of Piston provides you with the ability to switch the upstrea
 
 For example:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ piston switch http://dev.rubyonrails.org/svn/rails/tags/rel_1-2-1 vendor\rails
+<% code(:lang => "shell") do -%>$ piston switch http://dev.rubyonrails.org/svn/rails/tags/rel_1-2-1 vendor\rails
 Processing 'vendor\rails'...
   Fetching remote repository's latest revision and UUID
   Restoring remote repository to known state at r6010
@@ -19,7 +19,7 @@ Processing 'vendor\rails'...
   Removing temporary files / folders
   Updating Piston properties
   Updated to r5990 (663 changes)
-</textarea>
+<% end -%>
 
 Piston 1.3.0 also shows the revision number of locked directories.
 
@@ -27,5 +27,5 @@ h2. Installation
 
 As usual, nothing could be simpler:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ sudo gem install --include-dependencies piston
-</textarea>
+<% code(:lang => "shell") do -%>$ sudo gem install --include-dependencies piston
+<% end -%>

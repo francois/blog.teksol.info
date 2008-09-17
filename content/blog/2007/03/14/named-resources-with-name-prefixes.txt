@@ -9,7 +9,7 @@ filter:
 Rails allows you to define routes with named prefixes.  I expected Rails to somehow _know_ that I wanted my prefix to separate the rest of the name with an underscore.
 
 Here was my original routes:
-<textarea name="code" cols="55" rows="15" class="ruby" title="config/routes.rb">ActionController::Routing::Routes.draw do |map|
+<% code("config/routes.rb") do -%>ActionController::Routing::Routes.draw do |map|
   map.resources :parties, :path_prefix => "/admin" do |parties|
     parties.resources :addresses,
         :controller => "address_contact_routes",
@@ -19,10 +19,10 @@ Here was my original routes:
   map.resources :addresses,
       :controller => "address_contact_routes"
 end
-</textarea>
+<% end -%>
 
 Then, when I tried to use my route, I was getting a NoMethodError:
-<textarea name="code" cols="55" rows="15" class="shell">  1) Error:
+<% code(:lang => "shell") do -%>  1) Error:
 test_can_show(AddressContactRoutesControllerTest::PartyWithAddressTest):
 ActionView::TemplateError: undefined method `party_address_path' for #<#<Class:0xb768f6ac>:0xb63ee41c>
     On line #3 of app/views/address_contact_routes/_address_contact_route.rhtml
@@ -35,21 +35,21 @@ ActionView::TemplateError: undefined method `party_address_path' for #<#<Class:0
     6: <#% inline_fields_for(:address, address_contact_route, :url => update_url) do |f| -%>
 
     #{RAILS_ROOT}/app/views/address_contact_routes/_address_contact_route.rhtml:3:in `_run_rhtml_47app47views47address_contact_routes47_address_contact_route46rhtml'
-</textarea>
+<% end -%>
 
 After a bit of sleuthing (and adding messages to "ActionController::Routing::RouteSet#add_named_route":http://dev.rubyonrails.org/browser/branches/1-2-stable/actionpack/lib/action_controller/routing.rb#L1177), I found out that I was supposed to put the underscore myself on the prefix, like this:
 
-<textarea name="code" cols="55" rows="15" class="ruby">map.resources :parties, :path_prefix => "/admin" do |parties|
+<% code do -%>map.resources :parties, :path_prefix => "/admin" do |parties|
   parties.resources :addresses,
       :controller => "address_contact_routes",
       :name_prefix => :party_
 end
-</textarea>
+<% end -%>
 
 It was also interesting to see all those generated routes.  I discovered that the route with a format was named <code class="method ruby">formatted_whatever</code>.
 
 Here's a diff against the 1.2 branch of Rails that allows you to see all the generated routes as they are read:
-<textarea name="code" cols="55" rows="15" class="shell">$ svn diff vendor/rails/actionpack/lib/action_controller
+<% code(:lang => "shell") do -%>$ svn diff vendor/rails/actionpack/lib/action_controller
 Index: vendor/rails/actionpack/lib/action_controller/routing.rb
 ===================================================================
 --- vendor/rails/actionpack/lib/action_controller/routing.rb    (revision 6424)
@@ -81,13 +81,13 @@ Index: vendor/rails/actionpack/lib/action_controller/routing.rb
          named_routes[name] = add_route(path, options)
        end
 
-</textarea>
+<% end -%>
 
 For reference, here are all the generated routes for this declaration:
-<textarea name="code" cols="55" rows="15" class="ruby" title="config/routes.rb">ActionController::Routing::Routes.draw do |map|
+<% code("config/routes.rb") do -%>ActionController::Routing::Routes.draw do |map|
   map.resources :layouts, :path_prefix => "/admin"
 end
-</textarea>
+<% end -%>
 
 <pre>layouts => "/admin/layouts"
 formatted_layouts => "/admin/layouts.:format"

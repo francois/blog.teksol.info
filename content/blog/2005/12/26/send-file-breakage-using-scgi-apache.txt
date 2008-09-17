@@ -24,9 +24,9 @@ malformed header from script. Bad header=FWS\x05\xbf\x97: binary
 I searched the Rails mailing list, and found "SCGI error with send_data":http://thread.gmane.org/gmane.comp.lang.ruby.rails/26257.  No conclusive information in the thread, and Zed has not released another version of SCGI yet.
 
 Just for the heck, I removed the default buffering that <code class="method">#send_file</code> does:
-<textarea name="code" cols="55" rows="15" class="ruby">send_file request_file, :disposition => 'inline',
+<% code do -%>send_file request_file, :disposition => 'inline',
                         :filename => @app.name,
                         :stream => false
-</textarea>
+<% end -%>
 
 Bingo !  Things started working perfectly fine after that.

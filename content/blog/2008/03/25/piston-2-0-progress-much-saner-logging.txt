@@ -12,7 +12,7 @@ But this new dependency gives me much greater freedom in logging.  I'm not done 
 
 Anyway, here's what 1.9.1 was logging for a simple svn/git pistonization:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ ruby -I lib bin/piston import http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+<% code(:lang => "shell") do -%>$ ruby -I lib bin/piston import http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
 D, [2008-03-25T00:41:13.494826 #13759] DEBUG -- : Piston::Commands::Import with options {:verbose=>false, :force=>false, :quiet=>false, :lock=>false, :dry_run=>false}
 D, [2008-03-25T00:41:13.495078 #13759] DEBUG -- : Guessing the repository type of "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement"
 D, [2008-03-25T00:41:13.495386 #13759] DEBUG -- : git ls-remote --heads http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
@@ -77,16 +77,16 @@ D, [2008-03-25T00:41:34.752475 #13759] DEBUG -- : git add .
 D, [2008-03-25T00:41:34.752605 #13759] DEBUG -- : > "git add ."
 D, [2008-03-25T00:41:34.758728 #13759] DEBUG -- : > #<Process::Status: pid=13785,exited(0)>, success? true, status: 0
 D, [2008-03-25T00:41:34.758993 #13759] DEBUG -- : Removing temporary directory: .repository.tmp
-</textarea>
+<% end -%>
 
 And here's the current master branch:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ ruby -I lib bin/piston import http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+<% code(:lang => "shell") do -%>$ ruby -I lib bin/piston import http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
  INFO main: Guessing the repository type
  INFO main: Guessing the working copy type
  INFO main: Checking out the repository
  INFO main: Copying from Piston::Revision(http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement@9088)
  INFO main: Checked out "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement" r9088 to "ssl_requirement"
-</textarea>
+<% end -%>
 
 Obviously, in 1.9.1, I hadn't configured the logger at all, and *everything* was logged.  Not so anymore !

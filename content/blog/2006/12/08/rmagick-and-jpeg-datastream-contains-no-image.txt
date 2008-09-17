@@ -9,14 +9,14 @@ filter:
 Today, I hit a major roadblock: "JPEG datastream contains no image".  I turned to "Google":http://www.google.com/search?ie=UTF-8&oe=UTF-8&sourceid=navclient&gfns=1&q=%22JPEG+datastream+contains+no+image%22+rmagick and found a solution.
 
 Line 55 of tempfile.rb is:
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/ruby/1.8/tempfile.rb">@tmpfile = File.open(tmpname, File::RDWR|File::CREAT|File::EXCL, 0600)
-</textarea>
+<% code("lib/ruby/1.8/tempfile.rb") do -%>@tmpfile = File.open(tmpname, File::RDWR|File::CREAT|File::EXCL, 0600)
+<% end -%>
 
 Unfortunately, on Windows, this causes problems.  If the file contains binary data (such as a JPEG datastream...), the fact that we open the file without the BINARY flag sometimes truncates the file content.
 
 I patched my local Ruby 1.8.4 version to this:
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/ruby/1.8/tempfile.rb">@tmpfile = File.open(tmpname, File::RDWR|File::CREAT|File::EXCL|File::BINARY, 0600)
-</textarea>
+<% code("lib/ruby/1.8/tempfile.rb") do -%>@tmpfile = File.open(tmpname, File::RDWR|File::CREAT|File::EXCL|File::BINARY, 0600)
+<% end -%>
 
 The only change is I OR the <code class="constant">File::BINARY</code> flag to the <var>mode</var> parameter.
 

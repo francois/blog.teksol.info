@@ -14,13 +14,13 @@ What is a filename ? A key.
 
 What is a URL ?  A key.
 
-<textarea name="code" cols="55" rows="15" title="the_internet.rb" class="ruby">require 'uri'
+<% code("the_internet.rb") do -%>require 'uri'
 require 'open-uri'
 require 'singleton'
 
 # Access the Internet through a Hash-like interface
 # Code originally written by
-#     FranÃ§ois Beausoleil (francois@teksol.info)
+#     François Beausoleil (francois@teksol.info)
 # This code is released in the public domain.
 class TheInternet
   include Singleton
@@ -34,13 +34,13 @@ class TheInternet
     # POST, PUT or whatever to URL
   end
 end
-</textarea>
+<% end -%>
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="filesystem.rb">require 'singleton'
+<% code("filesystem.rb") do -%>require 'singleton'
 
 # Access the filesystem through a Hash-like interface
 # Code originally written by
-#     FranÃ§ois Beausoleil (francois@teksol.info)
+#     François Beausoleil (francois@teksol.info)
 # This code is released in the public domain.
 class Filesystem
   include Singleton
@@ -57,11 +57,11 @@ class Filesystem
     end
   end
 end
-</textarea>
+<% end -%>
 
 The above allows us to do very interesting things:
 
-<textarea name="code" cols="55" rows="15" class="ruby">
+<% code do -%>
 # Copy from the Internet to a local file:
 Filesystem.instance['teksol.info/index.html'] =
   TheInternet.instance['http://blog.teksol.info/']
@@ -71,7 +71,7 @@ Filesystem.instance['teksol.info/index.html'] =
 search_results =
   (TheInternet.instance['http://www.google.com/search'] =
     {:hl => 'en', :q => 'rails'})
-</textarea>
+<% end -%>
 
 Is this rambling interesting ?  Certainly.  Is it useful ?  You tell me !
 

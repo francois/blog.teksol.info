@@ -8,7 +8,7 @@ filter:
 --- 
 I was playing with "Amazon SQS":http://www.amazon.com/Simple-Queue-Service-home-page/b/ref=sc_fe_l_2?ie=UTF8&node=13584001&no=3435361&me=A36L942TSJ2AJA yesterday night, using "RightScale":http://info.rightscale.com/'s "gems":http://rightaws.rubyforge.org/, and I was getting strange errors:
 
-<textarea name="code" cols="55" rows="15" class="xml"><?xml version="1.0"?>
+<% code(:lang => "xml") do -%><?xml version="1.0"?>
 <Response>
   <Errors>
     <Error>
@@ -18,7 +18,7 @@ I was playing with "Amazon SQS":http://www.amazon.com/Simple-Queue-Service-home-
   </Errors>
   <RequestID>da0bcbc2-967d-4f26-a7f1-36b87079d2ba</RequestID>
 </Response>
-</textarea>
+<% end -%>
 
 This looked strange until I thought about using a plainer queue name.  I switched from "xlsuite.development.resize" to "xlsuite-development-resize".  Sure enough, the error disappeared.  I only found out about the requirements for the queue name this morning:
 

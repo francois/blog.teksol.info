@@ -10,13 +10,13 @@ If you are like me, you develop your applications on Windows and deploy to Linux
 
 On Rails 1.1, the console does not start anymore on Windows.  It reports the following error:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ ruby script\console
+<% code(:lang => "shell") do -%>$ ruby script\console
 Loading development environment.
 c:/ruby/lib/ruby/1.8/irb/init.rb:151:in `parse_opts': undefined method `upcase' for nil:NilClass (NoMethodError)
         from c:/ruby/lib/ruby/1.8/irb/init.rb:19:in `setup'
         from c:/ruby/lib/ruby/1.8/irb.rb:54:in `start'
         from c:/ruby/bin/irb:13
-</textarea>
+<% end -%>
 
 There are two ways to fix this issue:
 
@@ -24,7 +24,7 @@ There are two ways to fix this issue:
 <li>Upgrade Ruby to 1.8.4, or</li>
 <li>Patch your vendor/rails/railties/lib/commands/console.rb to remove the "--prompt-mode single" option:
 
-<textarea name="code" cols="55" rows="15" class="patch">Index: vendor/rails/railties/lib/commands/console.rb
+<% code(:lang => "diff") do -%>Index: vendor/rails/railties/lib/commands/console.rb
 ===================================================================
 --- vendor/rails/railties/lib/commands/console.rb       (revision 4097)
 +++ vendor/rails/railties/lib/commands/console.rb       (working copy)
@@ -34,7 +34,7 @@ There are two ways to fix this issue:
  end
 -exec "#{options[:irb]} #{libs} --prompt-mode simple"
 +exec "#{options[:irb]} #{libs}"
-</textarea>
+<% end -%>
 </li>
 </ol>
 

@@ -7,13 +7,13 @@ filter:
   - textile
 --- 
 Want to get an action with a dash in it's name and still do something useful ?  Try this:
-<textarea name="code" cols="55" rows="11" class="ruby">class WelcomeController < ApplicationController
+<% code do -%>class WelcomeController < ApplicationController
   define_method("sign-up".to_sym) do
     if request.post? then
       # Do something
     end
   end
 end
-</textarea>
+<% end -%>
 
 Of course, if you don't have anything to do, just name the view file appropriately: <var>app/views/welcome/sign-up.rhtml</var>.

@@ -7,32 +7,32 @@ filter:
   - textile
 --- 
 As I reported "earlier":http://blog.teksol.info/articles/2006/11/10/plugin_assets-nice-but-breaks, I now use "plugin_assets":http://wiki.pluginaweek.org/Plugin_assets in my applications.  Two days ago, I ran
-<textarea name="code" cols="55" rows="15" class="shell">$ piston status --show-updates
-</textarea>
+<% code(:lang => "shell") do -%>$ piston status --show-updates
+<% end -%>
 
 and noticed some changes in the "PluginAWeek.org":http://pluginaweek.org/ plugins.
 
 Naïvely, I ran:
-<textarea name="code" cols="55" rows="15" class="shell">$ piston update vendor/plugins/*
-</textarea>
+<% code(:lang => "shell") do -%>$ piston update vendor/plugins/*
+<% end -%>
 
 Now, rake assets:update breaks silently.  It won't find any plugins, no matter what.  I finally traced the problem to this:
 
-<textarea name="code" cols="55" rows="15" class="patch">Index: loaded_plugins.rb
+<% code(:lang => "diff") do -%>Index: loaded_plugins.rb
 ===================================================================
 --- loaded_plugins.rb   (revision 310)
 +++ loaded_plugins.rb   (revision 311)
 @@ -1,4 +1,4 @@
 -$LOADED_PLUGINS = []
 +$LOADED_PLUGINS = ActiveSupport::OrderedHash.new
-</textarea>
+<% end -%>
 
 The full diff can be obtained as
-<textarea name="code" cols="55" rows="15" class="shell">$ svn diff -r 310:311 http://svn.pluginaweek.org/trunk/plugins/rails/loaded_plugins/lib
-</textarea>
+<% code(:lang => "shell") do -%>$ svn diff -r 310:311 http://svn.pluginaweek.org/trunk/plugins/rails/loaded_plugins/lib
+<% end -%>
 
 For the moment, I'm using this fix:
-<textarea name="code" cols="55" rows="15" class="shell">$ svn diff
+<% code(:lang => "shell") do -%>$ svn diff
 Index: vendor/plugins/loaded_plugins/tasks/loaded_plugins_tasks.rake
 ===================================================================
 --- vendor/plugins/loaded_plugins/tasks/loaded_plugins_tasks.rake       (revision 2648)
@@ -45,6 +45,6 @@ Index: vendor/plugins/loaded_plugins/tasks/loaded_plugins_tasks.rake
 +  plugins.respond_to?(:values) ? plugins.values : plugins
  end
 \ No newline at end of file
-</textarea>
+<% end -%>
 
 Just a warning for everyone out there who might be using plugin_assets.

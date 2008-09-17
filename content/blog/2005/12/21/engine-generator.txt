@@ -54,9 +54,8 @@ $ mv public/javascripts/upload_engine.js vendor/plugins/upload_engine/public/jav
 $ mv public/stylesheets/upload_engine.css vendor/plugins/upload_engine/public/stylesheets
 </pre>
 
-<textarea name="code" cols="55" rows="15" title="config/environment.rb" class="ruby">
-Engines.start :upload_engine
-</textarea>
+<% code("config/environment.rb") do -%>Engines.start :upload_engine
+<% end -%>
 
 <pre>$ script/server
 </pre>

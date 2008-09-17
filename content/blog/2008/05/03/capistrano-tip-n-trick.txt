@@ -8,13 +8,13 @@ filter:
 --- 
 If like me you didn't know, you can do that with "Capistrano":http://www.capify.org/:
 
-<textarea name="code" cols="55" rows="12" class="shell">$ cap HOSTS=web0.myapp.com deploy:update_code
+<% code(:lang => "shell") do -%>$ cap HOSTS=web0.myapp.com deploy:update_code
 cap ROLES=web,app deploy
-</textarea>
+<% end -%>
 
 Not terribly useful for the tasks demonstrated above, but what about this ?
 
-<textarea name="code" cols="55" rows="12" class="shell">$ cap ROLES=app monit:summary
-</textarea>
+<% code(:lang => "shell") do -%>$ cap ROLES=app monit:summary
+<% end -%>
 
 Incidentally, where are these documented ?  I dimly remembered reading this somewhere once, and tried it.  Works like a charm!

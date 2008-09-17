@@ -12,26 +12,26 @@ Anyway, I added <code class="method">attr_accessible</code> to my models and the
 
 Let's take one example:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/tournament.rb">class Tournament < ActiveRecord::Base
+<% code("app/models/tournament.rb") do -%>class Tournament < ActiveRecord::Base
   belongs_to :game
   validates_presence_of :game_id
 end
-</textarea>
+<% end -%>
 
 We want to protect Tournament from injection attacks.  The accessible columns are: name, game_id.  So, let's add that:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/tournament.rb">class Tournament < ActiveRecord::Base
+<% code("app/models/tournament.rb") do -%>class Tournament < ActiveRecord::Base
   belongs_to :game
   attr_accessible :name, :game_id
   validate do |tournament|
     tournament.errors.add_to_base("Game must be active") unless tournament.game.active?
   end
 end
-</textarea>
+<% end -%>
 
 Run the tournament tests, and chaos ensues.  Looking at the errors, I can see a recurring pattern: all of my tests are complaining about a <code class="class exception">NoMethodError</code> <code class="method">active?</code> on <code class="class">NilClass</code>.  What ?  Look here, buddy, I *am* giving you a game:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/tournament_test.rb">class TournamentWithGameTest < Test::Unit::TestCase
+<% code("test/unit/tournament_test.rb") do -%>class TournamentWithGameTest < Test::Unit::TestCase
   fixtures :games
 
   def setup
@@ -39,18 +39,18 @@ Run the tournament tests, and chaos ensues.  Looking at the errors, I can see a 
         :name => 'My Tournament')
   end
 end
-</textarea>
+<% end -%>
 
 The fix is very obvious, once you think about it:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/tournament.rb">class Tournament < ActiveRecord::Base
+<% code("app/models/tournament.rb") do -%>class Tournament < ActiveRecord::Base
   belongs_to :game
   attr_accessible :name, :game_id*, :game*
   validate do |tournament|
     tournament.errors.add_to_base("Game must be active") unless tournament.game.active?
   end
 end
-</textarea>
+<% end -%>
 
 Since "ActiveRecord::Base":http://api.rubyonrails.com/classes/ActiveRecord/Base.html is doing a straight key removal from the attributes <code class="class">Hash</code> when using <code class="method">attr_accessible</code>, it is important to also include any relational attributes as well.
 

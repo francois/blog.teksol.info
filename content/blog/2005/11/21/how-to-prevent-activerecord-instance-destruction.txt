@@ -9,7 +9,7 @@ filter:
 In one of my projects, I wanted to prevent instances of particular classes to be deleted if they were in any way associated to another object.  In database terms, I wanted an <code class="sql">ON DELETE RESTRICT</code> constraint.
 
 Since I cannot rely on the database to enforce it for me (MySQL 4, MyISAM engine), I coded the following:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/city_test.rb">require File.dirname(__FILE__) + '/../test_helper'
+<% code("test/unit/city_test.rb") do -%>require File.dirname(__FILE__) + '/../test_helper'
 
 class CityTest < Test::Unit::TestCase
   fixtures :cities, :contacts
@@ -33,9 +33,9 @@ class CityTest < Test::Unit::TestCase
     end
   end
 end
-</textarea>
+<% end -%>
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/city.rb">class City < ActiveRecord::Base
+<% code("app/models/city.rb") do -%>class City < ActiveRecord::Base
   has_and_belongs_to_many :contacts, :join_table => 'contacts_cities'
 
   def destroy
@@ -48,7 +48,7 @@ end
     super
   end
 end
-</textarea>
+<% end -%>
 
 I had to override <code class="method">destroy</code> because in <code class="method">has_and_belongs_to_many</code> relationships, Rails deletes join table records before deleting the record.  This means that in <code class="method">before_destroy</code> filters, <code class="ruby expression">self.contacts.empty?</code> will always report <code class="constant">true</code>.  "Ticket #1183: dependents are destroyed before client before_destroy hooks are called":http://dev.rubyonrails.org/ticket/1183 is already opened on this issue.
 

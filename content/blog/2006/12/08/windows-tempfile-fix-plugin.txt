@@ -10,13 +10,13 @@ This is the initial release of the Windows Tempfile Fix plugin.  This plugin set
 
 h2. Installation
 
-<textarea name="code" cols="55" rows="15" class="shell">$ piston import svn://svn.teksol.info/svn/rails/plugins/windows_tempfile_fix vendor\plugins\windows_tempfile_fix
-</textarea>
+<% code(:lang => "shell") do -%>$ piston import svn://svn.teksol.info/svn/rails/plugins/windows_tempfile_fix vendor\plugins\windows_tempfile_fix
+<% end -%>
 
 Alternatively:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ ruby script/plugin install svn://svn.teksol.info/svn/rails/plugins/windows_tempfile_fix
-</textarea>
+<% code(:lang => "shell") do -%>$ ruby script/plugin install svn://svn.teksol.info/svn/rails/plugins/windows_tempfile_fix
+<% end -%>
 
 h2. README
 

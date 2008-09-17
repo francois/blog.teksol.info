@@ -6,21 +6,21 @@ filter:
   - erb
   - textile
 --- 
-<textarea name="code" cols="55" rows="15" class="shell">$ git status
+<% code(:lang => "shell") do -%>$ git status
 # On branch master
 nothing to commit (working directory clean)
 $ echo $?
 1
-</textarea>
+<% end -%>
 
 Shouldn't a successful git status in a git repository return a status code of 0 ?  Doing it in a random folder returns a sensible value:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git status
+<% code(:lang => "shell") do -%>$ git status
 fatal: Not a git repository
 Failed to find a valid git directory.
 $ echo $?
 128
-</textarea>
+<% end -%>
 
 Can anybody shed some light on this ?
 

@@ -10,13 +10,13 @@ Does anyone know why ActiveRecord does not merge joins when using scopes ?
 
 Scopes are wonderful, thanks for "has_finder":http://pivots.pivotallabs.com/users/nick/blog/articles/284-hasfinder-it-s-now-easier-than-ever-to-create-complex-re-usable-sql-queries and "named scopes":http://ryandaigle.com/articles/2008/3/24/what-s-new-in-edge-rails-has-finder-functionality, but joins aren't supported.  This code:
 
-<textarea name="code" cols="55" rows="15" class="ruby">City.nearest(latitude, longitude).find_tagged_with(tags)</textarea>
+<% code do -%>City.nearest(latitude, longitude).find_tagged_with(tags)<% end -%>
 
 raises an ActiveRecord::StatementInvalid complaining that a specified column could not be found.  The column can't be found because the join was dropped on the floor, instead of being merged.
 
 The change me and "Marc-André":http://macournoyer.wordpress.com/ are proposing to make is this:
 
-<textarea name="code" cols="55" rows="15" class="ruby diff patch">$ git diff 36236235039b3b0cab22a24ce7b45a8ec071cb5e 45e7c94be02a586f70908694545e8484e4a85382 vendor
+<% code(:lang => "diff") do -%>$ git diff 36236235039b3b0cab22a24ce7b45a8ec071cb5e 45e7c94be02a586f70908694545e8484e4a85382 vendor
 diff --git a/vendor/rails/activerecord/lib/active_record/base.rb b/vendor/rails/activerecord/lib/active_record/base.rb
 index 261d854..427e3ef 100755
 --- a/vendor/rails/activerecord/lib/active_record/base.rb
@@ -30,6 +30,6 @@ index 261d854..427e3ef 100755
                        else
                          hash[method][key] = hash[method][key] || params[key]
                        end
-</textarea>
+<% end -%>
 
 This is based on Rails 2.0.2, but Rails Edge has the same problem.  So, any ideas ?

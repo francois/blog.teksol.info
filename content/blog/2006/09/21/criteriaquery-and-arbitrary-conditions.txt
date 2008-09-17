@@ -26,7 +26,7 @@ Street Addres:        [               ]
 
 CriteriaQuery allows you to write the above as:
 
-<textarea name="code" cols="55" rows="15" class="ruby">pq = Person.query
+<% code do -%>pq = Person.query
 
 pq.disjunction.first_name_eq(params[:name]).last_name_eq(params[:name]) if params[:name]
   pq.category_id_eq(params[:category]) if params[:category]
@@ -35,17 +35,17 @@ pq.disjunction.first_name_eq(params[:name]).last_name_eq(params[:name]) if param
   address.state_eq(params[:address[:state]]) if params[:address[:state]]
   ...
 end
-</textarea>
+<% end -%>
 </blockquote>
 
 This is all fine and dandy, except using the current version (r41 from the "repository":http://3columns.net/rubyplayground/projects/criteria_query/trunk/criteria_query), you cannot add arbitrary conditions, such as <code class="sql">LENGTH(name) > 0</code>.
 
 ActiveRecord scopes to the rescue.  I recently hit that in an application where we allow the admin to find only non anonymous estimates.  Non anonymous is defined as having either a phone or an E-Mail address.
 
-<textarea name="code" cols="55" rows="15" class="ruby">conds = 'LENGTH(phone_number) > 0 OR LENGTH(email) > 0' if @filters[:non_anonymous]
+<% code do -%>conds = 'LENGTH(phone_number) > 0 OR LENGTH(email) > 0' if @filters[:non_anonymous]
 Estimate.with_scope(:find => {:conditions => conds}) do
   @estimates = query.find(:order => 'updated_at DESC')
 end
-</textarea>
+<% end -%>
 
 Of course, you will ask "why in the world aren't your fields <code class="sql">NULL</code> to begin with if they don't contain a value ?"  Now, that is a very interesting question which I will now explore with gusto !

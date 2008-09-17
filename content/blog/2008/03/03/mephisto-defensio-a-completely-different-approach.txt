@@ -28,23 +28,23 @@ If you wish to play with this Mephisto version, you can pull from my public clon
 
 *Update 2008-03-03*: After discussion with Halorgium on #github, I have pushed a multiengine branch.  Use that instead of my master, which has been reset.
 
-<textarea name="code" cols="55" rows="15" class="shell">git clone git://github.com/francois/mephisto.git mephisto_defensio
+<% code(:lang => "shell") do -%>git clone git://github.com/francois/mephisto.git mephisto_defensio
 cd mephisto_defensio
 git checkout multiengine
 rake db:bootstrap db:migrate
 thin start
-</textarea>
+<% end -%>
 
 If you already have a clone of Mephisto's repository from someone else, add mine as a remote:
 
-<textarea name="code" cols="55" rows="15" class="shell">cd mephisto
+<% code(:lang => "shell") do -%>cd mephisto
 git remote add francois git://github.com/francois/mephisto.git
 git fetch francois
 git branch --track multiengine francois/multiengine
 git checkout multiengine
 rake db:migrate
 thin start
-</textarea>
+<% end -%>
 
 In case you want to look at the code first, you can browse the GitHub repository using "http://github.com/francois/mephisto/tree/multiengine":http://github.com/francois/mephisto/tree/multiengine
 

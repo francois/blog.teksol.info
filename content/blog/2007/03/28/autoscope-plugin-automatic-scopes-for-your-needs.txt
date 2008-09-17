@@ -16,7 +16,7 @@ h2. Examples
 
 Declare your scopes within your ActiveRecord::Base subclasses.
 
-<textarea name="code" cols="55" rows="15" class="ruby">class Contact < ActiveRecord::Base
+<% code do -%>class Contact < ActiveRecord::Base
   auto_scope \
       :old => {:find => {:conditions => ["born_on < ?", 30.years.ago]}},
       :young => {:find => {:conditions => ["born_on > ?", 1.year.ago]}}
@@ -31,14 +31,14 @@ class Testimonial < ActiveRecord::Base
           :find => {:conditions => "approved_at IS NULL"},
           :create => {:approved_at => nil}}
 end
-</textarea>
+<% end -%>
 
 These declarations give you access to the following scoped methods:
-<textarea name="code" cols="55" rows="15" class="ruby">Testimonial.approved.count
+<% code do -%>Testimonial.approved.count
 Testimonial.unapproved.create!(params[:testimonial])
 @young_contacts = Contact.young
 @contacts = Contact.old.find(:all, :conditions => ["name LIKE ?", params[:name]])
-</textarea>
+<% end -%>
 
 The plugin's home page is: "http://xlsuite.org/plugins/auto_scope":http://xlsuite.org/plugins/auto_scope
 The plugin's Subversion repository is: "http://svn.xlsuite.org/plugins/auto_scope":http://svn.xlsuite.org/plugins/auto_scope

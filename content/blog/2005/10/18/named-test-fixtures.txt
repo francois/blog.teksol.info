@@ -7,28 +7,28 @@ filter:
   - textile
 --- 
 In one of my projects, I have tons of units and functional tests.  To speed things up, I set my configuration like this:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/test_helper.rb">class Test::Unit::TestCase
+<% code("test/test_helper.rb") do -%>class Test::Unit::TestCase
   self.use_transactional_fixtures = true
   self.use_instantiated_fixtures  = :no_instances
 end
-</textarea>
+<% end -%>
 
 In my tests, instead of accessing <var>@bob</var>, I now have to do:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/party_test.rb">def test_party_is_destoryed
+<% code("test/unit/party_test.rb") do -%>def test_party_is_destoryed
   party = Party.find(@parties['bob']['id'])
   party.destroy
   assert party.destroyed?, "Party wasn't marked destroyed"
 end
-</textarea>
+<% end -%>
 
 Works, but isn't this very verbose ?  So, I created myself a little helper::
-<textarea name="code" cols="55" rows="15" ang="ruby" title="test/test_helper.rb">def party(fixture_name)
+<% code("test/test_helper.rb") do -%>def party(fixture_name)
   Party.find(@parties[fixture_name.to_s]['id'])
 end
-</textarea>
+<% end -%>
 
 All great and dandy.  I wanted to share with the community, so I started digging into <tt class="filename">fixtures.rb</tt> to implement it.  Much to my surprise, this already exists:
-<textarea name="code" cols="55" rows="15" class="ruby" title="vendor/rails/activerecord/lib/active_record/fixtures.rb">class Test::Unit::TestCase #:nodoc:
+<% code("vendor/rails/activerecord/lib/active_record/fixtures.rb") do -%>class Test::Unit::TestCase #:nodoc:
   def self.fixtures(*table_names)
     table_names = table_names.flatten
     self.fixture_table_names |= table_names
@@ -36,7 +36,7 @@ All great and dandy.  I wanted to share with the community, so I started digging
     setup_fixture_accessors(table_names)
   end
 end
-</textarea>
+<% end -%>
 
 So, I guess I'm going to send a documentation patch instead of code !
 

@@ -16,34 +16,34 @@ What's changed ?
 * Renamed middle package from *flash_plugin_helper* to *flash_helper_plugin*.  This should not have any impact on your code.
 
 The interesting feature in this version are the new assertions.  For example, the following code:
-<textarea name="code" cols="55" rows="15" class="ruby">def test_destroy
+<% code do -%>def test_destroy
   post :destroy, :id => contacts(:bob).id
 
   assert_match /bob.*destroyed successfully/i,
                flash[:notice],
                "User notified that Bob was deleted"
 end
-</textarea>
+<% end -%>
 
 can be expressed like this instead:
-<textarea name="code" cols="55" rows="15" class="ruby">def test_destroy
+<% code do -%>def test_destroy
   post :destroy, :id => contacts(:bob).id
 
   assert_success_flash_contains \
       /bob.*destroyed successfully/i,
       'User notified that Bob was deleted'
 end
-</textarea>
+<% end -%>
 
 The reverse is also true:
-<textarea name="code" cols="55" rows="15" class="ruby">def test_pre_authorization_granted
+<% code do -%>def test_pre_authorization_granted
   get :index, {}, {:user_id => accounts(:bob).id}
 
   assert_any_flash_does_not_contain \
       /not authorized/i,
       'Authorization granted'
 end
-</textarea>
+<% end -%>
 
 There are eight assertion methods added to <code class="class">Test::Unit::TestCase</code>:
 * <code class="method declaration">#assert_any_flash_contains(string_or_regexp, msg=nil)</code>

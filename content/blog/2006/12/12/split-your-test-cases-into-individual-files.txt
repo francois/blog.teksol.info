@@ -12,7 +12,7 @@ Like I explained in "Test fixtures and behavioral testing":http://blog.teksol.in
 
 I wrote this little Rake task to do the split for me.  I'm putting it out here in case it profits someone else.
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/tasks/split_cases.rake"># This file is placed in the public domain by François Beausoleil
+<% code("lib/tasks/split_cases.rake") do -%># This file is placed in the public domain by François Beausoleil
 # Use at your own risks
 desc "Splits all test files so that only one test case is defined per file"
 task :split_cases => :environment do
@@ -62,4 +62,4 @@ task :split_cases => :environment do
 
   puts
 end
-</textarea>
+<% end -%>

@@ -7,19 +7,19 @@ filter:
   - textile
 --- 
 I learned a nice one today.  If you use "Rails Engines":http://rails-engines.rubyforge.org/ and you want to configure your environments differently, you can't do this:
-<textarea name="code" cols="55" rows="15" title="config/environments/development.rb" class="ruby">module LoginEngine
+<% code("config/environments/development.rb") do -%>module LoginEngine
   config :salt => 'test'
 end
-</textarea>
-<textarea name="code" cols="55" rows="15" title="config/environments/production.rb" class="ruby">module LoginEngine
+<% end -%>
+<% code("config/environments/production.rb") do -%>module LoginEngine
   config :salt => 'a-long-and-complicated-salt'
 end
-</textarea>
-<textarea name="code" cols="55" rows="15" title="config/environment.rb" class="ruby">Engines.start :login
-</textarea>
+<% end -%>
+<% code("config/environment.rb") do -%>Engines.start :login
+<% end -%>
 
 If you do that, you'll get the following backtrace:
-<textarea name="code" cols="55" rows="15" class="ruby-backtrace">$ ruby script\server
+<% code(:lang => "shell") do -%>$ ruby script\server
 ./script/../config/../vendor/rails/railties/lib/initializer.rb:178:in
 `load_environment': undefined method `config' for
 Rails::Initializer::LoginEngine:Module (NoMethodError)
@@ -36,10 +36,10 @@ Rails::Initializer::LoginEngine:Module (NoMethodError)
        from C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__'
        from C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
        from script/server:3
-</textarea>
+<% end -%>
 
 What is happening is that "Rails":http://www.rubyonrails.com/ loads the environment file *before* the Rails Engine plugin is initialized.  The solution ?  Do everything in <code class="filename">config/environment.rb</code>:
-<textarea name="code" cols="55" rows="15" title="config/environment.rb" class="ruby">module LoginEngine
+<% code("config/environment.rb") do -%>module LoginEngine
   case RAILS_ENV
   when 'development', 'test'
     config :salt, "test"
@@ -50,4 +50,4 @@ end
 
 Engines.start :login
 
-</textarea>
+<% end -%>

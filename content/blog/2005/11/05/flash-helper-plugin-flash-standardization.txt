@@ -24,7 +24,7 @@ anyone is welcome to suggest better ones):
 _(emphasis mine)_
 
 In the spirit of open source, I started coding a new "Rails plugin":http://wiki.rubyonrails.com/rails/pages/Plugins:  the "FlashHelperPlugin":https://opensvn.csie.org/traccgi/flash_helper_plugin/trac.cgi.  With it, you will be able to do:
-<textarea name="code" cols="55" rows="15" title="app/controllers/users_controller.rb" class="ruby">class UsersController < ApplicationController
+<% code("app/controllers/users_controller.rb" class="ruby") do -%>class UsersController < ApplicationController
   def authenticate
     if authenticated? then
       flash_success('Authenticated successfully')
@@ -33,9 +33,9 @@ In the spirit of open source, I started coding a new "Rails plugin":http://wiki.
       flash_failure('Failed authentication')
     end
   end
-</textarea>
+<% end -%>
 
-<textarea name="code" cols="55" rows="15" title="app/views/layouts/application.rhtml" class="html"><html>
+<% code("app/views/layouts/application.rhtml", :lang => "html") do -%><html>
 <head>
   <#%= stylesheet_link_tag 'scaffold', 'application',
       :media => 'all' %>
@@ -45,7 +45,7 @@ In the spirit of open source, I started coding a new "Rails plugin":http://wiki.
   <#%= @content_for_layout %>
 </body>
 </html>
-</textarea>
+<% end -%>
 
 Actually, what I need now is a nudge to get the tests working.  Also, WEBrick fails silently on startup with this plugin in <var class="filename">vendor/plugins</var>.
 

@@ -10,26 +10,26 @@ I was reading the code for the "FileColumn":http://www.kanthak.net/opensource/fi
 
 A recent example on the mailing list ?  "render partial and passing in the object":http://thread.gmane.org/gmane.comp.lang.ruby.rails/28873, by Mark Van Holstyn.  In the thread, he asks why he can't do:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/controllers/user_controller.rb">def edit
+<% code("app/controllers/user_controller.rb") do -%>def edit
   @user = User.find_by_id(1)
   render :partial => 'address', :object => @user.address}
 end
-</textarea>
+<% end -%>
 
 His partial being:
-<textarea name="code" cols="55" rows="15" title="app/views/shared/_address.rhtml" class="rhtml"><#%= text_area('address', 'street') %>
-</textarea>
+<% code("app/views/shared/_address.rhtml", :class => "html") do -%>><#%= text_area('address', 'street') %>
+<% end -%>
 
 Reading FileColumn helper's code, and the code in Rails own helpers, the following idiom is used to get a hold of the instance variable:
-<textarea name="code" cols="55" rows="15" class="ruby" title="file-column-0.3/lib/file_column_helper.rb">def url_for_file_column(object_name, method, suffix=nil)
+<% code("file-column-0.3/lib/file_column_helper.rb") do -%>def url_for_file_column(object_name, method, suffix=nil)
   object = instance_variable_get("@#{object_name.to_s}")
   ...
 end
-</textarea>
+<% end -%>
 
 What if we did it this way instead ?
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="file-column-0.3x/lib/file_column_helper.rb">def url_for_file_column(object_name, method, suffix=nil)
+<% code("file-column-0.3x/lib/file_column_helper.rb") do -%>def url_for_file_column(object_name, method, suffix=nil)
   object =  case object_name
             when String, Symbol
               instance_variable_get("@#{object_name.to_s}")
@@ -38,6 +38,6 @@ What if we did it this way instead ?
             end
   ...
 end
-</textarea>
+<% end -%>
 
 Actually, this should all be abstracted away in some kind of helper for helpers.  Let me take a moment to prepare a patch.  I think this would make things quite a bit easier for partial users.

@@ -11,28 +11,28 @@ In "UI for belongs_to relationships":http://blog.teksol.info/articles/2005/10/16
 I have to thank "Michael C. Toren":http://michael.toren.net/ for the spark that inspired this entry.
 
 The way I now do my belongs_to UIs today is much simpler.  Let us assume the following models for discussion:
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/product.rb">class Product
+<% code("app/models/product.rb") do -%>class Product
   belongs_to :color
 
   validates_presence_of :color
 end
-</textarea>
-<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/color.rb">class Color
+<% end -%>
+<% code("app/models/color.rb") do -%>class Color
   def self.all
     self.find(:all, :order => 'name')
   end
 end
-</textarea>
+<% end -%>
 
 When creating a product, we would like to select the color of said product.  The <acronym title="user interface">UI</acronym> should be a simple "SELECT":http://www.w3.org/TR/html401/interact/forms.html#edef-SELECT box.
 
 Rails makes it easy to have <code class="html">SELECT</code> boxes coming from some table:
-<textarea name="code" cols="55" rows="15" class="rhtml" title="app/views/products/_form.rhtml"><p><label>Description:
+<% code("app/views/products/_form.rhtml", :lang => "html") do -%><p><label>Description:
   <#%= text_field 'product', 'description' %></p>
 <p><label>Color:
   <#%= collection_select 'product', 'color_id',
       Color.all, :id, :name %></p>
-</textarea>
+<% end -%>
 
 See how I call <code class="method">#collection_select</code> with *color_id* instead of *color* ?  That's the trick to use.
 
@@ -45,13 +45,13 @@ There are two ways to resolve that:
 <ol>
 <li>Change the validation to require both <code class="method">color</code> and <code class="sql column">color_id</code> (adding two messages to the message area), or;</li>
 <li>Add the error <code class="html">DIV</code> manually when an error is found on the counterpart field, such as this:
-<textarea name="code" cols="55" rows="15" class="rhtml" title="app/views/products/_form.rhtml"><p><label>Description:
+<% code("app/views/products/_form.rhtml", :lang => "html") do -%><p><label>Description:
 <#%= text_field 'product', 'description' %></p>
 <p><label>Color:
 <div class="<#%= 'fieldWithErrors' if error_message_on 'product', 'color' %>">
 <#%= collection_select 'product', 'color_id',
     Color.all, :id, :name %></div></p>
-</textarea>
+<% end -%>
 </li>
 </ol>
 

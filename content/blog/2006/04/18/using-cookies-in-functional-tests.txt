@@ -10,7 +10,7 @@ Just had a bit of a problem today.  I wanted to test access to some actions, but
 
 When setting your cookies in the test, use <code class="class">CGI::Session</code>, and not a pure <code class="class">Hash</code>:
 
-<textarea name="code" cols="55" rows="15" class="ruby">class AccessDownloadsByCookieTest < Test::Unit::TestCase
+<% code do -%>class AccessDownloadsByCookieTest < Test::Unit::TestCase
   def setup
     @controller = AttachmentsController.new
     @request    = ActionController::TestRequest.new
@@ -26,4 +26,4 @@ When setting your cookies in the test, use <code class="class">CGI::Session</cod
     assert_response :success
   end
 end
-</textarea>
+<% end -%>

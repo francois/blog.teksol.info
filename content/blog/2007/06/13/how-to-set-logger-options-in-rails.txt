@@ -10,10 +10,10 @@ Today, I was replacing RailsCron and "BackgrounDRb":http://backgroundrb.rubyforg
 
 Actually doing the replacement is very easy:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="config/environment.rb">Rails::Initializer.run do |config|
+<% code("config/environment.rb") do -%>Rails::Initializer.run do |config|
   config.logger = Logger.new(File.dirname(__FILE__) + "/../log/#{RAILS_ENV}.log")
 end
-</textarea>
+<% end -%>
 
 That's it.  Have fun.  Stop reading...  Unless you want more details.
 
@@ -21,16 +21,16 @@ This is essentially what Rails does, except now you have complete control over h
 
 Some options you might want to investigate:
 
-<textarea name="code" cols="55" rows="15" class="ruby"># Keep at most 2 2 megabytes log files
+<% code do -%># Keep at most 2 2 megabytes log files
 config.logger = Logger.new(File.dirname(__FILE__) + "/../log/#{RAILS_ENV}.log", 2, 2*1024*1024)
 
 # Create a new log file each day
 config.logger = Logger.new(File.dirname(__FILE__) + "/../log/#{RAILS_ENV}.log", "daily")
-</textarea>
+<% end -%>
 
 If you are running a script which loads the Rails environment manually, you can also do this:
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="lib/daemons/futures_worker.rb">#!/usr/bin/env ruby
+<% code("lib/daemons/futures_worker.rb") do -%>#!/usr/bin/env ruby
 
 # You might want to change this
 raise "No RAILS_ENV defined" if ENV["RAILS_ENV"].to_s.empty?
@@ -41,6 +41,6 @@ RAILS_DEFAULT_LOGGER = Logger.new(File.dirname(__FILE__) + "/../../log/futures_r
 require File.dirname(__FILE__) + "/../../config/environment"
 
 # Other code as appropriate
-</textarea>
+<% end -%>
 
 The <code class="class">Rails::Initializer</code> is smart enough to use either the RAILS_DEFAULT_LOGGER or the one defined in the configuration block.  For the gory details, please read "Rails::Initializer#initialize_logger":http://dev.rubyonrails.org/browser/branches/1-2-stable/railties/lib/initializer.rb#L246

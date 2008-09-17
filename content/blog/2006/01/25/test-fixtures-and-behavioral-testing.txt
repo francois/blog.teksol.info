@@ -11,7 +11,7 @@ Yesterday, I was coding a new set of tests for a <code class="class">Picture</co
 I already had an existing <code class="filename">test/unit/picture_test.rb</code>, which I extended.
 
 The tests looked like this:
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/picture_test.rb">class PictureTest < Test::Unit::TestCase
+<% code("test/unit/picture_test.rb") do -%>class PictureTest < Test::Unit::TestCase
   def test_picture_exists_on_disk
     pict = uploaded_file('large.jpg', 'image/jpeg', 'somepicture.jpg')
     @picture = Picture.build(pict)
@@ -30,11 +30,11 @@ The tests looked like this:
     assert File.exist?(@picture.cache_thumbnail), 'file copied to disk'
   end
 end
-</textarea>
+<% end -%>
 
 I knew this was the wrong way to go - the fixture was repeated more than once.  Then, I realized that what I wanted was a new <code class="class">TestCase</code>.  I had already reached for my mouse to hit _New File_ when I had a flash:  what prevents me from simply adding a new class to <code class="filename">picture_test.rb</code> ?
 
-<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/picture_test.rb">class PictureTest < Test::Unit::TestCase
+<% code("test/unit/picture_test.rb") do -%>class PictureTest < Test::Unit::TestCase
   def test_read_from_stringio
     ...
   end
@@ -77,7 +77,7 @@ class PrivatePictureTest < Test::Unit::TestCase
         'thumbnail should not be on disk when picture is private'
   end
 end
-</textarea>
+<% end -%>
 
 I also had another flash:  is <code class="class">TestCase</code> the right name ?  Shouldn't it be called <code class="class">TestFixture</code> instead ?  Because that is what instances of this class represent - a test fixture.
 

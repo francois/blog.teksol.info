@@ -8,7 +8,7 @@ filter:
 --- 
 Have you ever wished you could access your "Amazon Simple Queue Service":http://www.amazon.com/Simple-Queue-Service-home-page/b/ref=sc_fe_l_2?ie=UTF8&node=13584001&no=3435361 from the command line ?  Now you can:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ AWS_ACCESS_KEY_ID=<your access key>
+<% code(:lang => "shell") do -%>$ AWS_ACCESS_KEY_ID=<your access key>
 $ AWS_SECRET_ACCESS_KEY="<the secret access key>"
 
 $ clisqs create my-queue
@@ -34,22 +34,22 @@ this is the message
 
 $ clisqs delete --force my-queue
 Queue my-queue was deleted.
-</textarea>
+<% end -%>
 
 h2. Installation
 
-<textarea name="code" cols="55" rows="15" class="shell">$ sudo gem install cliaws
-</textarea>
+<% code(:lang => "shell") do -%>$ sudo gem install cliaws
+<% end -%>
 
 h2. Direct-code access
 
-<textarea name="code" cols="55" rows="15" class="ruby">require "rubygems"
+<% code do -%>require "rubygems"
 require "cliaws"
 
 Cliaws.sqs.push("my-queue", "the data")
 the_size = Cliaws.sqs.size("my-queue")
 the_message = Cliaws.sqs.pop("my-queue")
-</textarea>
+<% end -%>
 
 h2. S3 ?
 

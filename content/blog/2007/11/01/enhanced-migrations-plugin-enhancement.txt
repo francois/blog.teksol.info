@@ -10,7 +10,7 @@ I recently hit upon the "Enhanced Migrations":http://revolutiononrails.blogspot.
 
 To this end, I generated the following diff:
 
-<textarea name="code" cols="55" rows="15" class="ruby">$ svn diff vendor
+<% code do -%>$ svn diff vendor
 Index: vendor/plugins/enhanced_migrations/lib/enhanced_migrations.rb
 ===================================================================
 --- vendor/plugins/enhanced_migrations/lib/enhanced_migrations.rb       (revision 7767)
@@ -26,6 +26,6 @@ Index: vendor/plugins/enhanced_migrations/lib/enhanced_migrations.rb
      end
    rescue ActiveRecord::StatementInvalid 
      # No Schema Info
-</textarea>
+<% end -%>
 
 Hope this is useful for other people.

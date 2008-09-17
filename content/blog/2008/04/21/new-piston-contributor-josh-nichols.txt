@@ -15,11 +15,11 @@ Both contributions were accepted and are now part of Piston's master branch.  Th
 
 If you want to help, do not fear !
 
-<textarea name="code" cols="55" rows="15" class="shell">$ git clone git://github.com/francois/piston.git
+<% code(:lang => "shell") do -%>$ git clone git://github.com/francois/piston.git
 $ # make changes
 $ git commit
 $ # fork piston's repository
 $ git remote add github git@github.com:YOURNAME/piston.git
 $ git push github master
 $ # Send me a pull request
-</textarea>
+<% end -%>

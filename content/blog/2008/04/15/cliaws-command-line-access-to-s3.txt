@@ -8,24 +8,24 @@ filter:
 --- 
 I just released a new gem on RubyForge:  cliaws.  Using it, you have access to nice command line shortcuts:
 
-<textarea name="code" cols="55" rows="15" class="shell">$ AWS_ACCESS_KEY_ID=<your access key>
+<% code(:lang => "shell") do -%>$ AWS_ACCESS_KEY_ID=<your access key>
 $ AWS_SECRET_ACCESS_KEY="<the secret access key>"
 $ clis3 list BUCKET/PATH-PREFIX
 $ clis3 put BUCKET/FULL/PATH/NAME /path/to/local/file
 $ clis3 get BUCKET/FULL/PATH/NAME /path/to/local/file
 $ clis3 cat BUCKET/FULL/PATH/NAME
-</textarea>
+<% end -%>
 
 This is not rocket science, but with the kind of work I'm doing at the moment, having quick command-line access to S3 is a boon.
 
 h2. Installation
 
-<textarea name="code" cols="55" rows="15" class="shell">$ gem install cliaws
-</textarea>
+<% code(:lang => "shell") do -%>$ gem install cliaws
+<% end -%>
 
 h2. Direct-code access
 
-<textarea name="code" cols="55" rows="15" class="ruby">require "rubygems"
+<% code do -%>require "rubygems"
 require "cliaws"
 
 # Retrieve and store in a variable
@@ -38,7 +38,7 @@ end
 
 # Returns an Array of full names
 contents = Cliaws.s3.list("BUCKET")
-</textarea>
+<% end -%>
 
 h2. Repository
 
