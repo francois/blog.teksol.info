@@ -1,0 +1,45 @@
+--- 
+title:      "Prevent field autocompletion in Rails applications"
+created_at: 2005-11-16 15:29:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Most of the Rails application I build these days have no use whatsoever for the autocomplete feature modern browsers.
+
+"FireFox":http://www.mozilla.org/products/firefox/ and "Internet Explorer":http://www.microsoft.com/windows/ie have extended the "input":http://www.w3.org/TR/html401/interact/forms.html#edef-INPUT element to provide an <code class="html attribute">autocomplete</code> attribute.
+
+This attribute may be set to _on_ or _off_, indicating whether autocomplete should be enabled, on a field-per-field basis.
+
+In Rails, that translates to:
+<textarea name="code" cols="55" rows="15" class="rhtml"><%= text_field :payment, :credit_card,
+        :autocomplete => 'off' %>
+</textarea>
+
+Obviously, if we have ten fields on the form, that would not be very "DRY":http://c2.com/cgi/wiki?DontRepeatYourself
+
+Instead, you can do the following:
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/helpers/application_helper.rb">module ApplicationHelper
+  def text_field(*args)
+    unless args.last.kind_of?(Hash) then
+      args << {}
+    end
+
+    args.last[:autocomplete] = 'off' \
+        unless args.last[:autocomplete]
+    super(*args)
+  end
+end
+</textarea>
+
+This is great when most of your fields need to have autocomplete disabled.  But, while researching this topic, I stumbled on "How to Turn Off Form Autocompletion":http://developer.mozilla.org/en/docs/How_to_Turn_Off_Form_Autocompletion
+ for "Mozilla":http://www.mozilla.com/ based browsers.
+
+You do it this way:
+<textarea name="code" cols="55" rows="15" class="rhtml"><%= start_form_tag({}, {:autocomplete => 'off'}) %>
+  ...
+<%= end_form_tag %>
+</textarea>
+
+The same trick as above for overriding <code class="method">text_field_tag</code> can be used to override <code class="method">form_tag</code>.

@@ -1,0 +1,27 @@
+--- 
+title:      "Git status exit status ?"
+created_at: 2008-03-15 06:46:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+<textarea name="code" cols="55" rows="15" class="shell">$ git status
+# On branch master
+nothing to commit (working directory clean)
+$ echo $?
+1
+</textarea>
+
+Shouldn't a successful git status in a git repository return a status code of 0 ?  Doing it in a random folder returns a sensible value:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git status
+fatal: Not a git repository
+Failed to find a valid git directory.
+$ echo $?
+128
+</textarea>
+
+Can anybody shed some light on this ?
+
+I found "Possible bug in 'git status' exit code is 1 instead of 0":http://www.gelato.unsw.edu.au/archives/git/0701/36671.html.  What is the rational for this ?  It goes against everything Unix ?!?

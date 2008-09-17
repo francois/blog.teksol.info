@@ -1,0 +1,78 @@
+--- 
+title:      "TheInternet.is_a?(Hash) == true"
+created_at: 2006-08-14 22:17:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+While convalescing from a recent "surgery":http://en.wikipedia.org/wiki/Thyroidectomy, I had a flash of insight.  One can view the Internet and a file system as one big, really big, Hash.
+
+What is a Hash if not a way to access a value referenced by a key ?
+
+What is a filename ? A key.
+
+What is a URL ?  A key.
+
+<textarea name="code" cols="55" rows="15" title="the_internet.rb" class="ruby">require 'uri'
+require 'open-uri'
+require 'singleton'
+
+# Access the Internet through a Hash-like interface
+# Code originally written by
+#     FranÃ§ois Beausoleil (francois@teksol.info)
+# This code is released in the public domain.
+class TheInternet
+  include Singleton
+
+  def [](url)
+    uri = url.respond_to?(:read) ? url : URI.parse(url)
+    uri.read
+  end
+
+  def []=(url, value)
+    # POST, PUT or whatever to URL
+  end
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="filesystem.rb">require 'singleton'
+
+# Access the filesystem through a Hash-like interface
+# Code originally written by
+#     FranÃ§ois Beausoleil (francois@teksol.info)
+# This code is released in the public domain.
+class Filesystem
+  include Singleton
+
+  def [](path)
+    File.read(path)
+  end
+
+  def []=(path, value)
+    File.open(path, 'wb') do |f|
+      f.write(value)
+      # Could do fancy stuff here:
+      # YAMLize value, marshall it, etc.
+    end
+  end
+end
+</textarea>
+
+The above allows us to do very interesting things:
+
+<textarea name="code" cols="55" rows="15" class="ruby">
+# Copy from the Internet to a local file:
+Filesystem.instance['teksol.info/index.html'] =
+  TheInternet.instance['http://blog.teksol.info/']
+
+# Given a suitable implementation of TheInternet#[]=,
+# we could do:
+search_results =
+  (TheInternet.instance['http://www.google.com/search'] =
+    {:hl => 'en', :q => 'rails'})
+</textarea>
+
+Is this rambling interesting ?  Certainly.  Is it useful ?  You tell me !
+
+*DISCLAIMER*: The Filesystem object above is full of security holes.  It should be implemented in a "chrooted":http://en.wikipedia.org/wiki/Chroot, environment, check permissions, etc.

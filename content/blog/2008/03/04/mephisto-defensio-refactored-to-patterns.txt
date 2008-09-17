@@ -1,0 +1,114 @@
+--- 
+title:      "Mephisto + Defensio: refactored to patterns"
+created_at: 2008-03-04 07:29:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Now that I have a couple of minutes, let me tell you what I changed exactly in "Mephisto":http://mephistoblog.com/ to support multiple spam detection engines.
+
+Initially, app/models/comment.rb looked like this:
+
+<textarea name="code" cols="55" rows="15" class="ruby">class Comment < Content
+  def check_approval(site, request)
+    self.approved = site.approve_comments?
+    if valid_comment_system?(site)
+      akismet = Akismet.new(site.akismet_key, site.akismet_url)
+      self.approved = !akismet.comment_check(comment_spam_options(site, request))
+      logger.info "Checking Akismet (#{site.akismet_key}) for new comment on Article #{article_id}.  #{approved? ? 'Approved' : 'Blocked'}"
+      logger.warn "Odd Akismet Response: #{akismet.last_response.inspect}" unless Akismet.normal_responses.include?(akismet.last_response)
+    end
+  end
+end
+</textarea>
+
+<p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/bugfixing/app/models/comment.rb#L62">app/models/comment.rb@bugfixing</a></p>
+
+The original method was intimately tied to "Akismet":http://akismet.com/: it would instantiate one, and use it directly.  The first thing I needed to do was to be able to use any kind of spam detection engine, without knowing the details of it.  In fact, what I needed was an instance of the "Adapter pattern":http://en.wikipedia.org/wiki/Adapter_pattern.
+
+The code changed from the above to this:
+
+<textarea name="code" cols="55" rows="15" class="ruby">class Comment < Content
+  def check_approval(site, request)
+    self.approved = site.approve_comments? || spam_engine(site).ham?(article.permalink_url(site, request), self)
+  end
+
+  def spam_engine(site)
+    site.spam_engine
+  end
+end
+</textarea>
+
+<p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/app/models/comment.rb#L62">app/models/comment.rb@multiengine</a></p>
+
+So now, I had to get hold of an instance of SpamDetectionEngine.  I again turned to the "Gang of Four":http://en.wikipedia.org/wiki/Design_Patterns patterns, and this is when I realized I needed a "Strategy Pattern":http://en.wikipedia.org/wiki/Strategy_pattern.  The Site was the most obvious place to put this, as the configuration for storing Akismet details was already there.  I simply extended the concept further to allow any engine to store any configuration settings in Site, and made Site return an instance of my spam engine:
+
+<textarea name="code" cols="55" rows="15" class="ruby">class Site < ActiveRecord::Base
+  def spam_engine
+    klass_name = read_attribute(:spam_detection_engine)
+    return Mephisto::SpamDetectionEngines::NullEngine.new(self) if klass_name.blank?
+    klass_name.constantize.new(self)
+  end
+end
+</textarea>
+
+<p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/app/models/site.rb#L109">app/models/site.rb@multiengine</a></p>
+
+What's a <code>NullEngine</code> you ask ?  It's the default engine.  It's a do nothing engine.  It's an instance of the "Null object pattern":http://en.wikipedia.org/wiki/Null_object_pattern.  What does this engine do really ?  It returns canned data for all requests.  It's always <code>#valid?</code>, and it always accepts comments.
+
+So, I moved the old Akismet code to the AkismetEngine, and created a new DefensioEngine.  Both of these engines have real code in place to do the validation.  Although I haven't verified that the AkismetEngine still works, I believe it should.  I used <a href="http://macournoyer.wordpress.com/">Marc-André Cournoyer</a>'s "Defensio Rails plugin":http://code.macournoyer.com/svn/plugins/defensio/ to actually talk to "Defensio":http://defensio.com/.
+
+Next, I needed a way to configure those different engines.  What I needed was a way to render templates, and have the engines provide the templates to the regular Rails views.  I made myself a custom Template class, which renders a simple ERB template.  I put the templates right next to the engine it's linked to.  Then it was just a matter of rendering the template.  Looking at the AkismetEngine, the <code>#settings_template</code> code looks like this:
+
+<textarea name="code" cols="55" rows="15" class="ruby">module Mephisto
+  module SpamDetectionEngines
+    class AkismetEngine < Mephisto::SpamDetectionEngine::Base
+      class << self
+        def settings_template(site)
+          load_template(File.join(File.dirname(__FILE__), "akismet_settings.html.erb")).render(:site => site, :options => site.spam_engine_options)
+        end
+      end
+    end
+  end
+end
+</textarea>
+
+<p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/lib/mephisto/spam_detection_engines/akismet_engine.rb#L7">lib/mephisto/spam_detection_engines/akismet_engine.rb@multiengine</a></p>
+
+Finally, Defensio provides statistics through it's API.  I wanted to show nice graphics, and turned to the "Google Chart API":http://code.google.com/apis/chart/ to generate them.  In the end, what does all of this look like ?  Well, this:
+
+<p style="text-align:center"><a href="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-statistics.png"><img src="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-statistics.png" width="360" alt="The Defensio engine's configuration and statistics"/><br/>Click for larger version</a></p>
+
+I had a bit of discussion with "Carl Mercier":http://blog.carlmercier.com/ about the accuracy graph.  He said Defensio looked poor because the green bar is very low.  I countered that the difference between 95 and 96 percent, if the graph were 100 pixels high, would only be 1 pixel.  The graph's scale is actually 95 to 100%, so now the difference between 95 and 96 percent will be 20 pixels, if the bar is 100 pixels high.  Anyway, this is an unresolved issue, and I'd like to know what people feel.  You can change this yourself by cloning the repository and editing the Defensio statistics template:
+
+<textarea name="code" cols="55" rows="15" class="ruby"><%
+  spam = @statistics.spam.to_i
+  ham = @statistics.ham.to_i
+  accuracy = @statistics.accuracy.to_f * 100.0
+  mapped_accuracy = ((accuracy - 95) * 5.0)
+  spam_pct = spam / (spam + ham) * 100.0
+  ham_pct = 100.0 - spam_pct
+  false_positives, false_negatives = @statistics.false_positives.to_i, @statistics.false_negatives.to_i
+  false_positives_pct = false_positives.to_f / (false_positives + false_negatives) * 100.0
+  false_negatives_pct = 100.0 - false_positives_pct
+  stats_chd = sprintf("t:%.1f,%.1f", spam_pct, ham_pct)
+  accuracy_chd = sprintf("t:%.1f|%.1f", mapped_accuracy, 100.0)
+  retraining_chd = sprintf("t:%.1f,%.1f", false_positives_pct, false_negatives_pct)
+%>
+</textarea>
+
+<p style="text-align:right"><a href="http://github.com/francois/mephisto/tree/multiengine/lib/mephisto/spam_detection_engines/defensio_statistics.html.erb#L5">lib/mephisto/spam_detection_engines/defensio_statistics.html.erb@multiengine</a></p>
+
+All in all, I really enjoyed refactoring a tool that I use regularly.  I didn't find nor fix any major problems along the way, but if I do find some, I'll be sure to fix them and make them available.
+
+So, what are you waiting for ?
+
+<textarea name="code" cols="55" rows="15" class="shell">git clone git://github.com/francois/mephisto.git mephisto_defensio
+cd mephisto_defensio
+git checkout multiengine
+rake db:bootstrap db:migrate
+thin start
+</textarea>
+
+NOTE:  There is a book called "Refactoring to Patterns":http://www.industriallogic.com/xp/refactoring/.  I haven't read it yet, but it seems like a good read.

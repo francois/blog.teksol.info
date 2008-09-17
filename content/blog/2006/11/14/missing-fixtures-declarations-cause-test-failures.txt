@@ -1,0 +1,60 @@
+--- 
+title:      "Missing fixtures declarations cause test failures"
+created_at: 2006-11-14 22:05:36
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Bob Silva posted "Testing Gotchas in Rails":http://www.railtie.net/articles/2006/10/09/testing-gotchas-in-rails in mid-October.  I had fallen across this error myself a few times.
+
+Well, today I had a huge code base I needed to check.  I wrote the following Rake task:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="lib/tasks/find_missing_fixtures.rake"># Find missing fixtures declarations from Rails tests
+# Code by Francois Beausoleil (francois@teksol.info)
+# Released in the public domain.  Do as you wish.
+desc "Finds missing fixtures declarations from your tests"
+task :find_missing_fixtures do
+  state = :find_test_case
+  test_case = nil
+
+  Dir['test/*/*_test.rb'].each do |file|
+    File.open(file, 'r') do |f|
+      f.each do |line|
+        case state
+        when :find_fixture
+          case line
+          when /def test_/
+            printf "%s: %s\n", file, test_case
+            state = :find_test_case
+          when /fixtures/
+            state = :find_test_case
+          when /class (\w+) < Test::Unit::TestCase$/
+            test_case = $1
+            state = :find_test_case
+          end
+
+        when :find_test_case
+          case line
+          when /class (\w+) < Test::Unit::TestCase$/
+            test_case = $1
+            state = :find_fixture
+          end
+        end
+      end
+    end
+  end
+end
+</textarea>
+
+Run it like this:
+<textarea name="code" cols="55" rows="15" class="shell">$ rake find_missing_fixtures
+(in D:/wwwroot/wpul.staging.teksol.info)
+test/unit/name_test.rb: NameTest
+test/unit/application_helper_test.rb: ApplicationHelperTest
+test/unit/application_helper_test.rb: ApplicationHelperTruncationTest
+</textarea>
+
+Why do I report both the file and TestCase name ?  Because I put more than one TestCase per test file, as I reported in "Test fixtures and behavioral testing":http://blog.teksol.info/articles/2006/01/25/test-fixtures-and-behavioral-testing
+
+Of course, if I could do away with fixtures altogether...

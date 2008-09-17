@@ -1,0 +1,27 @@
+--- 
+title:      "Is Windows a good environment for Ruby/Rails ?  It certainly should !"
+created_at: 2008-03-26 17:53:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just stumbled upon "Is Windows a First Class Platform for Ruby?":http://www.rubyinside.com/is-windows-a-first-class-platform-for-ruby-823.html by "Peter Cooper":http://www.petercooper.co.uk/ and "Is Windows a supported platform for Ruby? I guess not":http://blog.mmediasys.com/2008/03/06/is-windows-a-supported-platform-for-ruby-i-guess-not/ by "Luis Lavena":http://blog.mmediasys.com/.
+
+I have to admit, I *did* use Windows daily for 3 years before I switched permanently to "Ubuntu":http://www.ubuntu.com/, about 6 months back.  Initially, I was using "IntelliJ's IDEA":http://www.jetbrains.com/idea/index.html as my development platform, then I switched to the "e Text Editor":http://www.e-texteditor.com/.  I never had many problems with gems that didn't/couldn't/wouldn't install.  There are many kind souls in the community that keep these gems up to date.  I'm talking specifically about Tim Hunter ("RMagick":http://rmagick.rubyforge.org/), "Luis Lavena":http://blog.mmediasys.com/ ("Mongrel":http://mongrel.rubyforge.org/) and others.
+
+Just before I made the final switch, I was using Linux in a "VMware":http://vmware.com/ image to run "XLsuite":http://xlsuite.com/.  The application was unbearably slow in Windows, but acceptable in a virtual machine.  I was using the e Text Editor as my editor, accessing the code through a "Samba":http://samba.org/ share.
+
+My own experience was pretty positive.  Now that I'm on Ubuntu, I wouldn't go back though.  What made me switch ?  Better performance on the same hardware, mostly;  the novelty of the experience.  I do not dislike Windows, nor do I think Redmond is a bad place.  Windows is a fine platform.
+
+Just to contrast, look at the excellent support "Java":http://java.sun.com/ enjoys on Windows.  Windows is the 2<sup>nd</sup> platform for Java (with "Solaris":http://www.sun.com/software/solaris/index.jsp being the 1<sup>st</sup>).  We, the Ruby community, should be learning from "Sun":http://www.sun.com/.  There are many, many more Windows machines than Mac or Linux machines out there.  There are literally millions of people who could learn to write "Ruby":http://ruby-lang.org/, but are on Windows.  "Dr Nic":http://drnicwilliams.com/ said it all:  <a href="http://www.rubyinside.com/is-windows-a-first-class-platform-for-ruby-823.html#comment-35759"><q cite="http://www.rubyinside.com/is-windows-a-first-class-platform-for-ruby-823.html#comment-35759">&hellip; People Use Windows Too</q></a>.  Whether you want to or not, Windows isn't going away soon.
+
+Personally, I have made the switch.  But just on my small team, Windows users outnumber other platforms 1 to 1.  Here's the breakdown:
+
+* 4 Windows (2 coders, 1 designer, 1 sponsor)
+* 2 Ubuntu (1 coder, 1 designer)
+* 1 Mac (1 "ExtJS":http://extjs.com/ coder)
+
+Is Windows a good platform for Ruby ?  *Yes*.  Is Windows a great platform for Ruby ?  No, but there's no reason why it shouldn't be.  Just look at <a href="http://whytheluckystiff.net/">Why</a>'s work on "Hackety Hack":http://hacketyhack.net/.  I'm really impressed and happy that I will be able to show Ruby to my daughters.  The catch ?  Hackety Hack is for Windows only right now.
+
+Please, let's keep and increase Windows support.  Once they're hooked, they might switch, who knows ?

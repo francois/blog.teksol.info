@@ -1,0 +1,65 @@
+--- 
+title:      "Migrations, branches and dependencies"
+created_at: 2006-12-08 21:38:35
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"courtenay":http://blog.caboo.se/ just sent in a new ticket for Rails Core: "#6799":http://dev.rubyonrails.org/ticket/6799.  To summarize, his patch allows two migrations to have the same number, and migrates them in parallel.  courtenay blogged about his patch as "simultaneous migrations":http://blog.caboo.se/articles/2006/12/08/simultaneous-migrations
+
+<blockquote cite="http://blog.caboo.se/articles/2006/12/08/simultaneous-migrations">I’ve written a patch to migration code so you can have multiple migrations with the same number. This means that these migrations can effectively be run in parallel, so long as all the migrations with that number have the IndependentMigration class.</blockquote>
+
+His patch is interesting, and solves a real problem.  But, his two caveats render the solution slightly too complex.
+
+What if instead of version numbers we had migrations with timestamps ?  We would need a few changes for that to be useful:
+
+* All timestamps must be in the UTC timezone;
+* The schema_info table must change (or be replaced) to have many records instead of only one.
+
+Then, when we run the migrations, we order the migration files by name, and check if the record exists in the schema_info table.  If it doesn't, we migrate and record the time at which the migration ran.
+
+h3. Example
+
+Let's assume we are on <code class="branch">trunk/</code>.  The following migrations already exists.
+
+<pre class="directory-tree">db/
+  migrate/
+    20061208111503_create_posts.rb
+    20061208111504_create_tags.rb
+    20061208111505_create_taggings.rb</pre>
+
+The migrations table I was talking about above would look something like this:
+<textarea name="code" cols="55" rows="15" class="ruby">create_table :schema_migrations, :force => true do |t|
+  t.column :migration, :string, :limit => 20, :null => false
+  t.column :migrated_at, :datetime
+end
+
+add_index :schema_migrations, :migration
+</textarea>
+
+We have another developer who was working on another branch, and he just merged back to <code class="branch">trunk/</code>.  Let's update:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn update
+A db/migrate/20061208161723_create_links.rb
+A db/migrate/20061208111303_create_users.rb
+</textarea>
+
+Now that we have his code, let's migrate and run the tests
+
+<textarea name="code" cols="55" rows="15" class="shell">$ rake db:migrate test:recent
+== CreateUsers: migrating
+...
+== CreateLinks: migrating
+...
+
+...
+
+87 tests, 125 assertions, 0 failures, 0 errors
+</textarea>
+
+CreateUsers was run because it's timestamp comes before CreatePosts.  CreatePosts, CreateTags and CreateTaggings weren't run because they had already been run.  Finally, CreateLinks was run because it hadn't been run yet.
+
+The only thing missing now is the interim world.  What do we do with existing migrations ?  I believe we should simply migrate all low-level migrations before we do the new ones.  That should ensure all migrations are up to date, no ?
+
+I know code speaks louder than words.  Just give me a couple of hours, will you ?

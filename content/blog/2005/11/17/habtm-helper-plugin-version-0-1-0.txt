@@ -1,0 +1,23 @@
+--- 
+title:      "HABTM Helper Plugin, version 0.1.0"
+created_at: 2005-11-17 22:55:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just wrote another plugin: habtm_helper_plugin.  This plugin will generate HTML code to manage has_and_belongs_to_many relationships.
+
+What does it look like ?  See here:
+
+<p align="center"><img alt="HABTM generated manager" src="/assets/2007/10/13/habtm-manager.png"/></p>
+
+Release 0.1.0 is up for grabs, in one of four ways:
+* svn propset http://opensvn.csie.org/habtm_helper_plugin/tags/0.1.0 svn:externals vendor/plugins *WARNING: Destructive if you already set other externals*
+* script/plugin http://opensvn.csie.org/habtm_helper_plugin/tags/0.1.0
+* svn export http://opensvn.csie.org/habtm_helper_plugin/trunk vendor/plugins/habtm_helper/tags/0.1.0
+* Download "habtm-helper-plugin-0.1.0.zip":https://opensvn.csie.org/traccgi/habtm_helper_plugin/trac.cgi/attachment/wiki/WikiStart/habtm-helper-plugin-0.1.0.zip
+
+Full documentation in source.  If you want to know, the filter was developed using "RSpec":http://rspec.rubyforge.org/.  I wrote a lenghty article on my experience using Behavioral Driven Design at "Building a plugin on RSpec":http://blog.teksol.info/articles/2005/11/17/building-a-plugin-on-rspec
+
+The project is hosted on "OpenSVN":http://opensvn.csie.org/.  The project and Trac wiki/bug database is available at the "habtm_helper_plugin project home page":https://opensvn.csie.org/traccgi/habtm_helper_plugin/trac.cgi.

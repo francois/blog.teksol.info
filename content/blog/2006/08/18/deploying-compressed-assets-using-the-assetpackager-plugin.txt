@@ -1,0 +1,23 @@
+--- 
+title:      "Deploying compressed assets using the AssetPackager plugin"
+created_at: 2006-08-18 22:46:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I installed the "AssetPackager":http://agilewebdevelopment.com/plugins/assetpackager plugin.  "Scott":http://synthesis.sbecker.net/, the manager of the plugin, suggests running the <code>asset:packager:build_all</code> task after the symlink phase.
+
+I disagree with that because as soon as the symlink is done, it means we're live.  We haven't yet built the files, so users will receive "404s":http://en.wikipedia.org/wiki/404_error instead of the compressed files.
+
+Instead, I suggest doing it after updating the code.  So, his Capistrano task changes to this instead:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="config/deploy.rb">task :after_update_code, :roles => [:web] do
+  run <<-EOF
+    cd #{release_path} &&
+    rake RAILS_ENV=production asset:packager:build_all
+  EOF
+end
+</textarea>
+
+Unrelated note:  From the comments on Scott's "announcement":http://synthesis.sbecker.net/articles/2006/06/19/assetpackager-released#comments (see Timur Vafin's comments), I am not the only one writing asse*r*t_packager.  Must be all those darn assertions I write all day long...

@@ -1,0 +1,11 @@
+--- 
+title:      "Model Objects in the Session"
+created_at: 2007-01-03 21:10:13
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A bit more than a year ago, I wrote about "model serialization in session":http://blog.teksol.info/articles/2005/10/21/model-serialization-in-session, in which I advocated to implement <code class="method">dump</code> and <code class="method">load</code> methods in your model to only marshal the object's ID instead of the full object's properties.
+
+Today, I found about the "object_id_session plugin":http://rashkovskii.com/articles/2007/01/02/object_id_session, which has the same purpose, but a different implementation. 

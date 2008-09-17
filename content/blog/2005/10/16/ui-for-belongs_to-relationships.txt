@@ -1,0 +1,36 @@
+--- 
+title:      "UI for belongs_to relationships"
+created_at: 2005-10-16 17:08:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Anyone has a good idea of how to do that ?  I already know about "AssociationHelper":http://wiki.rubyonrails.com/rails/show/AssociationHelper, but I want a real drop down.
+
+The solution I have come up with currently is to manually create a "select":http://www.w3.org/TR/html401/interact/forms.html#edef-SELECT using "collection_select":http://api.rubyonrails.com/classes/ActionView/Helpers/FormOptionsHelper.html#M000348, like so:
+<textarea name="code" cols="55" rows="15" class="html"><p><label for="event_provider">Provider</label><br/>
+ <%= collection_select 'event', 'provider',
+     Provider.find_all(nil, 'name'), 'id', 'name' %>
+</textarea>
+
+The problem is when the post is coming back.  My update method is horrible:
+<textarea name="code" cols="55" rows="15" class="ruby"># Event belongs_to Provider
+def update
+  @event = Event.find(params['id'])
+
+  provider_id = params['event']['provider']
+  params['event'].delete('provider')
+  provider = Provider.find(provider_id)
+  event.provider = provider
+
+  if @event.update_attributes(@params['event']) then
+    flash[:notice] = 'Event updated'
+    redirect_to :action => 'show', :id => @event.id
+  else
+    render 'edit'
+  end
+end
+</textarea>
+
+You see how I have to find the Provider, and then delete that item from the <var>params</var> hash ?  This is the part I would like to make easier.  I know about "attr_accessible":http://api.rubyonrails.com/classes/ActiveRecord/Base.html#M000665, and it's converse "attr_protected":http://api.rubyonrails.com/classes/ActiveRecord/Base.html#M000664, and I am wondering if that is what I should use.

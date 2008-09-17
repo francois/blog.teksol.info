@@ -1,0 +1,19 @@
+--- 
+title:      "Moving to LayeredTech"
+created_at: 2006-08-26 05:22:26
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+This blog has moved !  It was hosted on "DreamHost":http://www.dreamhost.com/, but I was seeing an annoying number of 500 errors.  I now reserve my "DreamHost ":http://www.dreamhost.com/ account for backup purposes only.
+
+Since I am already the owner of an "L2-AMD-BARTON-3000-C":https://order.layeredtech.com/servers.lt?categoryId=4 at "LayeredTech":http://www.layeredtech.com/, I thought this would be the time to move the blog.
+
+If you can see this post, it means you are seeing the new server.
+
+While doing the move, I decided I would upgrade "Typo":http://typosphere.org/ to 4.0.3.  The upgrade was relatively painless.  My major problem was getting the SQLite3 development headers.  The server is Debian Sarge, and doing an <code class="command">apt-get install sqlite</code> was not getting the proper packages.  I finally tracked it down to <code class="command">apt-get install libsqlite3-dev</code>.
+
+One question I have though, why the dependency on "sqlite3-ruby":http://rubyforge.org/projects/sqlite-ruby/ ?  I was planning on running the blog on "MySQL":http://www.mysql.com/, so the time I spent getting sqlite3-ruby happy was lost.
+
+Enjoy this blog's new home !

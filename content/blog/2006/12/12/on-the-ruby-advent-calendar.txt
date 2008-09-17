@@ -1,0 +1,11 @@
+--- 
+title:      "On the Ruby Advent Calendar"
+created_at: 2006-12-12 05:53:55
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, I never expected that.  "Piston":http://piston.rubyforge.org/ is listed on the "Ruby Advent Calendar":http://www.rubyinside.com/advent2006/12-piston.html.
+
+Thanks go to "Chris Wanstrath":http://errtheblog.com/ and "Peter Cooper":http://www.petercooper.co.uk/.

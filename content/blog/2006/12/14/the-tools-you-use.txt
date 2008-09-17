@@ -1,0 +1,33 @@
+--- 
+title:      "The tools you use"
+created_at: 2006-12-15 01:01:58
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Signal vs Noise":http://www.37signals.com/svn/ asked today to tell them "The tools you use":http://www.37signals.com/svn/posts/158-link-it-up-the-tools-you-use.  Since I have a new environment, I thought I'd share it here instead.
+
+I am on Windows.  I know, not the best.  But, with a little help from virtualization technology, it's not as bad as it sounds.  I'll get the easy bits out:
+
+* "Photoshop":http://www.adobe.com/products/photoshopelwin/
+* "Firefox":http://getfirefox.com/
+* "Thunderbird":http://getthunderbird.com/
+* "Firebug":http://getfirebug.com/
+* "VNC":http://www.realvnc.com/
+* "GTalk":http://www.google.com/talk/ and "Skype":http://www.skype.com/
+* "Windows XP":http://www.microsoft.com/windowsxp/default.mspx
+
+A few days ago, I wanted to try Ubuntu, just for kicks.  I downloaded "Ubuntu Server":http://www.ubuntu.com/server, and installed it on "VMware Server":http://www.vmware.com/download/server/, a free virtualization product for Windows.  After setting up, I wanted something to play with, so I copied a Rails application I'm working on at the moment.  I ran my tests, and I couldn't believe my eyes.  My tests were running faster than if they were run on Windows.
+
+So, I took out a wristwatch, and ran the tests on both sides.  Yup, Virtual Linux was faster than Windows.  By a good margin too:  25 seconds vs 7.  That's from hitting Enter after "rake test:units" until the command line is back again.  Obviously, "YMMV":http://en.wikipedia.org/wiki/YMMV.
+
+So, I installed Samba on Linux, setup a shared drive, and am now happily editing using the "e Text Editor":http://www.e-texteditor.com/, while running my tests under Linux, and serve the application using "Mongrel":http://mongrel.rubyforge.org/, on Linux.
+
+So, my development environment is:
+* "VMware Server":http://www.vmware.com/download/server/
+* "Ubuntu Linux":http://www.ubuntu.com/
+* "Samba":http://www.samba.org/
+* "Mongrel":http://mongrel.rubyforge.org/
+
+If you are on Windows, I really encourage you to try this.  It was worth it for me.

@@ -1,0 +1,25 @@
+--- 
+title:      "Environment-specific model helpers"
+created_at: 2006-07-27 15:33:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just hit a case which I think will interest the community at large.
+
+Did you know it is possible to conditionnaly define methods ?  Something like this is quite possible:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/player.rb">class Player < User
+  if 'test' == RAILS_ENV then
+    # Conditional method definition to ease testing
+    def play_in(tournament, final_score)
+      ...
+    end
+  end
+end
+</textarea>
+
+Is that a code smell, or is it a really useful feature ?  I can't decide...
+
+The method defined above removes three lines of code from each of the tests where my players play in a tournament.  And since this is what the site is about, I think I just slashed a few hundred lines of code from my functional  and integration tests.  That is not trivial.

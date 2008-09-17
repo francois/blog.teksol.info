@@ -1,0 +1,79 @@
+--- 
+title:      "A little Smalltalk in Ruby: #if_nil and #if_not_nil"
+created_at: 2007-11-23 17:52:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I really like Smalltalk's <code class="smalltalk method">ifNil:</code> and <code class="smalltalk method">ifNotNil:</code>, and up to now, I could not use these in Ruby.  Fortunately, "Bob Hutchison":http://recursive.ca/hutch/ came to the rescue with "A Little Unnecessary Smalltalk Envy":http://recursive.ca/hutch/2007/11/22/a-little-unnecessary-smalltalk-envy/.
+
+I immediately copied that to "XLsuite":http://xlsuite.com/ and wrote a couple of tests.  Here is sample of what the code feels like:
+
+<textarea name="code" cols="55" rows="15" class="ruby">>> Party.find_by_email_address("sam@gamgee.net").if_not_nil do |party|
+?>   puts "Found Sam!"
+>> end
+=> nil
+</textarea>
+
+Oh well, no Sam in my database.  The code is here:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/smalltalk_test.rb">require File.dirname(__FILE__) + "/../test_helper"
+
+class SmalltalkTest < Test::Unit::TestCase
+  setup do
+    @block = Proc.new { true }
+  end
+
+  context "The nil object" do
+    should "yield when calling #if_nil on it" do
+      assert nil.if_nil(&@block)
+    end
+
+    should "not yield when calling #if_not_nil on it" do
+      deny nil.if_not_nil(&@block)
+    end
+  end
+
+  context "A non nil object" do
+    should "not yield when calling #if_nil on it" do
+      deny "".if_nil(&@block)
+    end
+
+    should "yield when calling #if_not_nil on it" do
+      assert "".if_not_nil(&@block)
+    end
+
+    should "pass itself to #if_not_nil" do
+      obj = "abc"
+      assert_same obj, obj.if_not_nil {|o| o}
+    end
+  end
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="lib/smalltalk.rb"># Copied and adapted from
+# http://recursive.ca/hutch/2007/11/22/a-little-unnecessary-smalltalk-envy/
+# Bob Huntchison
+class Object
+  # yield self when it is non nil.
+  def if_not_nil(&block)
+    yield(self) if block
+  end
+
+  # yield to the block if self is nil
+  def if_nil(&block)
+  end
+end
+
+class NilClass
+  # yield self when it is non nil.
+  def if_not_nil(&block)
+  end
+
+  # yield to the block if self is nil
+  def if_nil(&block)
+    yield if block
+  end
+end
+</textarea>

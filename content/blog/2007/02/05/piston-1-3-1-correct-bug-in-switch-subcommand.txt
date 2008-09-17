@@ -1,0 +1,28 @@
+--- 
+title:      "Piston 1.3.1: correct bug in switch subcommand"
+created_at: 2007-02-06 03:15:09
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Piston 1.3.0 introduced the switch subcommand, but it did not do one important thing:  it did not remember what new repository root we are reading from.  Version 1.3.1 corrects that.
+
+The CHANGELOG says:
+<pre>2007-03-09 1.3.1
+* piston switch would fail if the branch from which we are reading had been
+  deleted.
+* piston switch had a major bug.  It did not update the piston:root property
+  to remember the new repository root.  Reported and fixed by Graeme
+  Mathieson.
+* piston switch errors out early if not provided with the right arguments.
+  Thanks to Graeme Mathieson for the info and patch.
+* New internal command parser.  No visible external changes.
+</pre>
+
+Piston is a utility that eases vendor branch management. This is similar to <tt>svn:externals</tt>, except you have a local copy of the files, which you can modify at will.  As long as the changes are mergeable, you should have no problems.
+
+Download using the usual command:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ sudo gem install --include-dependencies piston
+</textarea>

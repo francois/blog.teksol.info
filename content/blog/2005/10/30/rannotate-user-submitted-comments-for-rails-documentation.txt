@@ -1,0 +1,17 @@
+--- 
+title:      "Rannotate - User submitted comments for Rails documentation"
+created_at: 2005-10-31 00:19:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Conor Hunt has just released "Rannotate":http://rannotate.rubyforge.org/, a tool that emulates "PHP's user-submitted comments manual":http://www.php.net/manual/en/.
+
+"Rannotate":http://rannotate.rubyforge.org/ can annotate any rdoc.  I setup my application's rdoc in 5 minutes flat.
+
+The only caveat is I had to fall back to "CVS":http://www.cvshome.org/, from "SVN":http://subversion.tigris.org/ to get the source code.  RubyForge does not yet offer "Subversion":http://subversion.tigris.org/ access for it's projects.
+
+Anyway, Conor has made available the "Rails  documentation - annotated":http://rails.outertrack.com/rails/index.html
+
+Great job !  Now we, as a group, simply need to add content.

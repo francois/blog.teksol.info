@@ -1,0 +1,13 @@
+--- 
+title:      "Pradipta's Rolodex"
+created_at: 2008-07-18 16:38:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+<p style="float:left;margin:0 6px 6px 0;border:1px solid black;padding:1px"><a href="http://groups.google.com/group/pradiptas-rolodex"><img src="http://blog.teksol.info/assets/2008/7/18/400_rails_developers_starring_pradipta_as_max_archie.jpg" width="240" alt="Pradipta's Rolodex Logo"/></a></p>
+
+Late last night, I had the honor of being mailed a Ruby on Rails offer.  See "416 Random People with RoR on their resume + Reply All = Reverse Flash Mob":http://blog.reverberate.org/2008/07/17/416-random-people-with-ror-on-their-resume-reply-all-reverse-flash-mob/ for the full details.
+
+Pretty amusing, really.

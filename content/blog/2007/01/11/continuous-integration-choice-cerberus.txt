@@ -1,0 +1,18 @@
+--- 
+title:      "Continuous Integration Choice: Cerberus"
+created_at: 2007-01-11 21:20:54
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just found about "Cerberus":http://cerberus.rubyforge.org/.  This looks like a nice tool, and very easy to setup and run:
+
+<textarea name="code" cols="55" rows="10" class="shell">$ sudo gem install --include-dependencies cerberus
+$ cerberus add PROJECT_DIR|PROJECT_URL
+$ cerberus buildall
+</textarea>
+
+Very simple and clean.
+
+I'm trying it out and will have more to post later on.

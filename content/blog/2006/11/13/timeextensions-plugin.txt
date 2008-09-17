@@ -1,0 +1,43 @@
+--- 
+title:      "TimeExtensions Plugin"
+created_at: 2006-11-14 01:59:57
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A minor plugin for all of you.  This plugin merely adds two new methods to Time and Date:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/time_extensions_test.rb">class TimeExtensionsTest < Test::Unit::TestCase
+  def test_really_in_future
+    assert 1.second.from_now.in_future?
+  end
+
+  def test_in_future_but_past
+    assert !1.second.ago.in_future?
+  end
+
+  def test_really_in_past
+    assert 1.second.ago.in_past?
+  end
+
+  def test_in_past_but_future
+    assert !1.second.from_now.in_future?
+  end
+end
+</textarea>
+
+This makes for much more readable code:
+
+<textarea name="code" cols="55" rows="15" class="ruby">if @post.published_at.in_future? then
+  # do something
+else
+  # do something else
+end
+</textarea>
+
+Installation:
+<textarea name="code" cols="55" rows="15" class="shell">$ script/plugin install \
+  svn://svn.teksol.info/svn/rails/plugins/time_extensions \
+  vendor/plugins/time_extensions
+</textarea>

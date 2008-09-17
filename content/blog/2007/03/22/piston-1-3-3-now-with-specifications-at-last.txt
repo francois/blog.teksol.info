@@ -1,0 +1,62 @@
+--- 
+title:      "Piston 1.3.3: Now with specifications (at last !)"
+created_at: 2007-03-22 20:04:06
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, I'm sorry.  The whole "Piston":http://piston.rubyforge.org/ package was broken for the last two weeks.  In fact, it was a problem with internal reorganizations and broken requires.
+
+This also illustrated the fact that I needed some kind of automated testing...  Which I advocate, but didn't do anything about until now for Piston.  Well, no more !  Piston now has a suite of specifications, coded using "RSpec":http://rspec.rubyforge.org/index.html.
+
+I briefly touched on this issue a week ago in "Piston import bugs and behavioural specifications":http://blog.teksol.info/articles/2007/03/14/piston-import-bugs-and-unit-testing.  Back then, I had three specifications.  I now have twenty:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ spec --format specdoc specs
+
+update when no local changes
+- retrieves the latest fulltext from the remote repository
+- records remote revision that was merged
+
+update when a local change
+- should merge local changes with remote ones
+
+convert with no svn:externals
+- does not touch the working copy
+
+convert with one svn:externals
+- removes existing folder to replace with piston export
+- remembers the revision we converted from
+
+convert with hard-coded revision in svn:externals
+- retrieves the specified revision text
+- locks the pistoned directory to that revision
+
+convert with non HEAD externals
+- retrieves the same revision we had in our WC
+- remembers the revision that was present, not HEAD
+- does not lock the pistoned directory
+
+import with a valid repository URL
+- gets the fulltext of all files
+- remembers the root of the import
+- remembers the upstream repository's UUID
+- remembers the revision we imported from
+- remembers the revision this WC was at when we imported
+
+switching to a branch in the same repository (without local mods)
+- gets the fulltext of the branch
+- changes the root of the pistoned dir to the new import location
+- keeps the upstream repository's UUID unchanged
+- remembers the upstream revision we pistoned from
+
+Finished in 103.968133 seconds
+
+20 specifications, 0 failures
+</textarea>
+
+At the moment, the four most important commands are specified: convert, import, update and switch.  And even then, only the golden path.  Which means I am missing tons of specifications.  But at least, I can now guarantee that Piston works, which is a *huge* step forward from the 1.3.2 relelase.
+
+As I continue to further specify Piston, things can only get better.
+
+Also, a very big thank you to all the people who told me they had problems with Piston.  Bug reports, although never enjoyable, are an absolute necessity.

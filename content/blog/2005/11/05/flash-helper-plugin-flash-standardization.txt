@@ -1,0 +1,52 @@
+--- 
+title:      "Flash Helper Plugin - Flash Standardization"
+created_at: 2005-11-05 14:34:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Over on the "Rails mailing list":http://news.gmane.org/gmane.comp.lang.ruby.rails, Luke Randall is proposing  that Rails "applications and generators standardize":http://article.gmane.org/gmane.comp.lang.ruby.rails/28104 on some keys for the flash:
+
+This being a very good idea, here is an excerpt of his proposition:
+
+<blockquote cite="http://article.gmane.org/gmane.comp.lang.ruby.rails/28104">Based on my own experiences, I'd suggest something along
+the lines of the following (the names are the best I can think of,
+anyone is welcome to suggest better ones):
+
+<ul>
+<li><var>:notice</var> for *positive* feedback (action successful, etc)</li>
+<li><var>:message</var> for *neutral* feedback (reminders, etc)</li>
+<li><var>:warning</var> for *negative* feedback (action unsuccessful, error encountered, etc)</li>
+</ul>
+</blockquote>
+
+_(emphasis mine)_
+
+In the spirit of open source, I started coding a new "Rails plugin":http://wiki.rubyonrails.com/rails/pages/Plugins:  the "FlashHelperPlugin":https://opensvn.csie.org/traccgi/flash_helper_plugin/trac.cgi.  With it, you will be able to do:
+<textarea name="code" cols="55" rows="15" title="app/controllers/users_controller.rb" class="ruby">class UsersController < ApplicationController
+  def authenticate
+    if authenticated? then
+      flash_success('Authenticated successfully')
+      redirect_back_or_default :controller => 'home'
+    else
+      flash_failure('Failed authentication')
+    end
+  end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" title="app/views/layouts/application.rhtml" class="html"><html>
+<head>
+  <%= stylesheet_link_tag 'scaffold', 'application',
+      :media => 'all' %>
+</head>
+<body>
+  <%= show_flash_messages %>
+  <%= @content_for_layout %>
+</body>
+</html>
+</textarea>
+
+Actually, what I need now is a nudge to get the tests working.  Also, WEBrick fails silently on startup with this plugin in <var class="filename">vendor/plugins</var>.
+
+If you want to help, go on over to the "flash_helper plugin project page":https://opensvn.csie.org/traccgi/flash_helper_plugin/trac.cgi for more information.  Get started by "checking out":http://opensvn.csie.org/flash_helper_plugin/trunk the code from "Subversion":http://subversion.tigris.org/.

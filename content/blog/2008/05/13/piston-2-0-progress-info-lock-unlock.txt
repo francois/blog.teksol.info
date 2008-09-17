@@ -1,0 +1,9 @@
+--- 
+title:      "Piston 2.0 Progress:  info, lock, unlock"
+created_at: 2008-05-14 02:38:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Tapajos":http://github.com/tapajos has been helping me shaping Piston into shape.  And I'm working on update now, so expect a 1.9.3 "RSN":http://web.bilkent.edu.tr/Online/Jargon30/JARGON_R/RSN.HTML

@@ -1,0 +1,69 @@
+--- 
+title:      "Piston 1.4.0:  piston diff, at long last"
+created_at: 2008-02-09 16:33:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, thanks to "Graeme Mathieson":http://woss.name/, "Piston":http://piston.rubyforge.org/ finally sports a piston diff subcommand.  This command allows you to know what changes you made vs what's in the remote repository.
+
+As usual, installation is pretty simple:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ gem install piston
+</textarea>
+
+What does piston diff report ?  Here it is:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ piston help diff
+diff: Shows the differences between the local repository and the pristine upstream
+usage: diff [DIR [...]]
+
+  This operation has the effect of producing a diff between the pristine upstream
+  (at the last updated revision) and your local version.  In other words, it
+  gives you the changes you have made in your repository that have not been
+  incorporated upstream.
+
+Valid options:
+    -v, --verbose                    Show subversion commands and results as they are executed
+    -q, --quiet                      Do not output any messages except errors
+    -r, --revision=REVISION
+    -u, --show-updates               Query the remote repository for out of dateness information
+    -l, --lock                       Close down and lock the imported directory from further changes
+        --dry-run                    Does not actually execute any commands
+        --force                      Force the command to run, even if Piston thinks it would cause a problem
+
+$ piston diff vendor/rails
+Processing 'vendor/rails'...
+  Fetching remote repository's latest revision and UUID
+  Checking out repository at revision 8784
+diff -urN --exclude=.svn vendor/rails.tmp/actionmailer/lib/action_mailer/base.rb vendor/rails/actionmailer/lib/action_mailer/base.rb
+--- vendor/rails.tmp/actionmailer/lib/action_mailer/base.rb	2008-02-08 22:38:25.000000000 -0500
++++ vendor/rails/actionmailer/lib/action_mailer/base.rb	2008-01-11 17:05:42.000000000 -0500
+@@ -348,7 +348,7 @@
+       #     end
+       #   end
+       def receive(raw_email)
+-        logger.info "Received mail:\n #{raw_email}" unless logger.nil?
++        logger.debug "Received mail:\n #{raw_email}" unless logger.nil?
+         mail = TMail::Mail.parse(raw_email)
+         mail.base64_decode
+         new.receive(mail)
+@@ -445,7 +445,7 @@
+     # no alternate has been given as the parameter, this will fail.
+     def deliver!(mail = @mail)
+       raise "no mail object available for delivery!" unless mail
+-      logger.info "Sent mail:\n #{mail.encoded}" unless logger.nil?
++      logger.debug "Sent mail:\n #{mail.encoded}" unless logger.nil?
+ 
+       begin
+         send("perform_delivery_#{delivery_method}", mail) if perform_deliveries
+</textarea>
+
+*Caveat*:  piston diff uses the command line version of diff.  This means Windows users will need to install a compatible version, or write a wrapper script around some preferred tool that supports the same features.
+
+h2. What is Piston ?
+
+Piston is a utility that eases vendor branch management. This is similar to svn:externals, except you have a local copy of the files, which you can modify at will. As long as the changes are mergeable, you should have no problems.
+
+Visit Piston's home page at "http://piston.rubyforge.org/":http://piston.rubyforge.org/

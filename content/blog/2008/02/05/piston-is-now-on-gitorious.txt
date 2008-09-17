@@ -1,0 +1,13 @@
+--- 
+title:      "Piston is now on Gitorious"
+created_at: 2008-02-05 20:22:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, after reading many "interesting":http://jamesgolick.com/2008/1/21/why-distributed-version-control-matters-to-you-today "articles":http://drnicwilliams.com/2008/02/03/using-git-within-a-team/ on "Git":http://git.or.cz/, I moved <a href="http://piston.rubyforge.org/">Piston</a>'s repository to "Gitorious":http://gitorious.org/.  Clone, fix and extend at will.  I will maintain the existing "Subversion":http://subversion.tigris.org/ "repository":http://piston.rubyforge.org/svn/ and do releases when fixes come in.  I will not maintain Piston itself in any significant ways though.
+
+So, for those of you that expressed an interest in maintaining Piston, go ahead !  Get Git, get coding and publish your repository so I can pull from it.
+
+Piston on Gitorious is available at "http://gitorious.org/projects/piston":http://gitorious.org/projects/piston.  The mainline (or trunk in Subversion terms) is available as "http://gitorious.org/projects/piston/repos/mainline":http://gitorious.org/projects/piston/repos/mainline

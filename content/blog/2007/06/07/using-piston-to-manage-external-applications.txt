@@ -1,0 +1,75 @@
+--- 
+title:      "Using Piston to manage external applications"
+created_at: 2007-06-07 18:34:13
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just received a mail from "Walter McGinnis":http://blog.katipo.co.nz/ asking:
+
+bq. In other words start a new client project based on an existing open source project that is an entire rails application like Typo or Mephisto and be able to update, modify, and merge accordingly like you would for plugins with piston.
+
+Walter proposed to use the following technique:
+
+<textarea name="code" cols="55" rows="15" class="shell">svn checkout repos_for_new_client_project new_client_project
+cd new_client_project
+piston import repos_for_third_party_open_source_rails_app_like_typo/trunk/app app
+piston import repos_for_third_party_open_source_rails_app_like_typo/trunk/db db
+</textarea>
+
+This would work, but as Walter says:
+
+bq. &hellip; it doesn't seem very DRY.
+
+Since this isn't the first time I am being asked the question, I decided to investigate a solution.  I ended up with something that works just fine.  The technique boils down to simply *not* creating <code class="folder">trunk/</code> and using Piston to create that folder.  You have to start from a fresh project to use this technique.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ piston version
+Piston 1.3.3
+
+$ svn checkout svn://my-server/project/ ~/project/
+Checked out revision 0.
+
+$ cd ~/project/
+
+$ piston import \
+    http://svn.techno-weenie.net/projects/mephisto/trunk/ \
+    trunk/
+Exported r2856 from 'http://svn.techno-weenie.net/projects/mephisto/trunk/' to 'trunk/'
+
+$ svn commit --message "Imported Mephito trunk@2756"
+
+# Some time later...
+$ cd ~/project/
+$ piston update .
+Processing '.'...
+  Fetching remote repository's latest revision and UUID
+  Restoring remote repository to known state at r2756
+  Updating remote repository to r2857
+  Processing adds/deletes
+  Removing temporary files / folders
+  Updating Piston properties
+  Updated to r2857 (56 changes)
+$ svn commit --message "Updated Mephisto to r2857 (56 changes)"
+</textarea>
+
+If you use Piston to manage sub-directories (such as vendor/rails), everything will still work:
+
+<textarea name="code" cols="55" rows="15" class="shell">
+$ svn update
+At revision 2.
+
+$ piston import http://dev.rubyonrails.org/svn/rails/trunk vendor/rails/
+Exported r6957 from 'http://dev.rubyonrails.org/svn/rails/trunk' to 'vendor/rails'
+
+$ svn commit --message "Imported Rails into vendor/rails at r6957"
+
+$ svn update
+
+$ piston update
+Processing '.'...
+  Fetching remote repository's latest revision and UUID
+unchanged from revision 2857
+Processing 'vendor/rails'...
+unchanged from revision 6957
+</textarea>

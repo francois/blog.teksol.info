@@ -1,0 +1,65 @@
+--- 
+title:      "Split your test cases into individual files"
+created_at: 2006-12-12 21:47:01
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Now that I am starting to use "autotest":http://blog.zenspider.com/archives/zentest/, having hundreds of lines of tests in one file is not looking so great anymore.
+
+Like I explained in "Test fixtures and behavioral testing":http://blog.teksol.info/articles/2006/01/25/test-fixtures-and-behavioral-testing, I now have many, many, test cases in my test files.  
+
+I wrote this little Rake task to do the split for me.  I'm putting it out here in case it profits someone else.
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="lib/tasks/split_cases.rake"># This file is placed in the public domain by François Beausoleil
+# Use at your own risks
+desc "Splits all test files so that only one test case is defined per file"
+task :split_cases => :environment do
+  files = Hash.new
+  Dir[File.join(RAILS_ROOT, 'test', '*', '*_test.rb')].each do |testcase|
+    puts testcase
+    files[testcase] ||= Hash.new
+    read_prefix, read_case, casename = true, false, nil
+
+    File.read(testcase).each_line do |line|
+      case line
+      when /^class (\w+)/
+        read_prefix, casename, read_case = false, $1, true
+        files[testcase][casename] ||= Array.new
+        files[testcase][casename] << line
+      when /^end$/
+        files[testcase][casename] << line if read_case
+        read_case, casename = false, nil
+      else
+        files[testcase][:prefix] ||= Array.new
+        files[testcase][:prefix] << line if read_prefix
+        files[testcase][casename] << line if read_case
+      end
+    end
+  end
+
+  files.each_pair do |testcase, values|
+    File.unlink(testcase)
+    values.each_pair do |casename, contents|
+      next if casename == :prefix
+      target = case testcase
+      when /unit/
+        'unit'
+      when /functional/
+        'functional'
+      else
+        raise ArgumentError, "Unrecognized test/* directory name: #{testcase}"
+      end
+
+      File.open(File.join(RAILS_ROOT, 'test', target, "#{casename.underscore}.rb"), 'wb') do |f|
+        print '.'
+        f.write(files[testcase][:prefix])
+        f.write(contents)
+      end
+    end
+  end
+
+  puts
+end
+</textarea>

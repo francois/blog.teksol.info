@@ -1,0 +1,25 @@
+--- 
+title:      "New Piston Contributor: Josh Nichols"
+created_at: 2008-04-22 00:38:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just received 2 contributions from "Josh Nichols":http://technicalpickles.com/:
+
+* New --repository-type option on piston import to force the repository backend to use (instead of letting Piston guess), and for cases where Piston is unable to guess: "ea958dd":http://github.com/francois/piston/commit/ea958dd2711364eab793c135e07171c9603a23e3;
+* Test suite reorganization: "1cef7b6":http://github.com/francois/piston/commit/1cef7b69dff6ad3bd62e5127a38f2de73ee89456 and "9cfa8f3":http://github.com/francois/piston/commit/9cfa8f32cfb975bc1ce32746c4567b9b3915ea45
+
+Both contributions were accepted and are now part of Piston's master branch.  Thank you very much, Josh, for your work.
+
+If you want to help, do not fear !
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git clone git://github.com/francois/piston.git
+$ # make changes
+$ git commit
+$ # fork piston's repository
+$ git remote add github git@github.com:YOURNAME/piston.git
+$ git push github master
+$ # Send me a pull request
+</textarea>

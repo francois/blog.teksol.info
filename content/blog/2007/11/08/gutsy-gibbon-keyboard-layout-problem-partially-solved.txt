@@ -1,0 +1,11 @@
+--- 
+title:      "Gutsy Gibbon keyboard layout problem partially solved"
+created_at: 2007-11-08 20:20:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just posted about my problem with the English US keyboard not having a pipe character ?  Well, I removed the French Canadian keyboard layout from my configuration, and now I have my pipe character back.  That's not very nice, since I won't be able to type in French anymore, but at least, I can program again.
+
+Thanks to "dvorak keyboard layout but keyboard shortcuts are in qwrty":http://ubuntuforums.org/showthread.php?t=601586 for the idea.

@@ -1,0 +1,64 @@
+--- 
+title:      "Returning CSV data to the browser"
+created_at: 2006-03-23 12:24:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Over on the Rails mailing list, "Pete asks":http://thread.gmane.org/gmane.comp.lang.ruby.rails/56881:
+
+<blockquote>One of my apps has to export data for the backend system to process it. What's the best way to create a CSV file in Rails and then return it as 
+a file to the client?</blockquote>
+
+I have used two tricks in the past to export the data.
+
+h2. Exporting using CSV::Writer
+
+This is simple.  Use "CSV::Writer":http://www.ruby-doc.org/stdlib/libdoc/csv/rdoc/classes/CSV/Writer.html and <code class="class">ActionController</code>'s "send_data":http://api.rubyonrails.com/classes/ActionController/Streaming.html#M000045 method.
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/controllers/report_controller.rb">class ReportController < ApplicationController
+  def report
+    @models = Model.find(:all, :conditions => ['...'])
+    report = StringIO.new
+    CSV::Writer.generate(report, ',') do |csv|
+      csv << %w(Title Total)
+      @models.each do |model|
+        csv << [model.title, model.total]
+      end
+    end
+
+    report.rewind
+    send_data(report.read,
+      :type => 'text/csv; charset=iso-8859-1; header=present',
+      :filename => 'report.csv')
+  end
+end
+</textarea>
+
+By default, "send_data":http://api.rubyonrails.com/classes/ActionController/Streaming.html#M000045 will make the <code class="http header">Content-Disposition</code> header equal to *attachment*.  This will ask the browser to download the file, instead of displaying it in the browser window.
+
+h2. Exporting using a regular view
+
+The second method is even simpler:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/controllers/report_controller.rb">class ReportController < ApplicationController
+  def report
+    @models = Model.find(:all, :conditions => ['...'])
+    response.headers['Content-Type'] = 'text/csv; charset=iso-8859-1; header=present'
+    response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
+  end
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="html" title="app/views/report/report.rhtml">Title,Value
+<% @models.each do |model| -%>
+"<%= model.title.gsub('"', '""') %>",<%= model.value %>
+<% end -%>
+</textarea>
+
+Notice how I escape quotes in the view ?  This is important, or else your parsing will be broken when you read the file back in.  Of course, if you use <code class="class">CSV::Writer</code>, you won't have to muck with that - it will all be taken care of for you.
+
+*UPDATE* 2006-03-30: Changed Content-Type from text/comma-separated-values to text/csv, and added the <var>header</var> optional parameter, per "RFC 4180":http://www.rfc-editor.org/rfc/rfc4180.txt
+
+*UPDATE* 2007-04-26:  Just noticed that the <code class="method">report</code> method above would render with a layout if one were defined in <code class="class">ApplicationController</code>.  Simply call #render and tell it to use no layout:  <code class="ruby">render :action => :report, :layout => false</code>

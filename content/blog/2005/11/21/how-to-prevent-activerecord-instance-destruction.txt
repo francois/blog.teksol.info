@@ -1,0 +1,55 @@
+--- 
+title:      "How to prevent ActiveRecord instance destruction"
+created_at: 2005-11-21 12:34:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+In one of my projects, I wanted to prevent instances of particular classes to be deleted if they were in any way associated to another object.  In database terms, I wanted an <code class="sql">ON DELETE RESTRICT</code> constraint.
+
+Since I cannot rely on the database to enforce it for me (MySQL 4, MyISAM engine), I coded the following:
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/city_test.rb">require File.dirname(__FILE__) + '/../test_helper'
+
+class CityTest < Test::Unit::TestCase
+  fixtures :cities, :contacts
+
+  def setup
+    @city = City.find(:first)
+  end
+
+  def test_prevent_destruction_if_associated_to_any_contact
+    @city.contacts << contacts(:jill)
+    @city.destroy
+    assert_not_nil City.find(@city.id), 'should not have been destroyed'
+    assert_match /cannot destroy.*contacts/i, @city.errors.on_base,
+        'reports error condition to user'
+  end
+
+  def test_allow_destruction_if_not_associated_to_any_contact
+    @city.destroy
+    assert_raises ActiveRecord::RecordNotFound do
+      City.find(@city.id)
+    end
+  end
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/city.rb">class City < ActiveRecord::Base
+  has_and_belongs_to_many :contacts, :join_table => 'contacts_cities'
+
+  def destroy
+    unless self.contacts.empty?
+      self.errors.add_to_base \
+          'We cannot destroy this instance since one or more contacts refer to it')
+      return
+    end
+
+    super
+  end
+end
+</textarea>
+
+I had to override <code class="method">destroy</code> because in <code class="method">has_and_belongs_to_many</code> relationships, Rails deletes join table records before deleting the record.  This means that in <code class="method">before_destroy</code> filters, <code class="ruby expression">self.contacts.empty?</code> will always report <code class="constant">true</code>.  "Ticket #1183: dependents are destroyed before client before_destroy hooks are called":http://dev.rubyonrails.org/ticket/1183 is already opened on this issue.
+
+*UPDATE (2006-03-08)* Fixed since "2006-02-13 (r2940)":http://dev.rubyonrails.org/changeset/2940

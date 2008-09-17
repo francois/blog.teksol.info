@@ -1,0 +1,13 @@
+--- 
+title:      "Piston 2.0 Progress:  New integration tests"
+created_at: 2008-03-23 07:25:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I have new integration tests, and they work just beautifully.  I'm missing a couple more, but things are looking very good.
+
+Thanks to "Paul Watson":http://thisoldcoder.com/ for finding and fixing two bugs in the Git/Git case.
+
+Finally, I have "faisal":http://faisal.com/ which offered looking into adding "SVK":http://svk.elixus.org/ support for the working copy.

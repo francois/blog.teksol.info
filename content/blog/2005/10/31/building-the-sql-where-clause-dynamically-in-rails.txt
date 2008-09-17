@@ -1,0 +1,55 @@
+--- 
+title:      "Building the SQL WHERE clause dynamically in Rails"
+created_at: 2005-10-31 11:19:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Over on the "Rails mailing list":http://news.gmane.org/gmane.comp.lang.ruby.rails, RafaÅ‚ Komorowski asks "How to programatically build :contitions with elegance?":http://article.gmane.org/gmane.comp.lang.ruby.rails/27446
+
+His problem is a form with four conditions.  Each may be applied, but any or all of them may be set to "All".
+
+The brute force way of doing this would be:
+<textarea name="code" cols="55" rows="15" class="ruby">class SearchController < ApplicationController
+  def search
+    case
+    when params[:cond1] && params[:cond2]
+      conditions = ['cond1 = ? AND cond2 = ?',
+          params[:cond1], params[:cond2]]
+    when params[:cond1]
+      conditions = ['cond1 = ?',
+          params[:cond1]]
+    when params[:cond2]
+      conditions = ['cond2 = ?',
+          params[:cond2]]
+    end
+
+    @results = Model.find(:all, :conditions => conditions)
+  end
+end
+</textarea>
+
+Note that in this case, you have to pay attention to the order in which you evaluate your conditions.  If you put <code>params[:cond1]</code> before <code>params[:cond1] && params[:cond2]</code>, and <code>params[:cond1]</code> is <code>true</code>, "Ruby":http://www.ruby-lang.org/en/ will only evaluate the <code>params[:cond1]</code> branch.
+
+Instead, I prefer to do this:
+<textarea name="code" cols="55" rows="15" class="ruby">class SearchController < ApplicationController
+  def search
+    conditions = ['1=1']
+
+    conditions << 'cond1 = :cond1' if params[:cond1]
+    conditions << 'cond2 = :cond2' if params[:cond2]
+
+    @results = Model.find(:all,
+        :conditions => [conditions.join(' AND '), params])
+  end
+end
+</textarea>
+
+Note how I initialize the <var>conditions</var> array: <code>['1=1']</code>.  This is to prevent a problem later on when "Rails":http://www.rubyonrails.com/ evaluates the conditions option to "find":http://api.rubyonrails.com/classes/ActiveRecord/Base.html#M000684 .  If we leave the array empty, "Rails":http://www.rubyonrails.com/ will append the WHERE empty condition, generating something like this:
+<textarea name="code" cols="55" rows="15" class="sql">SELECT * FROM models WHERE 
+</textarea>
+
+The database backend will complain with a syntax error.
+
+This discussion aside, I believe this is clear and concise code.  Ain't "Ruby":http://www.ruby-lang.org/en/ fun ?

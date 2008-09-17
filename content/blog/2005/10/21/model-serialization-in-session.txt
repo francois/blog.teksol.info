@@ -1,0 +1,35 @@
+--- 
+title:      "Model Serialization in Session"
+created_at: 2005-10-21 07:35:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I needed to save my products in the session for the cart.  My product has a belongs_to relationship with a picture object, which has the full data in the DB (20+ Kb/picture).
+
+Obviously, saving the whole products database in the session would be unfeasible.  So, I dug into the "Ruby Marshal":http://www.ruby-doc.org/core/classes/Marshal.html class documentation, and came up with the following solution:
+<textarea name="code" cols="55" rows="15" class="ruby">class Product < ActiveRecord::Base
+  def _dump(ignored)
+    self.id.to_s
+  end
+
+  def self._load(id)
+    find(id)
+  end
+end
+</textarea>
+
+Instead of saving the whole object, what I'm saving is only the model's ID.  On reload, I simply fetch the object from the DB again.  That way, my sessions stay nice and small, but I have the full object at my disposal when I want to work with the object.
+
+One last thing.  I coded a test which makes sure that things will always stay nice and small:
+<textarea name="code" cols="55" rows="15" class="ruby">class ProductTest < Test::Unit::TestCase
+  def test_dumping_loading
+    prod = Product.find(:first)
+    stream = Marshal.dump(prod)
+    assert stream.length < 32,
+        "Dumped stream exceeds 20 bytes treshold: #{stream.size}"
+    assert_equal prod, Marshal.load(stream)
+  end
+end
+</textarea>

@@ -1,0 +1,11 @@
+--- 
+title:      "An alternative to gitk:  qgit"
+created_at: 2008-01-16 11:51:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+At "Montreal on Rails":http://www.montrealonrails.com/ this evening, "Jean-François Couture":http://jfcouture.com/ presented "Git":http://git.or.cz/.  I installed it on my Ubuntu Desktop machine, and I found that gitk was horrible to look at.  Even after following Jean-François' "Various Tips For Setting Up Git: Improve Gitk Look And Get Bash Completion":http://jfcouture.com/2007/12/18/various-tips-for-setting-up-git-improve-gitk-look-and-get-bash-completion/, gitk wasn't really up to snuff with the rest of my UI.
+
+On the Git home page, I found a reference to "qgit":http://sourceforge.net/projects/qgit, a much nicer looking application.  Install and see for yourself.

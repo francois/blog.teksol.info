@@ -1,0 +1,46 @@
+--- 
+title:      "How to set logger options in Rails"
+created_at: 2007-06-14 00:30:14
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Today, I was replacing RailsCron and "BackgrounDRb":http://backgroundrb.rubyforge.org/ with generated "Daemons":http://agilewebdevelopment.com/plugins/daemon_generator, and I happened to investigate how "Rails":http://rubyonrails.com/ sets up it's logger.  For the longest time, I knew it was possible to change the options, but I just never investigated how to do it.  I thought I'd share my findings so others won't be in the dark as I was.
+
+Actually doing the replacement is very easy:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="config/environment.rb">Rails::Initializer.run do |config|
+  config.logger = Logger.new(File.dirname(__FILE__) + "/../log/#{RAILS_ENV}.log")
+end
+</textarea>
+
+That's it.  Have fun.  Stop reading...  Unless you want more details.
+
+This is essentially what Rails does, except now you have complete control over how the "Logger":http://www.ruby-doc.org/stdlib/libdoc/logger/rdoc/index.html is instantiated.
+
+Some options you might want to investigate:
+
+<textarea name="code" cols="55" rows="15" class="ruby"># Keep at most 2 2 megabytes log files
+config.logger = Logger.new(File.dirname(__FILE__) + "/../log/#{RAILS_ENV}.log", 2, 2*1024*1024)
+
+# Create a new log file each day
+config.logger = Logger.new(File.dirname(__FILE__) + "/../log/#{RAILS_ENV}.log", "daily")
+</textarea>
+
+If you are running a script which loads the Rails environment manually, you can also do this:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="lib/daemons/futures_worker.rb">#!/usr/bin/env ruby
+
+# You might want to change this
+raise "No RAILS_ENV defined" if ENV["RAILS_ENV"].to_s.empty?
+
+require "logger"
+
+RAILS_DEFAULT_LOGGER = Logger.new(File.dirname(__FILE__) + "/../../log/futures_runner.rb.log", 3, 2*1024*1024)
+require File.dirname(__FILE__) + "/../../config/environment"
+
+# Other code as appropriate
+</textarea>
+
+The <code class="class">Rails::Initializer</code> is smart enough to use either the RAILS_DEFAULT_LOGGER or the one defined in the configuration block.  For the gory details, please read "Rails::Initializer#initialize_logger":http://dev.rubyonrails.org/browser/branches/1-2-stable/railties/lib/initializer.rb#L246

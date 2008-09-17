@@ -1,0 +1,10 @@
+--- 
+title:      "TextMate for Windows ?  Not yet"
+created_at: 2006-11-24 00:36:47
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I started evaluating the "e Text Editor":http://www.e-texteditor.com/ this morning.  At first, I thought I would be in honeymoon, but I quickly realized that was not to be.
+

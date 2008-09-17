@@ -1,0 +1,56 @@
+--- 
+title:      "Cliaws SQS: Command-line access to Amazon Simple Queue Service"
+created_at: 2008-04-18 00:57:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Have you ever wished you could access your "Amazon Simple Queue Service":http://www.amazon.com/Simple-Queue-Service-home-page/b/ref=sc_fe_l_2?ie=UTF8&node=13584001&no=3435361 from the command line ?  Now you can:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ AWS_ACCESS_KEY_ID=<your access key>
+$ AWS_SECRET_ACCESS_KEY="<the secret access key>"
+
+$ clisqs create my-queue
+Queue my-queue was created.
+
+$ clisqs list
+my-queue
+
+$ clisqs push --data "this is the message" my-queue
+Pushed 19 bytes to queue my-queue
+
+$ cat README.txt | clisqs push my-queue
+Pushed 2687 bytes to queue my-queue
+
+$ clisqs push my-queue README.txt
+Pushed 2687 bytes to queue my-queue
+
+$ clisqs size my-queue
+3
+
+$ clisqs pop my-queue
+this is the message
+
+$ clisqs delete --force my-queue
+Queue my-queue was deleted.
+</textarea>
+
+h2. Installation
+
+<textarea name="code" cols="55" rows="15" class="shell">$ sudo gem install cliaws
+</textarea>
+
+h2. Direct-code access
+
+<textarea name="code" cols="55" rows="15" class="ruby">require "rubygems"
+require "cliaws"
+
+Cliaws.sqs.push("my-queue", "the data")
+the_size = Cliaws.sqs.size("my-queue")
+the_message = Cliaws.sqs.pop("my-queue")
+</textarea>
+
+h2. S3 ?
+
+This gem also works with S3.  See my prior release announcement: "Cliaws: command-line access to S3":http://blog.teksol.info/2008/4/15/cliaws-command-line-access-to-s3

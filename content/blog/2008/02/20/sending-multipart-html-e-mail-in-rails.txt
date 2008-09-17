@@ -1,0 +1,11 @@
+--- 
+title:      "Sending multipart HTML E-Mail in Rails"
+created_at: 2008-02-21 01:28:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I needed to send E-Mail as part of my work on "XLsuite":http://xlsuite.com/, and I had problems with HTML E-Mail.  I know, I know, it's preferable to have plain text and all, but user requirements being what they are...
+
+So, anyway, long story short, it didn't work.  I just can't use the multiple views with content type embedded in them, as the HTML's text is written from the user interface.  So, I turned to the trusted "Google":http://google.com/, and found an older article on "court3nay":http://www.caboo.se/ website "How to send multipart/alternative e-mail with inline attachments":http://www.caboo.se/articles/2006/02/19/how-to-send-multipart-alternative-e-mail-with-inline-attachments.  The essence of the trick is to use a multipart/related part, and embed the HTML content inside this part.  Enjoy !

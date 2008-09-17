@@ -1,0 +1,21 @@
+--- 
+title:      "Piston 1.9.0:  Official Preview Release"
+created_at: 2008-03-17 07:29:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I'm making it official.  I'm releasing 1.9.0 today:
+
+http://github.com/francois/piston/tree/1.9.0
+
+I'll put up a gem tomorrow, but if you want to play with Piston now, the best way is to either clone the repository, or grab a "tarball":http://github.com/francois/piston/tarball/1.9.0 directly from GitHub.
+
+What's implemented in this release ?
+
+* piston import
+
+But you can import from either SVN or Git, into either SVN or Git.  All Piston metadata is stored in a .piston.yml file in the pistonized dir's root.
+
+If you have questions, problems, comments, go ahead and comment right here, or use "Piston's tracker":http://rubyforge.org/tracker/?group_id=2105

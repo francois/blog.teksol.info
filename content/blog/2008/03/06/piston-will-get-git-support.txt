@@ -1,0 +1,17 @@
+--- 
+title:      "Piston will get Git support"
+created_at: 2008-03-07 02:53:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Now that I've had a good change to play with Git, I'm ready to implement Git support in Piston.  This will involve a couple of refactorings.  I can see 4 cases currently:
+
+|Repository|Working Copy|Strategy|
+|Subversion|Subversion|Use current strategy of storing data in Subversion properties|
+|Subversion|Git|Clone the Git repository, copy the files over and store the metadata as Subversion properties.  Use Git to handle the merging for Piston (Yay!)|
+|Git|Subversion|svn export the data and use a hidden YAML file to store the metadata in the pistonized directory|
+|Git|Git|Use Git submodules perhaps ?  Or git clone + copy + YAML|
+
+I have no idea how git submodules work, so I can't really say that I will be handling that last case in the most efficient manner.  I'm planning on having completed this work by the end of next week (March 14th).  Stay tuned for details !

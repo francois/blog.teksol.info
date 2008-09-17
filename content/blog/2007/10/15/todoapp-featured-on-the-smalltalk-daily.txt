@@ -1,0 +1,13 @@
+--- 
+title:      "TodoApp Featured on the Smalltalk Daily"
+created_at: 2007-10-16 00:22:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"James Robertson":http://www.cincomsmalltalk.com/blog/blogView of "Cincom Smalltalk":http://www.cincomsmalltalk.com/userblogs/cincom/blogView features my "TodoApp on Seaside in 218 lines":http://blog.teksol.info/2007/10/15/todoapp-on-seaside-in-218-lines in his "Smalltalk Daily":http://www.cincomsmalltalk.com/casts/stDaily/ series.  The episode is available at "smalltalk_daily-10-15-07.html":http://www.cincomsmalltalk.com/casts/stDaily/2007/smalltalk_daily-10-15-07.html 
+
+I would like to publicly thank James for taking the time to do the screencast, and assure him that the way he pronounces my last name is quite correct.
+
+In case you aren't following my "Monticello repository":http://mirror.teksol.info/monticello/todo, the TodoApp is now at revision 5, including a bunch of fixes "Ramon Leon":http://onsmalltalk.com/ suggested.  TodoApp also stands at 233 lines, instead of the original 218.  I have a couple of refactorings in mind, so the line count will probably go down.

@@ -1,0 +1,45 @@
+--- 
+title:      "Named Test Fixtures"
+created_at: 2005-10-18 13:45:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+In one of my projects, I have tons of units and functional tests.  To speed things up, I set my configuration like this:
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/test_helper.rb">class Test::Unit::TestCase
+  self.use_transactional_fixtures = true
+  self.use_instantiated_fixtures  = :no_instances
+end
+</textarea>
+
+In my tests, instead of accessing <var>@bob</var>, I now have to do:
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/party_test.rb">def test_party_is_destoryed
+  party = Party.find(@parties['bob']['id'])
+  party.destroy
+  assert party.destroyed?, "Party wasn't marked destroyed"
+end
+</textarea>
+
+Works, but isn't this very verbose ?  So, I created myself a little helper::
+<textarea name="code" cols="55" rows="15" ang="ruby" title="test/test_helper.rb">def party(fixture_name)
+  Party.find(@parties[fixture_name.to_s]['id'])
+end
+</textarea>
+
+All great and dandy.  I wanted to share with the community, so I started digging into <tt class="filename">fixtures.rb</tt> to implement it.  Much to my surprise, this already exists:
+<textarea name="code" cols="55" rows="15" class="ruby" title="vendor/rails/activerecord/lib/active_record/fixtures.rb">class Test::Unit::TestCase #:nodoc:
+  def self.fixtures(*table_names)
+    table_names = table_names.flatten
+    self.fixture_table_names |= table_names
+    require_fixture_classes(table_names)
+    setup_fixture_accessors(table_names)
+  end
+end
+</textarea>
+
+So, I guess I'm going to send a documentation patch instead of code !
+
+*UPDATE 1* (Oct 18, 2005): Well, would you look at that, this is all documented in the "Class: Fixtures":http://api.rubyonrails.com/classes/Fixtures.html (See the last paragraph under *Using Fixtures*)
+
+*UPDATE 2* (Oct 25, 2005): "Rails 0.14.1 (1.0 RC2)":http://documentation.rubyonrails.com/release_notes/rc2.html is pre-configured like that.  In fact, "Mike Clark":http://clarkware.com/cgi/blosxom wrote "Faster Testing with Rails 1.0":http://www.clarkware.com/cgi/blosxom/2005/10/24#Rails10FastTesting to explain the new behavior.

@@ -1,0 +1,166 @@
+--- 
+title:      "Using SQS and S3 to decouple image resizing from uploading"
+created_at: 2008-01-19 01:36:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Starting from a fresh Rails application (I'm using 2.0.2), install "AttachmentFu":http://agilewebdevelopment.com/plugins/attachment_fu:
+
+<textarea name="code" cols="55" rows="15" class="shell">script/plugin install http://svn.techno-weenie.net/projects/plugins/attachment_fu/
+</textarea>
+
+Edit <code>config/amazon_s3.yml</code> and put this:
+
+<textarea name="code" cols="55" rows="15" class="yaml" title="config/amazon_s3.yml">development:
+  bucket_name: amazon-sqs-development-yourname
+  access_key_id: "your key"
+  secret_access_key: "your secret access key"
+  queue_name: amazon-sqs-development-resizer-yourname
+</textarea>
+
+<code>queue_name</code> is new.  AttachmentFu does not require this, but we are going to reuse the file from our own code, so better put all configuration in the same place.
+
+Generate a scaffolded Photo model using:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ script/generate scaffold photo filename:string size:integer content_type:string width:integer height:integer parent_id:integer thumbnail:string
+</textarea>
+
+Edit <code>app/views/photos/new.erb.html</code> and replace everything with this:
+
+<textarea name="code" cols="55" rows="15" class="html" title="app/views/photos/new.erb.html"><h1>New photo</h1>
+
+<%= error_messages_for :photo %>
+
+<% form_for(@photo, :html => {:multipart => true}) do |f| %>
+  <p>
+    <label for="photo_uploaded_data">File:</label>
+    <%= f.file_field :uploaded_data %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', photos_path %>
+</textarea>
+
+What we did here is simply tell Rails to use a "multipart encoded":http://www.w3.org/TR/html4/interact/forms.html#adef-enctype form, and to only provide us with a single file upload field.
+
+Edit <code>app/models/photo.rb</code> and add the AttachmentFu plugin configuration:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/photo.rb">class Photo < ActiveRecord::Base
+  has_attachment :content_type => :image, :storage => :s3
+  validates_as_attachment
+end
+</textarea>
+
+Start your server and confirm you can upload a file.  No thumbnails were generated as we did not configure any thumbnailing to do.  We don't actually want AttachmentFu to handle that, so we can't just specify it in the has_attachment call.
+
+To use RightScale's AWS SQS component, we have to configure it with the access key and secret access key.  Add this to the end of the Photo class:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/photo.rb">class Photo < ActiveRecord::Base
+  def queue
+    self.class.queue
+  end
+
+  class << self
+    def queue
+      # This creates the queue if it doesn't exist
+      @queue ||= sqs.queue(aws_config["queue_name"])
+    end
+
+    def sqs
+      @sqs ||= RightAws::Sqs.new(
+        aws_config["access_key_id"], aws_config["secret_access_key"],
+        :logger => logger)
+    end
+
+    def aws_config
+      return @aws_config if @aws_config
+
+      @aws_config = YAML.load(File.read(File.join(RAILS_ROOT, "config", "amazon_s3.yml")))
+      @aws_config = @aws_config[RAILS_ENV]
+      raise ArgumentError, "Missing #{RAILS_ENV} configuration from config/amazon_s3.yml file." if @aws_config.nil?
+      @aws_config
+    end
+  end
+end
+</textarea>
+
+<code>#aws_config</code> is a method that reads the configuration.  <code>#sqs</code> is a method that provides access to an instance of <code>RightScale::Sqs</code>, pre-configured with the correct access keys.  <code>#queue</code> uses <code>#sqs</code> to get or create a named queue.  There's also an instance version of <code>#queue</code>, to ease our code later on.
+
+Let's add the request sending:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/photo.rb">class Photo < ActiveRecord::Base
+  def send_resize_request
+    # Don't send a resize request for thumbnails
+    return true unless self.parent_id.blank?
+
+    params = Hash.new
+    params[:id] = self.id
+    params[:sizes] = Hash.new
+    params[:sizes][:square] = "75x75"
+    params[:sizes][:thumbnail] = "100x"
+
+    begin
+      queue.push(params.to_yaml)
+    rescue
+      logger.warn {"Unable to send resize request.  Error: #{$!.message}"}
+      logger.warn {$!.backtrace.join("\n")}
+
+      # Don't raise the error so the request goes through.
+      # We don't want the user to see a 500 error because
+      # we can't talk to Amazon.
+    end
+  end
+end
+</textarea>
+
+*Now*, this is getting interesting.  AttachmentFu knows if the current model is a thumbnail or not by looking at parent_id.  If it's nil, we are the parent, else we are a thumbnail.  We do the same thing here.
+
+Then, we setup a couple of parameters to send to the resizer.  Notice we send the actual thumbnail sizes *in the message* itself.
+
+Next, we do the most important part:  <code>queue.push</code>.  This sends a message string (limited to 256 KiB) to Amazon SQS, and returns.  If there is an error, we don't actually want to prevent the request from completing, so we rescue any exceptions and log them.  If you have the ExceptionNotifier plugin installed, this is a good place to log to it.
+
+Now that we have a way to send the resize request, we have to execute it at some point.  The controller is *not* the right place to do it.  If you create Photo models from more than one controller, you're bound to forget to call #send_resize_request.  It's better to do it in an #after_create callback, which we'll do with a single line:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/photo.rb">class Photo < ActiveRecord::Base
+  after_create :send_resize_request
+end
+</textarea>
+
+Next, we have to receive the messages.  So, we write a new method in Photo:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/photo.rb">class Photo < ActiveRecord::Base
+  class << self
+    def fetch_and_thumbnail
+      messages = queue.receive_messages(20)
+      return if messages.blank?
+
+      logger.debug {"==> Photo\#fetch_and_thumbnail -- received #{messages.size} messages"}
+      messages.each do |message|
+        params = YAML.load(message.body)
+        photo = Photo.find_by_id(params[:id])
+        if photo.blank? then
+          # The Photo was deleted before we got a chance to thumbnail it.
+          # We must delete the message, or we'll always get it afterwards.
+          message.delete
+          next
+        end
+
+        photo.generate_thumbnails(params[:sizes])
+        message.delete
+      end
+    end
+  end
+end
+</textarea>
+
+The first thing we do is see if there are any messages.  The call to <code>#queue</code> is the helper method we defined earlier on.  We ask to receive up to 20 messages at a time.  If there were no messages, we simply return.
+
+Then, for each message, we have to process it, so we iterate over each message, retrieving the original parameters <code>Hash</code>.  The important thing to do is to delete the message after we have processed it, or else the message will still be visible next time around.
+
+<code>#generate_thumbnails</code> is important, but uninteresting in this discussion.

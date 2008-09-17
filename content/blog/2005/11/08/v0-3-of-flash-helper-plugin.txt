@@ -1,0 +1,70 @@
+--- 
+title:      "v0.3 of Flash Helper Plugin"
+created_at: 2005-11-08 13:04:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A new day, a new release !
+
+What's changed ?
+
+* A heinous bug was corrected that prevented <var>flash.now</var> from being correctly appended to.
+* <code class="method">#show_flash_messages</code> was always returning the enclosing <code class="html tag">div</code>.  Now, it will only return something if the keys contain something.
+* Assertions for your unit tests.  See below for details.
+* Renamed middle package from *flash_plugin_helper* to *flash_helper_plugin*.  This should not have any impact on your code.
+
+The interesting feature in this version are the new assertions.  For example, the following code:
+<textarea name="code" cols="55" rows="15" class="ruby">def test_destroy
+  post :destroy, :id => contacts(:bob).id
+
+  assert_match /bob.*destroyed successfully/i,
+               flash[:notice],
+               "User notified that Bob was deleted"
+end
+</textarea>
+
+can be expressed like this instead:
+<textarea name="code" cols="55" rows="15" class="ruby">def test_destroy
+  post :destroy, :id => contacts(:bob).id
+
+  assert_success_flash_contains \
+      /bob.*destroyed successfully/i,
+      'User notified that Bob was deleted'
+end
+</textarea>
+
+The reverse is also true:
+<textarea name="code" cols="55" rows="15" class="ruby">def test_pre_authorization_granted
+  get :index, {}, {:user_id => accounts(:bob).id}
+
+  assert_any_flash_does_not_contain \
+      /not authorized/i,
+      'Authorization granted'
+end
+</textarea>
+
+There are eight assertion methods added to <code class="class">Test::Unit::TestCase</code>:
+* <code class="method declaration">#assert_any_flash_contains(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_any_flash_does_not_contain(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_failure_flash_contains(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_failure_flash_does_not_contain(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_success_flash_contains(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_success_flash_does_not_contain(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_message_flash_contains(string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_message_flash_does_not_contain(string_or_regexp, msg=nil)</code>
+
+The <tt>any</tt> variants of the assertions check all message keys: <code class="symbol">:notice</code>, <code class="symbol">:message</code> and <code class="symbol">:warning</code>.  All messages are concatenated, and the assertion is made against the resulting string.
+
+In addition, four building block assertions are also added:
+* <code class="method declaration">#assert_flash_contains(key, string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_flash_does_not_contain(key, string_or_regexp, msg=nil)</code>
+* <code class="method declaration">#assert_in_contents(string_or_regexp, contents, msg=nil)</code>
+* <code class="method declaration">#assert_not_in_contents(string_or_regexp, contents, msg=nil)</code>
+
+And last, but not least, the <code class="method declaration">#flash_contents(key)</code> method returns the flash's contents, as a string, whether it was an <code class="class">Array</code> or a <code class="class">String</code> to begin with.
+
+If anybody is using this in production, would you <a href="mailto:francois.beausoleil@gmail.com">drop me an E-Mail</a> ?
+
+Enjoy !

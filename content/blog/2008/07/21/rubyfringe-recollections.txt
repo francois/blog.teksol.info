@@ -1,0 +1,16 @@
+--- 
+title:      "RubyFringe: Recollections"
+created_at: 2008-07-21 17:38:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+<div style="float:left;border:1px solid black;padding:2px;margin:0 4px 4px"><a href="http://www.flickr.com/photos/chaimzvi/531941055/"><img src="http://farm2.static.flickr.com/1150/531941055_f1cc0f626b_m_d.jpg" width="240" height="240" alt="Tearful Goodbye, by chaim zvi."></a></div>
+I had so much fun at "RubyFringe":http://rubyfringe.com/ that I don't want to go!  I'm in the "Metropolitan":http://metropolitan.com/'s lobby, and writing this.  I almost have a tear in my eyes.  What fond recollections I will cherish for a long time to come.
+
+Thanks to the "Unspace":http://www.unspace.ca/ crew (Pete, Megan, "Hampton":http://hamptoncatlin.com/ and the others I haven't thanked personally but who did an *amazing* job) for making this event.
+
+This was my first conference ever, and it was great.  As Pete said, <q>I'm happy we took your conference virginity.</q>
+
+<p style="font:80%"><em>Photo by chaim zvi, "Tearful Goodbye":http://www.flickr.com/photos/chaimzvi/531941055/</em></p>

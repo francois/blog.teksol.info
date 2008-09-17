@@ -1,0 +1,7 @@
+--- 
+extension: html
+filter: 
+  - erb
+  - tidy
+--- 
+<%= @content %>

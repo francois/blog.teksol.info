@@ -1,0 +1,21 @@
+--- 
+title:      "Liquid::Template security issue:  not a problem"
+created_at: 2008-01-21 19:52:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, it seems I jumped the gun.  In "Security issue in Liquid::Template":http://blog.teksol.info/2008/1/18/security-issue-in-liquid-template, I thought I had a found a problem with the "Liquid":http://code.google.com/p/liquid-markup/ template engine.  Instead, I should have looked more closely at what *I* do:
+
+<textarea name="code" cols="55" rows="13" class="ruby" title="app/controllers/pages_controller.rb">class PagesController < ApplicationController
+  def show
+    # ...
+    render(:inline => @page.render, :layout => false)
+  end
+end
+</textarea>
+
+The details can be found at "#render":http://api.rubyonrails.org/classes/ActionController/Base.html#M000452 on the Ruby on Rails API.  Seems like it's time for us to switch to using <code>render :text</code>.
+
+I am sorry for any scare I caused.  If I had run a separate test case, I'd have immediately seen I was in error, and not Liquid.

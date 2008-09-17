@@ -1,0 +1,25 @@
+--- 
+title:      "Now on Ubuntu!"
+created_at: 2007-03-20 00:07:05
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, I made the plunge.  I am now the proud owner of <code class="name">bliss</code>, a "Ubuntu 6.10 Desktop":http://www.ubuntu.com/products/WhatIsUbuntu/desktopedition.  All configuration settings are at their default values for now.  Customization will come at a later stage, after I have familiarized myself better with the system.
+
+I still have tons of data that is stored in a "Ghost":http://www.symantec.com/home_homeoffice/products/overview.jsp?pcid=br&pvid=ghost10 archive, but I'll get there eventually.  I also have a few things that don't work or haven't been tested yet: printer doesn't work, scanner is untested, I haven't tried moving data from my cameras yet, bookmarks haven't moved yet, and I can't switch keyboard mappings using <code class="keyboard">Left Shift+Alt</code> yet.
+
+The best part of this move ?  It wasn't too painful.  Since I was already using mostly Open Source software ("Firefox":http://getfirefox.com/, "Firebug":http://getfirebug.com/, "Thunderbird":http://getthunderbird.com, "Ruby":http://www.ruby-lang.org/, "Rails":http://www.rubyonrails.com/, "MySQL":http://www.mysql.com/, "Mongrel":http://mongrel.rubyforge.org/ and others), I didn't have to learn entirely new interfaces for most software.  The worst part ?
+
+Just the sheer amount of work it is to move data between computers (or virtual machines, in this case), and make sure everything arrived at the destination.
+
+For now, I use a combination of "Vim":http://www.vim.org/ and "Bluefish":http://bluefish.openoffice.nl/index.html for text editing.  I generally like Bluefish, but some things are unfamiliar.  Moving with Ctrl+Left/Right doesn't behave as it did on Windows.  Of course, I have to learn new keyboard bindings, and that's always a pita.  I configured Bluefish to use the excellent "DejaVu Fonts":http://en.wikipedia.org/wiki/Dejavu_font, both for monospace and sans variants.
+
+I will setup "VMWare Server":http://www.vmware.com/products/server/ to access Windows when I need it, which should hopefully be not very often.
+
+I haven't made my final decision, but each hour that I use my Ubuntu desktop is another hour in "Windows":http://www.microsoft.com/windows/default.mspx' coffin.  I did not want to head over to Vista, and I was planning on buying a "Mac Mini":http://www.apple.com/macmini/ later this year.  In the meantime, I'm very satisfied with my new desktop.
+
+One last thing:  Very big kudos to the Ubuntu and other localization teams.  I installed Ubuntu in French, and I had some fears that working in French would lead to a bad experience.  Those fears were unfounded. The quality of the translation is excellent, and a simple <code class="shell variable">LANG=en_CA.UTF-8</code> in my <code class="file">~/.bashrc</code> makes the command line tools speak and listen in English, which is what I want and need.
+
+Again, my heartfelt thanks to the Open Source community at large for such a beautiful and well thought out product.

@@ -1,0 +1,31 @@
+--- 
+title:      "Piston 1.3.0: switch goodness"
+created_at: 2007-01-23 01:46:39
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+The latest release of Piston provides you with the ability to switch the upstream repository locations without losing any history.
+
+For example:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ piston switch http://dev.rubyonrails.org/svn/rails/tags/rel_1-2-1 vendor\rails
+Processing 'vendor\rails'...
+  Fetching remote repository's latest revision and UUID
+  Restoring remote repository to known state at r6010
+  Updating remote repository to http://dev.rubyonrails.org/svn/rails/tags/rel_1-2-1@5990
+  Processing adds/deletes
+  Removing temporary files / folders
+  Updating Piston properties
+  Updated to r5990 (663 changes)
+</textarea>
+
+Piston 1.3.0 also shows the revision number of locked directories.
+
+h2. Installation
+
+As usual, nothing could be simpler:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ sudo gem install --include-dependencies piston
+</textarea>

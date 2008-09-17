@@ -1,0 +1,106 @@
+--- 
+title:      "Piston import bugs and behavioural specifications"
+created_at: 2007-03-14 18:42:59
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, I originally only set out to build a quick script to help me, then I decided to release it.  Now, a few versions later, I find myself without the safety of a suite of "behavioural specifications":http://rspec.rubyforge.org/index.html.
+
+I have received three separate reports of piston import being broken.  One was even reported in the "comments here":http://blog.teksol.info/articles/2007/03/09/piston-1-3-2-more-piston-switch-corrections#comments.
+
+To that end, I have started adding behavioural specifications to Piston.  The specs run very slowly, due to the nature of the specifications I wrote:
+
+# svnadmin create remote-repository
+# svn checkout
+# _make some changes_
+# svn commit
+# svnadmin create local-repository
+# svn checkout
+# _use the piston commands_
+# <code>working_copy.should match_expectations</code>
+
+Here is one specification:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="specs/convert_spec.rb">context "convert with no svn:externals" do
+  context_setup do
+    @remote_repos = Repository.new
+    @rwc = WorkingCopy.new(@remote_repos)
+    @rwc.checkout
+    @rwc.mkdir("/trunk")
+
+    @rwc.add("/trunk/README", "this is line 1")
+    @rwc.commit
+
+    @rwc.add("/trunk/main.c", "int main() { return 0; }")
+    @rwc.commit
+
+    @local_repos = Repository.new
+    @lwc = WorkingCopy.new(@local_repos)
+    @lwc.checkout
+
+    @lwc.mkdir("/vendor")
+    @lwc.commit
+    @lwc.update
+
+    convert(@lwc.path + "/vendor")
+  end
+
+  setup do
+    convert(@lwc.path + "/vendor")
+  end
+
+  teardown do
+    @lwc.revert("--recursive")
+    @lwc.status.split.each do |path|
+      FileUtils.rm_rf(path) if path =~ /^\?/
+    end
+  end
+
+  context_teardown do
+    @lwc.destroy
+    @local_repos.destroy
+    @rwc.destroy
+    @remote_repos.destroy
+  end
+
+  specify "does not touch the working copy" do
+    @lwc.status.should == ""
+  end
+
+  def convert(non_options=[], options=[])
+    @command = Piston::Commands::Convert.new([non_options].flatten, options)
+    @command.logging_stream = @stream = StringIO.new
+    @command.run
+  end
+end
+</textarea>
+
+In "RSpec documentation":http://rspec.rubyforge.org/documentation/index.html, the developers of RSpec say about <code class="ruby method">#context_setup</code> and <code class="ruby method">#context_teardown</code>:
+
+bq. The use of these is generally discouraged, because it introduces dependencies between the specs. Still, it might prove useful for very expensive operations if you know what you are doing.
+
+Well, I did find a use for it.  And thank god for that.  The specs run in 20 seconds, and I only have three specifications at this time:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ spec --format=specdoc
+
+import with a valid repository URL
+- copies the files into a named directory
+
+convert with no svn:externals
+- does not touch the working copy
+
+convert with one svn:externals
+- removes existing folder to replace with piston export
+
+Finished in 18.186754 seconds
+
+3 specifications, 0 failures
+</textarea>
+
+This journey has been interesting.  And interestingly enough, the code I am developing to help me in my specs will help me in the original implementation.  I now have real <code class="class">WorkingCopy</code> and <code class="class">Repository</code> objects.
+
+One interesting thing:  <code class="command">svnadmin create</code> requires a good entropy source, or else it will block, waiting for more entropy to be generated.  I had to recompile "Subversion":http://subversion.tigris.org/ and set <code class="switch">--with-devrandom=/dev/urandom</code>.  In fact, this is a flag that is passed to APR.
+
+I will release a new Piston version today or tomorrow with at least the golden paths tested.

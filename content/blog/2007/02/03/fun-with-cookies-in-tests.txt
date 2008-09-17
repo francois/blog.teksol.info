@@ -1,0 +1,30 @@
+--- 
+title:      "Fun with cookies in tests"
+created_at: 2007-02-03 06:32:08
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+One thing's for sure, it's not obvious what's going on when a test fails because of cookies.  For that reason, I shied away from using cookies significantly.
+
+Anyway, here's a failure I was getting:
+<textarea name="code" cols="55" rows="15" class="shell">  1) Failure:
+test_create_session_with_right_username_and_password_and_remember_me(CreateSessionsControllerTest)
+    [test/functional/sessions_controller_test.rb:57:in `test_create_session_with_right_username_and_password_and_remember_me'
+     /home/francois/src/config/../vendor/plugins/mocha/lib/mocha/test_case_adapter.rb:19:in `run']:
+No :auth_token cookie in the response
+---
+auth_token:
+- cookie value
+</textarea>
+
+Turns out the @response.cookies Hash is not indifferent.  You really have to use a String to get to the content:
+
+<textarea name="code" cols="55" rows="15" class="ruby">def test_cookie_set
+  assert_equal ["some value"], @response.cookies["auth_token"],
+    "this will succeed"
+  assert_equal ["some value"], @response.cookies[:auth_token],
+    "this will always fail"
+end
+</textarea>

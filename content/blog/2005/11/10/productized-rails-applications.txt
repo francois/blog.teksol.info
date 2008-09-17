@@ -1,0 +1,15 @@
+--- 
+title:      "Productized Rails Applications"
+created_at: 2005-11-10 12:20:32
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Is it me or do most Rails applications need the "Rails Product Generator":http://wiki.rubyonrails.com/rails/pages/RailsProductGenerator  ?
+
+For instance, I am building an application that has two faces - frontend and backend.  The backend has the administrative interfaces, and the frontend can only play around with the data - not change it.
+
+In a previous application, I made an Admin module, but for security purposes, this time I don't want that - it cuts off a whole section of my webspace, which I don't want to do.
+
+So, what do other people do ?

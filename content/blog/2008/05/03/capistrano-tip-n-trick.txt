@@ -1,0 +1,20 @@
+--- 
+title:      "Capistrano Tip'n'Trick"
+created_at: 2008-05-03 09:32:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If like me you didn't know, you can do that with "Capistrano":http://www.capify.org/:
+
+<textarea name="code" cols="55" rows="12" class="shell">$ cap HOSTS=web0.myapp.com deploy:update_code
+cap ROLES=web,app deploy
+</textarea>
+
+Not terribly useful for the tasks demonstrated above, but what about this ?
+
+<textarea name="code" cols="55" rows="12" class="shell">$ cap ROLES=app monit:summary
+</textarea>
+
+Incidentally, where are these documented ?  I dimly remembered reading this somewhere once, and tried it.  Works like a charm!

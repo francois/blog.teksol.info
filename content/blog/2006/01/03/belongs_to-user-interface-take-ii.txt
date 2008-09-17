@@ -1,0 +1,58 @@
+--- 
+title:      "belongs_to user interface, take II"
+created_at: 2006-01-03 12:08:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+In "UI for belongs_to relationships":http://blog.teksol.info/articles/2005/10/16/how-to-manage-belongs_to-relationships,  I discussed a way to make a "belongs_to":http://api.rubyonrails.com/classes/ActiveRecord/Associations/ClassMethods.html#M000473 UI.  Unfortunately, it was very complex, and I found a better way since then.
+
+I have to thank "Michael C. Toren":http://michael.toren.net/ for the spark that inspired this entry.
+
+The way I now do my belongs_to UIs today is much simpler.  Let us assume the following models for discussion:
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/product.rb">class Product
+  belongs_to :color
+
+  validates_presence_of :color
+end
+</textarea>
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/color.rb">class Color
+  def self.all
+    self.find(:all, :order => 'name')
+  end
+end
+</textarea>
+
+When creating a product, we would like to select the color of said product.  The <acronym title="user interface">UI</acronym> should be a simple "SELECT":http://www.w3.org/TR/html401/interact/forms.html#edef-SELECT box.
+
+Rails makes it easy to have <code class="html">SELECT</code> boxes coming from some table:
+<textarea name="code" cols="55" rows="15" class="rhtml" title="app/views/products/_form.rhtml"><p><label>Description:
+  <%= text_field 'product', 'description' %></p>
+<p><label>Color:
+  <%= collection_select 'product', 'color_id',
+      Color.all, :id, :name %></p>
+</textarea>
+
+See how I call <code class="method">#collection_select</code> with *color_id* instead of *color* ?  That's the trick to use.
+
+One nice side-effect of this is that validation will still run.  The "validates_presence_of":http://api.rubyonrails.com/classes/ActiveRecord/Validations/ClassMethods.html#M000682 declaration will be respected if no <code class="sql column">color_id</code> is assigned.
+
+The only problem left to resolve is the field highlighting that Rails field helpers automagically add when a field validation rule is not respected.
+
+There are two ways to resolve that:
+
+<ol>
+<li>Change the validation to require both <code class="method">color</code> and <code class="sql column">color_id</code> (adding two messages to the message area), or;</li>
+<li>Add the error <code class="html">DIV</code> manually when an error is found on the counterpart field, such as this:
+<textarea name="code" cols="55" rows="15" class="rhtml" title="app/views/products/_form.rhtml"><p><label>Description:
+<%= text_field 'product', 'description' %></p>
+<p><label>Color:
+<div class="<%= 'fieldWithErrors' if error_message_on 'product', 'color' %>">
+<%= collection_select 'product', 'color_id',
+    Color.all, :id, :name %></div></p>
+</textarea>
+</li>
+</ol>
+
+*UPDATE (2006-01-04)*: John Indra noted that there didn't exist an <code class="method">error_messages_on</code>, only <code class="method">error_message_on</code>.  Code above corrected.

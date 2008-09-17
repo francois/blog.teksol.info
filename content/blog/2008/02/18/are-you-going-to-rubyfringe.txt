@@ -1,0 +1,9 @@
+--- 
+title:      "Are you going to RubyFringe ?"
+created_at: 2008-02-18 19:39:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Because, I am !  "RubyFringe":http://rubyfringe.com/ is a conference held by "Hampton Catlin":http://hamptoncatlin.com/, the creator of "Haml":http://haml.hamptoncatlin.com/.  If you're going, leave me a note and we'll meet there !

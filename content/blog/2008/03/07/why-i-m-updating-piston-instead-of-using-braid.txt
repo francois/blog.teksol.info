@@ -1,0 +1,17 @@
+--- 
+title:      "Why I'm updating Piston instead of using Braid"
+created_at: 2008-03-07 19:06:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Jean-François":http://jfcouture.com/ commented on "Piston will get Git support":http://blog.teksol.info/2008/3/6/piston-will-get-git-support:
+
+bq. You might want to check out "braid":http://evil.che.lu/projects/braid, formerly known as giston.
+
+<p style="text-align:right">"Jean-François Couture":http://blog.teksol.info/2008/3/6/piston-will-get-git-support#comment-4088</p>
+
+I knew about Braid.  The way I see it, Braid *requires* "Git":http://git.or.cz/.  Without it, it is useless.  What I want to do with Piston instead is to be completely repository and working copy agnostic.  Use the best possible solution given the tools at hand:  Subversion properties when appropriate, YAML files if I can't.  Use Git to merge if possible, do it using Subversion if I can't.  And so on.
+
+I even had a request for supporting SVK by "Faisal":http://faisal.com/.  It will be very important for me to allow any combination of server/working copy.  Anyway, more code, less talk.  Once I have a workinjg release, you'll be able to judge the quality of my work.

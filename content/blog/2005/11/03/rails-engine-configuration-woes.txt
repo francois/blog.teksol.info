@@ -1,0 +1,53 @@
+--- 
+title:      "Rails Engine configuration woes"
+created_at: 2005-11-03 12:15:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I learned a nice one today.  If you use "Rails Engines":http://rails-engines.rubyforge.org/ and you want to configure your environments differently, you can't do this:
+<textarea name="code" cols="55" rows="15" title="config/environments/development.rb" class="ruby">module LoginEngine
+  config :salt => 'test'
+end
+</textarea>
+<textarea name="code" cols="55" rows="15" title="config/environments/production.rb" class="ruby">module LoginEngine
+  config :salt => 'a-long-and-complicated-salt'
+end
+</textarea>
+<textarea name="code" cols="55" rows="15" title="config/environment.rb" class="ruby">Engines.start :login
+</textarea>
+
+If you do that, you'll get the following backtrace:
+<textarea name="code" cols="55" rows="15" class="ruby-backtrace">$ ruby script\server
+./script/../config/../vendor/rails/railties/lib/initializer.rb:178:in
+`load_environment': undefined method `config' for
+Rails::Initializer::LoginEngine:Module (NoMethodError)
+       from ./script/../config/../vendor/rails/railties/lib/initializer.rb:150:in `load_environment'
+       from ./script/../config/../vendor/rails/railties/lib/initializer.rb:147:in `silence_warnings'
+       from ./script/../config/../vendor/rails/railties/lib/initializer.rb:147:in `load_environment'
+       from ./script/../config/../vendor/rails/railties/lib/initializer.rb:73:in `process'
+       from ./script/../config/../vendor/rails/railties/lib/initializer.rb:36:in `send'
+       from ./script/../config/../vendor/rails/railties/lib/initializer.rb:36:in `run'
+       from ./script/../config/../config/environment.rb:10
+       from C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__'
+       from C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
+       from ./script/../config/../vendor/rails/railties/lib/commands/server.rb:52
+       from C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__'
+       from C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
+       from script/server:3
+</textarea>
+
+What is happening is that "Rails":http://www.rubyonrails.com/ loads the environment file *before* the Rails Engine plugin is initialized.  The solution ?  Do everything in <code class="filename">config/environment.rb</code>:
+<textarea name="code" cols="55" rows="15" title="config/environment.rb" class="ruby">module LoginEngine
+  case RAILS_ENV
+  when 'development', 'test'
+    config :salt, "test"
+  when 'production'
+    config :salt, "another-long-and-complicated-salt"
+  end
+end
+
+Engines.start :login
+
+</textarea>

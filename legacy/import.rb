@@ -2,7 +2,7 @@
 require "rubygems"
 require "active_record"
 require "net/scp"
-require "uri/open-scp"
+require "fileutils"
 
 ActiveRecord::Base.establish_connection(:adapter => "mysql", :database => "mephisto_teksol_development", :username => "root", :encoding => "utf8")
 ActiveRecord::Base.logger = Logger.new(STDERR)
@@ -31,15 +31,57 @@ class Asset < ActiveRecord::Base
 end
 
 class Content < ActiveRecord::Base; end
-class Article < Content; end
+class Article < Content
+=begin
+  `id` int(11) NOT NULL auto_increment,
+  `article_id` int(11) default NULL,
+  `user_id` int(11) default NULL,
+  `title` varchar(255) default NULL,
+  `permalink` varchar(255) default NULL,
+  `excerpt` text,
+  `body` text,
+  `excerpt_html` text,
+  `body_html` text,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  `published_at` datetime default NULL,
+  `type` varchar(20) default NULL,
+  `author` varchar(100) default NULL,
+  `author_url` varchar(255) default NULL,
+  `author_email` varchar(255) default NULL,
+  `author_ip` varchar(100) default NULL,
+  `comments_count` int(11) default '0',
+  `updater_id` int(11) default NULL,
+  `version` int(11) default NULL,
+  `site_id` int(11) default NULL,
+  `approved` tinyint(1) default '0',
+  `comment_age` int(11) default '0',
+  `filter` varchar(255) default NULL,
+  `user_agent` varchar(255) default NULL,
+  `referrer` varchar(255) default NULL,
+  `assets_count` int(11) default '0',
+  `spam_engine_data` text,
+=end
+end
+
 class Comment < Content; end
 
-puts "Found #{Asset.count} assets, #{Article.count} articles and #{Comment.count} comments"
-Asset.all.each do |asset|
-  local_filename = "content/assets/#{File.basename(asset.full_filename)}"
-  next if File.file?(local_filename)
-  puts asset.full_filename
-  File.open(local_filename, "wb") do |io|
-    io.write(open("scp://blog@teksol.info#{asset.full_filename}").read)
+Article.find(:all, :conditions => "published_at IS NOT NULL", :order => "published_at").each do |article|
+  puts article.permalink
+  filename = "content/blog/%04d/%02d/%02d/%s.txt" % [article.published_at.year, article.published_at.month, article.published_at.day, article.permalink]
+  FileUtils.mkdir_p(File.dirname(filename))
+  File.open(filename, "wb") do |io|
+    io.puts <<-EOF
+--- 
+title:      "#{article.title}"
+created_at: #{article.published_at.utc.to_s(:db)}
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+EOF
+
+    io.write article.body
   end
 end

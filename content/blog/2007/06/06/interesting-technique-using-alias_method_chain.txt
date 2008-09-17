@@ -1,0 +1,37 @@
+--- 
+title:      "Interesting technique using #alias_method_chain"
+created_at: 2007-06-07 03:34:14
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just hit upon a technique which I haven't seen before.  It is akin to using modules to add behaviour to an object.  Let me just present the technique and discuss it afterwards:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/future.rb">class Future < ActiveRecord::Base
+  def execute
+    # execute the Future
+  end
+
+  def execute_with_interval
+    execute_without_interval
+
+    if completed? && interval then
+      # schedule a copy of this Future to execute at
+      # a later date/time
+    end
+  end
+
+  alias_method_chain :execute, :interval
+end
+</textarea>
+
+A "Future":http://en.wikipedia.org/wiki/Future_%28programming%29 is an object that promises to return a result sometime in the future.  I am using it here in the context of a Rails application.
+
+Some of my futures are repeatable tasks, while others are simply one-shot, fire-and-forget.  The method I want to introduce is how I added behaviour to an existing method *within the same class*.  I did not include an extra module, nor did I introduce subclasses.
+
+To tell you the truth, I initially implemented <code class="class">RecurringFuture</code> to add the behaviour there, but I had already created a <code class="class">RetsFuture</code> that includes additional behaviour specific to talking with a "RETS":http://www.rets.org/ server.
+
+In my <code class="class">RecurringFuture</code> implementation, I had already implemented <code class="method ruby">#execute_with_interval</code> and the correct <code class="method ruby rails">#alias_method_chain</code>.  What I did is I simply pulled the code up, and deleted the now extraneous subclass.
+
+I don't know if this is a common technique, but I just found it very useful to have a clear separation of concerns: one method executes, the other recurs.

@@ -1,0 +1,47 @@
+--- 
+title:      "Generator error when adding to Subversion"
+created_at: 2005-11-10 10:27:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Seems there's a problem with the "Rails":http://www.rubyonrails.com/ generator.  I was receiving an odd (pun intended) error:
+<textarea name="code" cols="55" rows="15" class="shell">$ ruby script\generate migration -tc AddGamesAndCategories1
+odd number of arguments for Hash
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:130:in `[]'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:130:in `add_general_options!'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:130:in `call'
+  C:/ruby/lib/ruby/1.8/optparse.rb:1308:in `order!'
+  C:/ruby/lib/ruby/1.8/optparse.rb:1266:in `catch'
+  C:/ruby/lib/ruby/1.8/optparse.rb:1266:in `order!'
+  C:/ruby/lib/ruby/1.8/optparse.rb:1346:in `permute!'
+  C:/ruby/lib/ruby/1.8/optparse.rb:1373:in `parse!'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:89:in `parse!'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:85:in `initialize'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:85:in `new'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:85:in `parse!'
+  ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../scripts.rb:19:in `run'
+  ./script/../config/../vendor/rails/railties/lib/commands/generate.rb:6
+  C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require__'
+  C:/ruby/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:21:in `require'
+  script/generate:3
+</textarea>
+
+After a bit of debugging, it turned out that there's a small problem with the <code class="method">Rails::Generator::Options::ClassMethods#add_general_options!</code> method.
+<textarea name="code" cols="55" rows="15" class="ruby">opt.on('-c', '--svn',
+  'Modify files with subversion. (Note: svn must be in path)') {
+  options[:svn] =
+    Hash[*`svn status`.collect { |e|
+      e.chop.split.reverse unless
+        e.chop.split.size != 2 }.flatten] }
+</textarea>
+_(reformatted for visibility)_
+
+This line will return <code class="value">nil</code>, unless the line splits in two (A app/models/test.rb).  The problem is that if the number of lines that don't split in two is odd, then the flattened array will contain an odd number of items, which will cause Hash.new to fail.
+
+The solution ?  <code name="method">compact</code> the array before flattening.  I already submitted "ticket #2814":http://dev.rubyonrails.com/ticket/2814 with a patch.
+
+In the meantime, I'm running a patched copy of Rails.
+
+*UPDATE*: "revision 2972":http://dev.rubyonrails.org/changeset/2972 applied a modified version of my original patch. 

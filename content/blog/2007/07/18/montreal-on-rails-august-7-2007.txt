@@ -1,0 +1,9 @@
+--- 
+title:      "Montreal on Rails, August 7 2007"
+created_at: 2007-07-18 04:33:20
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+On August 7<sup>th</sup>, I'll be at "Montreal on Rails":http://upcoming.yahoo.com/event/219916/.  Will you ?

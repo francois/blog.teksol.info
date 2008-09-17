@@ -1,0 +1,12 @@
+--- 
+title:      "About Speeding up Test Runs with fork"
+created_at: 2006-04-19 11:21:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Eric Hodel":http://blog.segment7.net/
+talked about "Speeding up Test Runs with fork":http://blog.segment7.net/articles/2006/04/08/speeding-up-test-runs-with-fork.  He uses Unix's <code class="function">fork</code>, which is great, except if you're on Windows.
+
+What if (on Windows only) the server process restarted and waited for the next connection ?  We Windows developer would be paying the price of starting up the Rails environment, but it would happen in the background, while I am coding the next behavior, or implementing the last one.

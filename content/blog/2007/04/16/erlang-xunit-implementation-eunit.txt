@@ -1,0 +1,17 @@
+--- 
+title:      "Erlang xUnit Implementation: EUnit"
+created_at: 2007-04-16 18:40:14
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you are exploring "Erlang":http://www.erlang.org/ and want an xUnit implementation, look no further than "eunit":http://svn.process-one.net/contribs/trunk/eunit/.
+
+*UPDATE 2007-04-16*: I did not build eunit.  "Richard Carlsson":http://user.it.uu.se/~richardc/ (the current maintainer) pointed me to it on the "erlang-questions":http://www.erlang.org/ml-archive/erlang-questions/ mailing list.
+
+I started writing my own, and I will document that in the coming days as it was a very good learning experience for me.
+
+Erlang ?  Yes, I like it.  A lot.  I bought "Programming Erlang":http://www.pragmaticprogrammer.com/titles/jaerlang/ as a beta book from the "Pragmatic Programmers":http://www.pragmaticprogrammer.com/index.html to help me get started faster.
+
+My plan is to build "Battleship":http://www.boardgamegeek.com/game/2425 in Erlang.  That should prove very interesting.

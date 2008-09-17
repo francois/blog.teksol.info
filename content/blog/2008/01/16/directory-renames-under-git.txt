@@ -1,0 +1,72 @@
+--- 
+title:      "Directory renames under Git"
+created_at: 2008-01-16 20:42:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Hmmm, I know "Subversion":http://subversion.tigris.org/ doesn't do it any better, but I was led to believe "Git":http://git.or.cz/ tracked directory renames.  At least, it didn't behave as I expected.  Here's a reproduction recipe:
+
+<textarea name="code" cols="55" rows="15" class="shell" title="repro.sh">#!/bin/sh
+# This is repro.sh -- use at your own risks
+rm -rf recipe > /dev/null
+mkdir recipe
+cd recipe
+git init
+mkdir lib
+echo "v1" > lib/main.rb
+git add lib/
+git commit -m "initial version"
+git checkout -b perf
+echo "v2" >> lib/main.rb
+git commit --all -m "perf improvements"
+echo "v1" > lib/helper.rb
+git add lib/helper.rb
+git commit -m "new file"
+git checkout master
+git mv lib lib0
+git commit -m "renamed"
+git checkout perf
+git merge master
+find | grep -v .git
+</textarea>
+
+<typo:code>$ . repro.sh 
+/home/francois/src/recipe
+Initialized empty Git repository in .git/
+Created initial commit a50ea59: initial version
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ create mode 100644 lib/main.rb
+Switched to a new branch "perf"
+Created commit 73d3379: perf improvements
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+Created commit 01c0e0e: new file
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ create mode 100644 lib/helper.rb
+Switched to branch "master"
+Created commit 66ac898: renamed
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ delete mode 100644 lib/main.rb
+ create mode 100644 lib0/main.rb
+Switched to branch "perf"
+Merge made by recursive.
+ {lib => lib0}/main.rb |    0 
+ 1 files changed, 0 insertions(+), 0 deletions(-)
+ rename {lib => lib0}/main.rb (100%)
+.
+./lib
+./lib/helper.rb
+./lib0
+./lib0/main.rb
+</textarea>
+
+In prose, here's what I did:
+
+* Initial development was in <code class="file">lib/main.rb</code>
+* Then, I branched <code class="git branch">master</code> to create a <code class="git branch">perf</code> branch
+* On the <code class="git branch">perf</code> branch, I added <code class="file">lib/helper.rb</code>, and modified <code class="file">lib/main.rb</code>
+* Back on <code class="git branch">master</code>, I renamed <code class="dir">lib/</code> to <code class="dir">lib0/</code>
+* Back on <code class="git branch">perf</code>, I merged from <code class="git branch">master</code>
+
+What I _expected_ to see is a move of lib/helper.rb *and* lib/main.rb to lib0/.  Oh well, I don't rename directories that often anyway.  It's more of a caveat than anything else.

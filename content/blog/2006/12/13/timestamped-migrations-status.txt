@@ -1,0 +1,23 @@
+--- 
+title:      "Timestamped Migrations Status"
+created_at: 2006-12-13 20:53:52
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+As I have "reported":http://groups.google.com/group/rubyonrails-core/browse_thread/thread/f7ca66d97fd52bf5/738fd67048c474b2#anchor_86eedc828d262a88 on the rubyonrails-core mailing list, I have a working solution.  Right now, this is a patch against Rails Edge.  I am trying to move this code into a plugin, but I have problems with dependencies.  I override methods in <code class="class">Rails::Generator::Base</code>, but there is no file named <code class="file">rails/generator/base.rb</code>.  That constant is defined in <code class="file">rails_generator/commands.rb</code>, which makes it very hard for the ActiveSupport dependency mechanism to load it.
+
+In the hopes that someone could show me the way, I am making the patch available through the Rails Trac on issue "#6838":http://dev.rubyonrails.org/ticket/6838.  The patch is "timestamped_migrations.v1.patch":http://dev.rubyonrails.org/attachment/ticket/6838/timestamped_migrations.v1.patch
+
+What this patch does:
+
+* Generates migrations where the version number is replaced with a UTC timestamp;
+* Allows migrating up and down, ordering migrations by name;
+* Records which migrations were run in the <code class="sql table">schema_migrations</code> table.
+
+This patch has *no* tests, but from the command line it seems to work.  It even works with the <code class="rake task">db:sessions:create</code> Rake task.
+
+Enjoy, and either leave comments here or at "francois.beausoleil@gmail.com":mailto:francois.beausoleil@gmail.com.
+
+*2006-12-13 Update*:  Opened a new ticket as "#6838":http://dev.rubyonrails.org/ticket/6838, from "#6799":http://dev.rubyonrails.org/ticket/6799.

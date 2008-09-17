@@ -1,0 +1,41 @@
+--- 
+title:      "Rails 1.1 Console on Windows"
+created_at: 2006-03-30 13:37:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you are like me, you develop your applications on Windows and deploy to Linux/Unix/FreeBSD, whatever.
+
+On Rails 1.1, the console does not start anymore on Windows.  It reports the following error:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ ruby script\console
+Loading development environment.
+c:/ruby/lib/ruby/1.8/irb/init.rb:151:in `parse_opts': undefined method `upcase' for nil:NilClass (NoMethodError)
+        from c:/ruby/lib/ruby/1.8/irb/init.rb:19:in `setup'
+        from c:/ruby/lib/ruby/1.8/irb.rb:54:in `start'
+        from c:/ruby/bin/irb:13
+</textarea>
+
+There are two ways to fix this issue:
+
+<ol>
+<li>Upgrade Ruby to 1.8.4, or</li>
+<li>Patch your vendor/rails/railties/lib/commands/console.rb to remove the "--prompt-mode single" option:
+
+<textarea name="code" cols="55" rows="15" class="patch">Index: vendor/rails/railties/lib/commands/console.rb
+===================================================================
+--- vendor/rails/railties/lib/commands/console.rb       (revision 4097)
++++ vendor/rails/railties/lib/commands/console.rb       (working copy)
+@@ -22,4 +22,4 @@
+ else
+   puts "Loading #{ENV['RAILS_ENV']} environment."
+ end
+-exec "#{options[:irb]} #{libs} --prompt-mode simple"
++exec "#{options[:irb]} #{libs}"
+</textarea>
+</li>
+</ol>
+
+*UPDATE* (2006-03-30): Ah, I just found the reason why irb chokes.  <a href="http://livsey.org/">Richard Livsey</a>'s "script/console with edge Rails on Windows with 1.8.2":http://livsey.org/2006/03/27/scriptconsole-with-edge-rails-on-windows-with-182/

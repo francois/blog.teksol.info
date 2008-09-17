@@ -1,0 +1,21 @@
+--- 
+title:      "Piston: Searching for a maintainer"
+created_at: 2008-01-16 19:49:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Due to "Real Life":http://en.wikipedia.org/wiki/Real_Life encroaching on my minimal spare time, I have decided I have no time to maintain "Piston":http://piston.rubyforge.org/.  Therefore, as others have done, I am searching for a maintainer.
+
+To qualify, you need to:
+
+* have a Rubyforge account;
+* be enthusiastic;
+* and have a need to extend Piston.
+
+Piston is my most successful Open Source project so far, and I want to put it in someone's capable hands.
+
+Please send me mail to "francois@teksol.info":mailto:francois@teksol.info if you are interested ?
+
+Are you this person ?

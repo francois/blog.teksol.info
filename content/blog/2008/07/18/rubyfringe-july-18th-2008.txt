@@ -1,0 +1,15 @@
+--- 
+title:      "RubyFringe: July 18th, 2008"
+created_at: 2008-07-18 07:26:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Just in case you spot me in the crowd, here's what I look like:
+
+<p style="text-align:center">
+  <a href="http://blog.teksol.info/assets/2008/7/18/WebFairy-2.0.jpg"><img src="http://blog.teksol.info/assets/2008/7/18/WebFairy-2.0.jpg" width="375" alt="The Web 2.0 Fairy"/></a>
+</p>
+
+Hope to see you there!

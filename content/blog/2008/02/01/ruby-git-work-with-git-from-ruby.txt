@@ -1,0 +1,9 @@
+--- 
+title:      "Ruby/Git: work with Git from Ruby"
+created_at: 2008-02-01 21:07:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I have a passing interest in "Git":http://git.or.cz/.  I haven't migrated my projects over to it now, but am looking into it.  Just for fun, I googled "ruby git", and I found "Ruby/Git":http://jointheconversation.org/rubygit/.  I thought more people should know about this.

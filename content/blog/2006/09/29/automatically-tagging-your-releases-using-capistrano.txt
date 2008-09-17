@@ -1,0 +1,31 @@
+--- 
+title:      "Automatically tagging your releases using Capistrano"
+created_at: 2006-09-29 17:48:47
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Even though "Capistrano":http://rubyforge.org/projects/capistrano "tags" each release by creating a new folder on the production server(s), it might be interesting to have a historical perspective in your repository anyway.
+
+This makes it easier to know exactly what went up for a release.
+
+I would like to share the following "Capistrano":http://rubyforge.org/projects/capistrano recipe for your pleasure:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="config/deploy.rb">require 'uri'
+task :after_deploy do
+  source = repository
+  dest = URI.parse(repository).merge("../releases/#{File.basename(release_path)}")
+  cmd = "svn copy --revision=#{revision} --quiet --message \"Auto tagging release #{release_path}\" #{source} #{dest}"
+  puts cmd
+  `#{cmd}`
+end
+</textarea>
+
+First, we start by requiring "uri":http://www.ruby-doc.org/stdlib/libdoc/uri/rdoc/index.html, because "Subversion":http://subversion.tigris.org/ does not like relative URLs.
+
+Next, we find the location into which to tag the release, and finally, we just do it.
+
+Simple, effective.
+
+Enjoy !

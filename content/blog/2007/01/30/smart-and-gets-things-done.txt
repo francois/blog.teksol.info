@@ -1,0 +1,13 @@
+--- 
+title:      "Smart and Gets Things Done"
+created_at: 2007-01-30 21:15:15
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I would like to provide you with an interesting link:  "How to Get Hired -- What CS Students Need to Know":http://www.kegel.com/academy/getting-hired.html
+
+When I was "searching for someone":http://jobs.rubynow.com/jobs/show/271 myself, I hadn't read this essay, but I already knew I was searching for someone who is "Smart and Gets Things Done":http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html.
+
+Those two articles pretty much sum up what I want from anyone I would be hiring.

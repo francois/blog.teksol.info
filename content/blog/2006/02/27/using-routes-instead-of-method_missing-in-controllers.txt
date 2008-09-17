@@ -1,0 +1,42 @@
+--- 
+title:      "Using routes instead of method_missing in Controllers"
+created_at: 2006-02-27 13:25:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Over on "Software Development Budoka":http://jroller.com/page/bloritsch, Berin Loritsch talks about "supporting The Rel-Tag Microformat in Rails":http://jroller.com/page/bloritsch?entry=supporting_the_rel_tag_microformat.  Unfortunately, he uses a very obscure approach.
+
+Here is his code:
+<textarea name="code" cols="55" rows="15" class="ruby">class TagsController < ApplicationController
+  layout 'site'
+
+  def method_missing(methodId)
+    name = methodId.id2name
+    @tag = name
+    @tagged_items = Project.find_tagged_with :any => name
+    render 'tags\list'
+  end
+end
+</textarea>
+
+Unfortunately, that is very unclear.  Much better to use routes to do the same thing:
+<textarea name="code" cols="55" rows="15" class="ruby" title="config/routes.rb">ActionController::Routing::Routes.draw do |map|
+  map.connect 'tags/:tag_name',
+    :controller => 'tags', :action => 'by_tag'
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/controllers/tags_controller.rb">class TagsController < ApplicationController
+  layout 'site'
+
+  def by_tag
+    @tagged_items = Project.find_tagged_with(
+      :any => params[:tag_name])
+    render 'tags\list'
+  end
+end
+</textarea>
+
+In my mind, that seems to be the easiest way to do the job.

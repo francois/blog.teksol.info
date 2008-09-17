@@ -1,0 +1,46 @@
+--- 
+title:      "BudgetApp: home budgeting made easy"
+created_at: 2007-10-31 08:27:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I have worked some more on my home budget planner application.  The current version is implemented on "Seaside":http://www.seaside.st/, and it's doing great.  I haven't had as much time as I wanted, but it's coming along nicely.  I have some formal training in accounting practices, and I treat my house as being a business: we have income and expense accounts, equity for ourselves, and assets (our bank account) as well as liability accounts (credit cards and bank loans).
+
+<p>
+  <a href="http://blog.teksol.info/assets/2007/10/31/budgetapp-admin-tab.png">
+    <img src="http://blog.teksol.info/assets/2007/10/31/budgetapp-admin-tab.png" alt="" width="480"/>
+    <span class="caption">BudgetApp's administration tab.  Click for larger view.</span>
+  </a>
+</p>
+
+This is the administration tab.  This is where you add and change accounts.  Not much more to show here.
+
+<p>
+  <a href="http://blog.teksol.info/assets/2007/10/31/budgetapp-budget-tab.png">
+    <img src="http://blog.teksol.info/assets/2007/10/31/budgetapp-budget-tab.png" alt="" width="480"/>
+    <span class="caption">BudgetApp's budget tab.  Click for larger view.</span>
+  </a>
+</p>
+
+The budget tab.  This is where you actually set your budget targets for the month.  Historical data is kept around, and you can immediately see when your budget is under the actual value.
+
+<p>
+  <a href="http://blog.teksol.info/assets/2007/10/31/budgetapp-real-tab.png">
+    <img src="http://blog.teksol.info/assets/2007/10/31/budgetapp-real-tab.png" alt="" width="480"/>
+    <span class="caption">BudgetApp's real tab.  Click for larger view.</span>
+  </a>
+</p>
+
+This is the least polished of the tabs yet, and ironically, this is where most of the work is going to be done.  I'll need to use the application for a bit before I can determine the exact interface I want.  I'm thinking of having a couple of panels that will allow the user to say what kind of transaction occurred: paid, bought, reimbursed, transferred, etc.
+
+That's the state of affairs at revision 9 on the "Monticello":http://mirror.teksol.info/monticello/budgetapp repository.
+
+h2. Differences with Rails
+
+I haven't actually started doing any work on the Rails side of things, but there is one thing I did notice:  I find it easier to segregate my work in change sets in the file world versus when working in the image-world.  For example, revision 8 includes changes to a couple of classes, and none are related:  stylistic changes in the budget and admin tabs, plus my initial stab at the real tab.  Had I been using Rails, I would have committed a couple of files here and there multiple times, and that would be it.
+
+I am aware of Monticello's "add to current change set" and "remove from current change set", but have not dared using them yet.  I'm not exactly sure what these options will do, and most importantly, I am afraid of losing work.  That probably won't happen, but there's this nagging feeling deep down...
+
+Anyway, next step is to generate real transactions from the real tab.  More on this next week !

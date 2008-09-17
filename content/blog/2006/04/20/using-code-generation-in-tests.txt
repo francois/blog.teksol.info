@@ -1,0 +1,64 @@
+--- 
+title:      "Using code generation in tests"
+created_at: 2006-04-20 14:39:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Not sure if this falls into the useful or into the weird category, but I'm beginning to do code generation in my behavior specifications...
+
+Take a look at the behavior specification:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="text/unit/transaction_state_test.rb">require File.dirname(__FILE__) + '/../test_helper'
+
+class TransactionStateOrderingTest < Test::Unit::TestCase
+  TransactionState::StatusNames.each do |status|
+    define_method("test_#{status}_query_method") do
+      assert TransactionState.send(status).send("#{status}?"), status
+      (TransactionState::StatusNames - [status]).each do |inner_status|
+        assert !TransactionState.send(status).send("#{inner_status}?"), inner_status
+      end
+    end
+  end
+end
+</textarea>
+
+And the corresponding implementation:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/transaction_state.rb">class TransactionState
+  StatusNames = %w(started approved processed completed cancelled).freeze
+
+  attr_reader :name, :index
+  alias_method :to_s, :name
+
+  def initialize(name)
+    @name, @index = name.to_s, StatusNames.index(name.to_s)
+    raise "Unknown status name: #{name.inspect}" unless @index
+  end
+
+  # Generate instance methods to query the state of this instance.
+  # Generates #started? and #completed?, among others.
+  StatusNames.each do |status|
+    define_method("#{status}?") do
+      self.name == TransactionState.send(status).name
+    end
+  end
+
+  # Generate class methods to return pre-instantiated
+  # TransactionState objects, one per status name.
+  class << self
+    @@states_cache = Hash.new
+    StatusNames.each do |status|
+      @@states_cache[status.to_sym] = TransactionState.new(status)
+      define_method(status) do
+        @@states_cache[status.to_sym]
+      end
+    end
+  end
+
+  Statuses = StatusNames.map {|status| TransactionState.send(status)}
+end
+</textarea>
+
+Nothing too earth shattering, except for the specs.  How do I ensure the specs were properly generated ?  I didn't, except for confirming that the number of  tests and assertions went up as expected.

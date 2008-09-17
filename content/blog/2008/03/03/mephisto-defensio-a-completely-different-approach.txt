@@ -1,0 +1,51 @@
+--- 
+title:      "Mephisto + Defensio: a completely different approach"
+created_at: 2008-03-04 02:37:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+My friend, "Carl Mercier":http://blog.carlmercier.com/, unveiled "Defensio":http://defensio.com/ in "November 2007":http://blog.defensio.com/2007/11/07/defensio-unveiled/.  At the time, I had repeatedly told Carl I would write a plugin for "Mephisto":http://mephistoblog.com/ to integrate with Defensio.  Then, in "December 2007":http://blog.defensio.com/2007/12/22/now-on-mephisto/, "TheWebFellas":http://www.thewebfellas.com/ released a plugin that "integrated Mephisto and Defensio":http://www.thewebfellas.com/blog/2007/12/19/mephisto-comment-defensio-plugin.
+
+I installed the plugin, but it didn't work out for me.  And then, I had other stuff to do (like nobody does, duh).  And now, a couple of months later, I am just learning about "Git":http://git.or.cz/, and how Git empowers people to make wholesale changes to an application, and still be able to exchange that code with everyone.
+
+I was on the #github channel on Friday night, having some problems creating a new repository.  Comes alongs halorgium telling me "why didn't you name your repository Mephiso ?"  Good question.  And I asked him if "Rick Olson":http://techno-weenie.net/ (techno-weenie) had a public Git repository for Mephisto.  Halorgium replied with Rick's repository URL, and told me that it was down at the moment.  But, he had a recent clone, which he pushed to "GitHub":http://github.com/.  I then simply forked his repository, and started coding like mad.
+
+It's now 4 days later, and I am releasing a refactored Mephisto.  Instead of being intimately tied to "Akismet":http://akismet.com/, or Defensio for that matter, this version of Mephisto uses the Strategy and Adapter design patterns to enable any spam detection engine to connect to Mephisto.
+
+I don't know Rick personally, nor do I know "Mark Dagget":http://www.locusfoc.us/, but if they wish, they can now pull from my repository, and the whole Mephisto community will have a much better Mephisto available to them all.
+
+So:
+
+* If halorgium hadn't been on #github on Friday, I wouldn't have known about Rick's Mephisto repository;
+* If halorgium hadn't had a clone, I wouldn't have started then;
+* If I hadn't been using Git, I wouldn't have attempted this (too many changes in too many places for Subversion);
+
+Git *empowered* me to make big changes to a foreign code base.  I'm not afraid of losing any of my changes, and anyone can pull from my repository.  This is a completely different working model than "Subversion":http://subversion.tigris.org/.
+
+If you wish to play with this Mephisto version, you can pull from my public clone URL:  "git://github.com/francois/mephisto.git":git://github.com/francois/mephisto.git
+
+*Update 2008-03-03*: After discussion with Halorgium on #github, I have pushed a multiengine branch.  Use that instead of my master, which has been reset.
+
+<textarea name="code" cols="55" rows="15" class="shell">git clone git://github.com/francois/mephisto.git mephisto_defensio
+cd mephisto_defensio
+git checkout multiengine
+rake db:bootstrap db:migrate
+thin start
+</textarea>
+
+If you already have a clone of Mephisto's repository from someone else, add mine as a remote:
+
+<textarea name="code" cols="55" rows="15" class="shell">cd mephisto
+git remote add francois git://github.com/francois/mephisto.git
+git fetch francois
+git branch --track multiengine francois/multiengine
+git checkout multiengine
+rake db:migrate
+thin start
+</textarea>
+
+In case you want to look at the code first, you can browse the GitHub repository using "http://github.com/francois/mephisto/tree/multiengine":http://github.com/francois/mephisto/tree/multiengine
+
+I suggest starting with "Mephisto::SpamDetectionEngine::Base":http://github.com/francois/mephisto/tree/multiengine/lib/mephisto/spam_detection_engine/base.rb, and exploring from there.

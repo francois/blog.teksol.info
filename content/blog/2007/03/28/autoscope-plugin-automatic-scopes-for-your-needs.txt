@@ -1,0 +1,44 @@
+--- 
+title:      "AutoScope Plugin: automatic scopes for your needs"
+created_at: 2007-03-28 19:17:54
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, in relation to my "Useful #with_scope technique":http://blog.teksol.info/articles/2007/03/28/useful-with_scope-technique post, here's a plugin that implements that idea.  This code is used on a production system.  It works perfectly for my needs at the moment.
+
+h2. AutoScope
+
+Automatically create scoped access methods on your ActiveRecord models.
+
+h2. Examples
+
+Declare your scopes within your ActiveRecord::Base subclasses.
+
+<textarea name="code" cols="55" rows="15" class="ruby">class Contact < ActiveRecord::Base
+  auto_scope \
+      :old => {:find => {:conditions => ["born_on < ?", 30.years.ago]}},
+      :young => {:find => {:conditions => ["born_on > ?", 1.year.ago]}}
+end
+
+class Testimonial < ActiveRecord::Base
+  auto_scope \
+      :approved => {
+          :find => {:conditions => ["approved_at < ?", proc {Time.now}]},
+          :create => {:approved_at => proc {Time.now}}},
+      :unapproved => {
+          :find => {:conditions => "approved_at IS NULL"},
+          :create => {:approved_at => nil}}
+end
+</textarea>
+
+These declarations give you access to the following scoped methods:
+<textarea name="code" cols="55" rows="15" class="ruby">Testimonial.approved.count
+Testimonial.unapproved.create!(params[:testimonial])
+@young_contacts = Contact.young
+@contacts = Contact.old.find(:all, :conditions => ["name LIKE ?", params[:name]])
+</textarea>
+
+The plugin's home page is: "http://xlsuite.org/plugins/auto_scope":http://xlsuite.org/plugins/auto_scope
+The plugin's Subversion repository is: "http://svn.xlsuite.org/plugins/auto_scope":http://svn.xlsuite.org/plugins/auto_scope

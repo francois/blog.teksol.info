@@ -1,0 +1,18 @@
+--- 
+title:      "Montreal on Rails 3:  Piston Talk"
+created_at: 2007-10-13 12:20:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+At the last "Montreal on Rails":http://montrealonrails.com/, I presented "Piston":http://piston.rubyforge.org/.  "James Golick":http://jamesgolick.com/ is taking care of the videos, and I promised I would put the files up.  Here they are, at long last.  As soon as I have a link for the video, I'll put it up here.
+
+The files which I used to do the presentation are "OpenOffice.org 2":http://www.openoffice.org/:
+
+* "Piston: Easy Vendor Branch Management":http://blog.teksol.info/assets/2007/10/13/mor3-20071002-3.odp
+* "Piston Cheatsheet":http://blog.teksol.info/assets/2007/10/13/cheatsheet.odt
+
+"Marc-André":http://macournoyer.wordpress.com/ got my only hard-copy of the cheatsheet, authographed by yours truly.  Way to go Marc !
+
+The presentation went rather well.  Probably due to some parsing issues, the slides didn't look that good on Keynote, and <a href="http://blog.carlmercier.com/">Carl</a>'s machine had trouble switching slides fast enough for my talk.  I was surprised at the many questions from the group.  Thanks for your time everyone.  I really appreciated seeing you there.

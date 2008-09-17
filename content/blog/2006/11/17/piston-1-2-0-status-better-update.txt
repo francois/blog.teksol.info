@@ -1,0 +1,50 @@
+--- 
+title:      "Piston 1.2.0: status, better update"
+created_at: 2006-11-17 20:27:46
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Piston 1.2.0 is here.  From the "ChangeLog":http://rubyforge.org/viewvc?view=rev&root=piston&revision=55:
+
+* New status subcommand.  Shows M if locally or remotely modified. Applies to  one, many, all folders.  This subcommand *requires* the use of a Subversion 1.2.0 client.  Thanks to Chris Wanstrath for the inspiration.  His Rake
+  tasks are available at http://errtheblog.com/post/38.
+* Minor patch by Miguel Ibero Carreras to make Subversion always use the C locale, instead of the current one.  This allows Piston to be used with internationalized versions of Subversion.  David Bittencourt later reported the same problem.  Thanks!
+* Better handle how update finds it's latest local revision to prevent conflicts.  If you had never locally changed your vendor repositories, this fix will change nothing for you.  This helps prevent local conflicts if you had ever applied a local patch.
+
+h2. Installation
+
+<typo:code>$ gem install piston
+Successfully installed piston, version 1.2.0
+</textarea>
+
+There is no need to install "Piston":http://piston.rubyforge.org/ on your server.  A local installation on your development machine is all that you need to administer the remote code.
+
+h2. Caveat
+
+It is *imperative* that you locally update your piston:local-revision property manually, just this once.  Prior to 1.2.0, Piston would almost never update the piston:local-revision property, meaning it would always think there were local changes.  With the new update implementation, Piston would try to merge changes that had already occured, causing many conflicts.  You need to reset the value of piston:local-revision to the revision where you last did a piston update or import.
+
+An example is in order.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propget piston:local-revision vendor\rails
+29
+
+$ svn log -r head:1 vendor/rails
+------------------------------------------------------------------------
+r31 | francois | 2006-11-17 10:05:54 -0500 (ven., 17 nov. 2006) | 1 line
+
+Updated to Rails r4500
+------------------------------------------------------------------------
+r30 | francois | 2006-11-17 10:03:48 -0500 (ven., 17 nov. 2006) | 1 line
+
+Import Rails r4393
+------------------------------------------------------------------------
+
+$ svn propset piston:local-revision 31 vendor\rails
+property 'piston:local-revision' set on 'vendor\rails'
+
+$ svn commit --quiet --message "Updated piston:local-revision to 31, per ChangeLog instructions"
+</textarea>
+
+Visit "Piston's":http://piston.rubyforge.org/ website.

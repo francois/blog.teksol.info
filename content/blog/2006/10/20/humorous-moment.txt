@@ -1,0 +1,21 @@
+--- 
+title:      "Humorous Moment"
+created_at: 2006-10-20 10:28:09
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I use the "Money":http://rubyforge.org/projects/money gem quite a bit in my Rails applications.  One thing I needed was to often add or substract one penny from an amount.  So, I did like all good programmers should do:
+
+<textarea name="code" cols="55" rows="13" class="ruby" title="lib/money_extensions.rb">class Money
+  Penny = Money.new(1).freeze
+end
+</textarea>
+
+Turns out that when using the constant, it ends up looking like this:
+
+<textarea name="code" cols="55" rows="13" class="ruby">amount -= Money::Penny
+</textarea>
+
+I never knew I'd have a "Bond Girl":http://en.wikipedia.org/wiki/Bond_girl in my "Rails":http://rubyonrails.org/ code :)

@@ -1,0 +1,9 @@
+--- 
+title:      "git setup"
+created_at: 2008-04-22 19:34:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+http://dysinger.net/2007/12/30/installing-git-on-mac-os-x-105-leopard/

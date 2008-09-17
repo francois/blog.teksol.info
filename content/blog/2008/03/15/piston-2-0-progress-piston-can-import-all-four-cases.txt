@@ -1,0 +1,132 @@
+--- 
+title:      "Piston 2.0 Progress:  Piston can import all four cases"
+created_at: 2008-03-15 23:03:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+As I outlined in "Piston will get Git support":http://blog.teksol.info/2008/3/6/piston-will-get-git-support, the four cases below are now supported (at least for importing):
+
+<table border="1" cellspacing="0" cellpadding="2">
+<thead>
+<tr>
+<th>Repository</th>
+<th>Working Copy</th>
+<th>Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subversion</td>
+<td>Subversion</td>
+<td>Use current strategy of storing data in Subversion properties</td>
+</tr>
+<tr>
+<td>Subversion</td>
+<td>Git</td>
+<td>Clone the Git repository, copy the files over and store the metadata as Subversion properties.  Use Git to handle the merging for Piston (Yay!)</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>Subversion</td>
+<td>svn export the data and use a hidden YAML file to store the metadata in the pistonized directory</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>Subversion</td>
+<td>Use Git submodules perhaps ?  Or git clone + copy + YAML</td>
+</tr>
+</tbody>
+</table>
+
+I'm not in fact using git submodules, or anything fancy.  I'm cloning the repository, and copying manually from there.  So, nothing fancy.  But adding new repository and working copy handlers is *so* easy:
+
+h3. samples/import_svn_svn.rb
+
+<textarea name="code" cols="55" rows="15" class="ruby">#!/usr/bin/env ruby
+#
+# Import an SVN repository into an SVN working copy.
+require File.dirname(__FILE__) + "/common"
+
+@root = @root + "tmp/git_git"
+@root.rmtree rescue nil
+@root.mkpath
+
+@tmp = @root + "plugin.tmp"
+
+@plugin = @root + "plugin"
+@plugin.mkpath
+File.open(@plugin + "README", "wb") {|f| f.puts "Hello World"}
+File.open(@plugin + "init.rb", "wb") {|f| f.puts "# Some init code"}
+Dir.chdir(@plugin) do
+  git :init
+  git :add, "."
+  git :commit, "-m", "initial commit"
+end
+
+@wc = @root + "wc"
+@wc.mkpath
+File.open(@wc + "README", "wb") {|f| f.puts "My local project"}
+Dir.chdir(@wc) do
+  git :init
+  git :add, "."
+  git :commit, "-m", "initial commit"
+end
+
+repos = Piston::Git::Repository.new("file://" + @plugin.realpath)
+commit = repos.at(:head)
+commit.checkout_to(@tmp)
+
+wc = Piston::Git::WorkingCopy.new(@wc + "vendor")
+wc.create
+wc.copy_from(commit)
+wc.remember(commit.remember_values)
+wc.finalize
+</textarea>
+
+h3. samples/import_git_svn.rb
+
+<textarea name="code" cols="55" rows="15" class="ruby">#!/usr/bin/env ruby
+#
+# Import a Git project into a Subversion working copy.
+require File.dirname(__FILE__) + "/common"
+
+@root = @root + "tmp/git_svn"
+@root.rmtree rescue nil
+@root.mkpath
+
+@repos = @root + "repos"
+@wc = @root + "wc"
+
+@plugin = @root + "plugin"
+@tmp = @root + "plugin.tmp"
+
+svnadmin :create, @repos
+svn :checkout, "--quiet", "file://" + @repos.realpath, @wc
+
+@plugin.mkpath
+File.open(@plugin + "README", "wb") {|f| f.puts "Hello World"}
+File.open(@plugin + "init.rb", "wb") {|f| f.puts "# Some initialization code here"}
+Dir.chdir(@plugin) do
+  logger.debug {"CWD: #{Dir.getwd}"}
+  git :init
+  git :add, "."
+  git :commit, "-m", "initial commit"
+end
+
+repos = Piston::Git::Repository.new("file://" + @plugin.realpath)
+commit = repos.at(:head)
+commit.checkout_to(@tmp)
+wc = Piston::Svn::WorkingCopy.new(@wc + "vendor")
+wc.create
+wc.copy_from(commit)
+wc.remember(commit.remember_values)
+wc.finalize
+</textarea>
+
+Do you see the differences ?  They're all in the setup code.  Once we hit <code>commit.checkout_to</code>, everything else is the same.
+
+I'm almost ready to release a release candidate.  This will be 1.9.0, and only support the import subcommand.  It will at least expose the code to more testing than just what I have.
+
+Oh, and no more "Piston 1.3.3: Now with specifications (at last!)":http://blog.teksol.info/2007/3/22/piston-1-3-3-now-with-specifications-at-last.  This version of Piston was tested right from the start.

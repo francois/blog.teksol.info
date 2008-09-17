@@ -1,0 +1,15 @@
+--- 
+title:      "Newshutch RSS Online Feed Reader is Closing"
+created_at: 2007-11-02 07:41:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Newshutch":http://www.newshutch.com/, an online feed reader, is closing.  I have used their service for quite a while now and, sadly, they are closing.  As the authors say in their "We’re pulling the plug on Newshutch":http://newshutch.com/blog/2007/10/30/we%e2%80%99re-pulling-the-plug-on-newshutch/:
+
+bq. The main problem we’ve been facing is that none of us were passionate about Newshutch anymore.
+
+Ah, "passion":http://headrush.typepad.com/...  The key to everything.  On projects I am passionate about, I will work 10/15 hours a day, and on others, I will procrastinate until the end of time.
+
+No words yet on whether or not the source code will be open sourced, sold or anything else.

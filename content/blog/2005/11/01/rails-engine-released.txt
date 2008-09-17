@@ -1,0 +1,15 @@
+--- 
+title:      "Rails Engine Released"
+created_at: 2005-11-01 22:12:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Over on the "Rails mailing list":http://article.gmane.org/gmane.comp.lang.ruby.rails/27632, James Adams reports the initial release of "Rails Engines":http://rails-engines.rubyforge.org/.
+
+What are engines ?  They are "plugins":http://wiki.rubyonrails.com/rails/pages/Plugins, more or less, except they also bundle controllers, views, partials, models and everything else you'd usually need in a component.
+
+In fact, Rails Components could very well be implemented using Rails Engines.
+
+I wonder how routes are handled.  Can engines provide their own routes, or must the engine user define the routes he wants ?  Gotta try that "login_engine":https://opensvn.csie.org/rails_engines/plugins/login_engine/ and see for myself.

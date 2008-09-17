@@ -1,0 +1,84 @@
+--- 
+title:      "respond_to order is important"
+created_at: 2006-05-03 17:59:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+This is the test I wrote.  You'll notice it is almost verbatim the scaffolded test.
+
+<textarea name="code" cols="55" rows="15" class="ruby">def test_create
+  num_blog_accounts = BlogAccount.count
+
+  post :new,
+    :blog_account => {:feed_url => 'http://bladibla.com/'},
+    :commit => 'Close'
+  assert_redirected_to blog_accounts_url
+
+  assert_equal num_blog_accounts + 1, BlogAccount.count
+end
+</textarea>
+
+Interestingly, I made it fail with the following simple code:
+
+<textarea name="code" cols="55" rows="15" class="ruby">def new
+  return edit unless params[:id].blank?
+  @title = 'Creating blog account'
+  @blog_account = BlogAccount.new
+  save_and_navigate if request.post?
+end
+
+protected
+def save_and_navigate
+  if @blog_account.update_attributes(params[:blog_account])
+    flash_success 'BlogAccount was successfully updated.'
+    respond_to do |wants|
+      wants.js do
+        render :action => 'save', :content_type => 'text/javascript; charset=utf-8', :layout => false
+      end
+      wants.html do
+        redirect_to blog_accounts_url
+      end
+    end
+  end
+end
+</textarea>
+
+The failure was:
+<textarea name="code" cols="55" rows="15" class="shell">$ ruby test\functional\admin\blog_accounts_controller_test.rb -n test_create
+Loaded suite test/functional/admin/blog_accounts_controller_test
+Started
+F
+Finished in 0.188 seconds.
+
+  1) Failure:
+test_create(Admin::BlogAccountsControllerTest) [test/functional/admin/blog_accounts_controller_test.rb:42]:
+Expected response to be a <:redirect>, but was <200>
+
+1 tests, 1 assertions, 1 failures, 0 errors
+</textarea>
+
+Flipping the order of my <code class="method">respond_to</code> block did the trick:
+<textarea name="code" cols="55" rows="15" class="ruby">respond_to do |wants|
+  wants.html do
+    redirect_to blog_accounts_url
+  end
+  wants.js do
+    render :action => 'save', :content_type => 'text/javascript; charset=utf-8', :layout => false
+  end
+end
+</textarea>
+
+This is partially logical.  Of course, the request doesn't have an <var>Accept</var> header, so Rails uses the default, which is to return in order the order of definition.
+
+Alternatively, setting the request's <var>Accept</var> header would do the trick:
+
+<textarea name="code" cols="55" rows="15" class="ruby">def setup
+  @controller = Admin::BlogAccountsController.new
+  @request    = ActionController::TestRequest.new
+  @response   = ActionController::TestResponse.new
+
+  @request.env['HTTP_ACCEPT'] = 'text/html'
+end
+</textarea>

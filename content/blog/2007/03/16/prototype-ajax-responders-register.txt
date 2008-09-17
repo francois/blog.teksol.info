@@ -1,0 +1,55 @@
+--- 
+title:      "Prototype Ajax.Responders.register"
+created_at: 2007-03-16 05:26:26
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, I found today I needed an "Ajax.Responders":http://www.prototypejs.org/api/ajax/responders for something not as trivial as showing an indicator.
+
+On the form, I have event handlers responsible for doing a PUT on each change to the field.  This way, the user doesn't need to remember to save his record when navigating away.
+
+Since I'm working on the contact page, we need to add addresses and phones.  I had it all working, except that the new address or phone's fields weren't AJAX-enabled.
+
+After reading a bit, I found/remembered about <code class="class javascript">Ajax.Responders</code>.  Here's what it looks like:
+
+<textarea name="code" cols="55" rows="15" class="javascript" title="public/javascripts/xl_suite/form_handler.js">XlSuite.FormHandler = Class.create();
+XlSuite.FormHandler.prototype = {
+  initialize: function(root) {
+    this.root = root;
+    this.registeredFields = new Hash();
+
+    // Register an event handler to be called
+    // after each Ajax call completes
+    Ajax.Responders.register({
+      onComplete:
+        this.registerEventHandlers.bindAsEventListener(this)
+    });
+  },
+
+  registerEventHandlers: function() {
+    var editors = Selector.findChildElements($(this.root), ["input.subtleField", "select.subtleField", "textarea.subtleField"]);
+
+    for (var i = 0; i < editors.length; i++) {
+      var field = editors[i];
+      if (this.registeredFields[field.id] != field && field.id.substring(0, 4) != "new_") {
+        Event.observe(field, "focus", this.onFocus.bindAsEventListener(this));
+        Event.observe(field, "keypress", this.onKeypress.bindAsEventListener(this));
+        Event.observe(field, "blur", this.onBlur.bindAsEventListener(this));
+
+        // Remember that we processed this field
+        this.registeredFields[field.id] = field;
+      }
+    }
+  }
+
+  // rest of implementation omitted
+);
+</textarea>
+
+In <code class="method javascript">initialize</code>, we prepare ourselves a <code class="class javascript">Hash</code> to remember which fields were processed, and not add multiple event handlers for the same field.
+
+Then, in <code class="method javascript">registerEventHandler</code> (which is called on the complete event of the AJAX call), we find which fields to register event handlers on, and flag them as processed.
+
+I didn't find many example usages of <code class="class javascript">Ajax.Responders</code>.  I hope this helps someone.

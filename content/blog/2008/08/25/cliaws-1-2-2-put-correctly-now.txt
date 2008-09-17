@@ -1,0 +1,39 @@
+--- 
+title:      "Cliaws 1.2.2: put correctly now..."
+created_at: 2008-08-26 00:28:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Today sees a new release of "Cliaws":http://github.com/francois/cliaws/wikis.  This is a simple library to interact with "S3":http://www.amazon.com/S3-AWS-home-page-Money/b/ref=sc_fe_l_2?ie=UTF8&node=16427261&no=3435361&me=A36L942TSJ2AJA (and other services) through the command-line.  This library is very similar to Amazon's own ec2-* scripts, except this library is written in "Ruby":http://ruby-lang.org/.
+
+Interacting with S3 should be no harder than:
+
+<typo:code lang="shell">$ clis3 put my-local-file my-bucket/my-s3-file
+</typo:code>
+
+Put many files at once:
+<typo:code lang="shell">$ clis3 put my-local-file0 my-local-file1 my-bucket/my-s3-directory/
+</typo:code>
+
+Put an environment variable:
+<typo:code lang="shell">$ clis3 put --data $MY_DATA my-bucket/my-env-value
+</typo:code>
+
+Put stdin too!
+<typo:code lang="shell">$ tar czfv /var/cache/mylvmbackup/backup | clis3 put - my-bucket/my-backup/backup-20080825-000000.tar.gz
+</typo:code>
+
+All of this functionnality is available from with Ruby too:
+
+<textarea name="code" class="ruby" rows="12">require "rubygems"
+require "cliaws"
+
+Cliaws.s3.put("this is the content", "my-bucket/my-s3-file")
+File.open("my-local-file", "rb") do |io|
+  Cliaws.s3.put(io, "my-bucket/my-s3-file")
+end
+</textarea>
+
+Give the "RubyForge":http://rubyforge.org/ gem servers a couple of hours to refresh themselves, and then enjoy!

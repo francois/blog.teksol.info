@@ -1,0 +1,38 @@
+--- 
+title:      "Expected X to define Y error"
+created_at: 2007-03-09 22:24:24
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just got hit by this famous error again.  And I am not the only one:
+
+* Aug 2006:  "Expected ... to define ...":http://www.ruby-forum.com/topic/77708
+* Dec 2006: "Weird error trying to define controller?":http://railsforum.com/viewtopic.php?id=2716
+* Jan 2007: "rails 1.2.1":http://www.ruby-forum.com/topic/94356
+* "Ticket #7452":http://dev.rubyonrails.org/ticket/7452 (there are more)
+* "Google search on this error message":http://www.google.ca/search?q=expected+%22to+define%22+rails+dependencies++%2Bload_missing_constant&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:fr:official&client=firefox-a
+
+Now, I know I should put my patches where my mouth is.  And that's exactly what I'm trying to do here.  My application is on the 1.2 branch, and I get this error if I have the Response Logger plugin loaded.  Trying again with Edge Rails, I again get the error.  If I try with WEBrick or Mongrel, same error.  Loading the console produces the same error.  Using Windows or Linux changes nothing: same error.
+
+The exact backtrace is:
+<textarea name="code" cols="55" rows="15" class="shell">$ ruby script\console
+Loading development environment.
+./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:249:in `load_missing_constant': Expected ./script/../config/../config/../vendor/plugins/response_logger/lib/response_logger.rb to define ResponseLogger (LoadError)
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:452:in `const_missing'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:464:in `const_missing'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:260:in `load_missing_constant'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:452:in `const_missing'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:260:in `load_missing_constant'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:452:in `const_missing'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:260:in `load_missing_constant'
+        from ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:468:in `const_missing'
+         ... 14 levels...
+        from C:/ruby/lib/ruby/1.8/irb/init.rb:250:in `load_modules'
+        from C:/ruby/lib/ruby/1.8/irb/init.rb:21:in `setup'
+        from C:/ruby/lib/ruby/1.8/irb.rb:54:in `start'
+        from C:/ruby/bin/irb.bat:20
+</textarea>
+
+In this application, I am using "Engines":http://rails-engines.org/, along with LoginEngine.  You really need the right version of Engines with the right version of Rails for things to work out well:  "Rails 1.2":http://dev.rubyonrails.org/svn/rails/branches/1-2-stable requires "Engines 1.2":http://svn.rails-engines.org/engines/tags/rel_1.2.0/.

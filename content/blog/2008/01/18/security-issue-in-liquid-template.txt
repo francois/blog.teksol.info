@@ -1,0 +1,17 @@
+--- 
+title:      "Security issue in Liquid::Template"
+created_at: 2008-01-19 00:09:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+In "XLsuite":http://xlsuite.com/, we use "Liquid templates":http://www.liquidmarkup.org/ in the CMS.  Two days ago, I noticed a big problem:  ERB code in the Liquid template ends up being eval'd.  This is in direct contradiction with Liquid's mission statement:
+
+bq. Ruby library for rendering safe templates which cannot affect the security of the server they are rendered on.
+
+<p style="text-align:right">From "Liquid":http://www.liquidmarkup.org/ Home Page</p>
+
+I'm reposting this here so this gets the attention it deserves.
+
+If you are interested, you can view Liquid's issue at:  "http://code.google.com/p/liquid-markup/issues/detail?id=6":http://code.google.com/p/liquid-markup/issues/detail?id=6

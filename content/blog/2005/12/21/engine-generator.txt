@@ -1,0 +1,64 @@
+--- 
+title:      "Engine Generator"
+created_at: 2005-12-21 13:33:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Jon Lim":http://www.snowblink.co.uk/ on the Rails mailing list just "announced":http://thread.gmane.org/gmane.comp.lang.ruby.rails/36358 the release of "Engines Generator":http://rails-engines.rubyforge.org/wiki/wiki.pl?ExtractAnEngine.
+
+From the documentation:
+<pre>$ script/generate engine UploadEngine
+Please enter the author's name: Joe Smith
+Please enter the author's email: joe.smith@xyz.com
+
+We can generate the following licenses automatically for you:
+0) None
+1) GPL
+2) MIT
+3) LGPL
+Please select a license: 2
+'MIT' selected
+      exists  vendor/plugins
+      create  vendor/plugins/upload_engine
+      create  vendor/plugins/upload_engine/README
+      create  vendor/plugins/upload_engine/init_engine.rb
+      create  vendor/plugins/upload_engine/app
+      create  vendor/plugins/upload_engine/app/models
+      create  vendor/plugins/upload_engine/app/controllers
+      create  vendor/plugins/upload_engine/app/helpers
+      create  vendor/plugins/upload_engine/app/views
+      create  vendor/plugins/upload_engine/db
+      create  vendor/plugins/upload_engine/db/migrate
+      create  vendor/plugins/upload_engine/lib
+      create  vendor/plugins/upload_engine/lib/upload_engine.rb
+      create  vendor/plugins/upload_engine/lib/upload_engine
+      create  vendor/plugins/upload_engine/public
+      create  vendor/plugins/upload_engine/public/javascripts
+      create  vendor/plugins/upload_engine/public/javascripts/upload_engine.js
+      create  vendor/plugins/upload_engine/public/stylesheets
+      create  vendor/plugins/upload_engine/public/stylesheets/upload_engine.css
+      create  vendor/plugins/upload_engine/tasks
+      create  vendor/plugins/upload_engine/tasks/upload_engine.rake
+      create  vendor/plugins/upload_engine/test
+      create  vendor/plugins/upload_engine/test/test_helper.rb
+      create  vendor/plugins/upload_engine/test/fixtures
+      create  vendor/plugins/upload_engine/test/functional
+      create  vendor/plugins/upload_engine/test/unit
+
+$ mv app/models/upload.rb vendor/plugins/upload_engine/app/models
+$ mv app/controllers/upload_controller.rb vendor/plugins/upload_engine/app/controllers
+$ mv app/views/upload vendor/plugins/upload_engine/app/views
+$ mv public/javascripts/upload_engine.js vendor/plugins/upload_engine/public/javascripts
+$ mv public/stylesheets/upload_engine.css vendor/plugins/upload_engine/public/stylesheets
+</pre>
+
+<textarea name="code" cols="55" rows="15" title="config/environment.rb" class="ruby">
+Engines.start :upload_engine
+</textarea>
+
+<pre>$ script/server
+</pre>
+
+This is way cool.  Great work, Jon !

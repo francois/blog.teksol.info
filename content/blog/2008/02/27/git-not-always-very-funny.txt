@@ -1,0 +1,327 @@
+--- 
+title:      "Git:  not always very funny..."
+created_at: 2008-02-28 01:59:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Okay, I have a use case which I think shouldn't be too hard.  "Jean-François":http://jfcouture.com/, my "Montreal on Rails":http://montrealonrails.com/ buddy, gave me a good hand, but I think there's some interaction going on between "Github":http://github.com/ and git-svn that causes friction...
+
+I have a new project which I want to track using "Git":http://git.or.cz/, but I also want to keep a push-only "Subversion":http://subversion.tigris.org/ repository on "Rubyforge":http://rubyforge.org/.
+
+So, I started like any old project:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn checkout svn+ssh://fbos@rubyforge.org/var/svn/theproject
+$ svn mkdir tags branches
+$ newgem theproject
+$ mv theproject trunk
+$ svn add trunk
+$ svn commit -m "New project layout"
+</textarea>
+
+Then, I imported that into a fresh Git repository:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git svn clone svn+ssh://fbos@rubyforge.org/var/svn/theproject -T trunk -t tags -b branches theproject
+</textarea>
+
+I then started coding and commiting using Git.  All was well, and I was happy.  Then, I pushed to Subversion, like any good developer should:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git svn dcommit
+</textarea>
+
+That worked well enough.  Then, I was ready to have a public Git repository.  I went to Github, where I have an account, and created a new repository.  I then did:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git remote add github git@github.com:francois/theproject.git
+$ git push github master
+</textarea>
+
+That gave me a couple of errors:
+
+<textarea name="code" cols="55" rows="15" class="shell">error: remote 'refs/heads/master' is not a strict subset of local ref
+ 'refs/heads/master'. maybe you are not up-to-date and need to pull first?
+ error: failed to push to 'git@github.com:francois/theproject.git'
+</textarea>
+
+After some discussion with Jean-François, he told me to have a separate branch on which to do development, and merge to master when I am ready to dcommit.  So, I did:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git checkout -b mainline
+# code again
+$ git checkout master
+$ git merge mainline
+$ git svn dcommit
+</textarea>
+
+That works well enough.  Now I want to push my mainline to Github.  So I do:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ git remote add github git@github.com:francois/theproject.git
+$ git push github mainline
+$ git push github mainline
+updating 'refs/heads/mainline'
+  from 0000000000000000000000000000000000000000
+  to   31d6eee71b00f829b8568937ab3adaaa8831205c
+Generating pack...
+Done counting 201 objects.
+Deltifying 201 objects...
+ 100% (201/201) done
+Writing 201 objects...
+ 100% (201/201) done
+Total 201 (delta 100), reused 0 (delta 0)
+refs/heads/mainline: 0000000000000000000000000000000000000000 -> 31d6eee71b00f829b8568937ab3adaaa8831205c
+</textarea>
+
+Great!  It works.  Except...  The repository page on Github still shows I need to create the repository.  Just for fun, *without doing anything else* I created a new empty Git repository, touched README, added that, remoted Github and pushed.  Voilà, Github showed me the repository, with README being added.
+
+Can anyone shed some light on this ?  Here's a reproduction recipe:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ cat repro.sh
+#!/bin/sh
+
+rm -rf repos wc theproject
+svnadmin create repos
+svn checkout file:///`pwd`/repos wc
+cd wc
+svn mkdir tags branches
+newgem theproject
+mv theproject trunk
+svn add trunk
+svn commit -m "Initial revision"
+cd ..
+git svn clone file:///`pwd`/repos theproject
+cd theproject
+echo "The new revision" > README
+git add README
+git commit -a -m "New README content"
+git checkout -b mainline
+git checkout master
+git svn dcommit
+git checkout mainline
+echo "More content" >> README
+git commit -a -m "More README goodness"
+git remote add github git@github.com:francois/theproject.git
+git push github mainline
+git checkout master
+git merge mainline
+git svn dcommit
+</textarea>
+
+And here's a sample <code>bash +x</code> run:
+
+<textarea name="code" cols="55" rows="15" class="shell">+ rm -rf repos wc theproject
++ svnadmin create repos
+++ pwd
++ svn checkout file:////home/francois/src/repro/repos wc
+Checked out revision 0.
++ cd wc
++ svn mkdir tags branches
+A         tags
+A         branches
++ newgem theproject
+      create  
+      create  config
+      create  doc
+      create  lib
+      create  log
+      create  script
+      create  tasks
+      create  test
+      create  tmp
+      create  lib/theproject
+      create  History.txt
+      create  License.txt
+      create  Rakefile
+      create  README.txt
+      create  setup.rb
+      create  lib/theproject.rb
+      create  lib/theproject/version.rb
+      create  config/hoe.rb
+      create  config/requirements.rb
+      create  log/debug.log
+      create  tasks/deployment.rake
+      create  tasks/environment.rake
+      create  tasks/website.rake
+      create  test/test_helper.rb
+      create  test/test_theproject.rb
+  dependency  install_website
+      create    website/javascripts
+      create    website/stylesheets
+      exists    script
+      exists    tasks
+      create    website/index.txt
+      create    website/index.html
+      create    script/txt2html
+       force    tasks/website.rake
+  dependency    plain_theme
+      exists      website/javascripts
+      exists      website/stylesheets
+      create      website/template.rhtml
+      create      website/stylesheets/screen.css
+      create      website/javascripts/rounded_corners_lite.inc.js
+  dependency  install_rubigen_scripts
+      exists    script
+      create    script/generate
+      create    script/destroy
+      create  Manifest.txt
+      readme  readme
+Important
+=========
+
+* Open config/hoe.rb
+* Update missing details (gem description, dependent gems, etc.)
++ mv theproject trunk
++ svn add trunk
+A         trunk
+A         trunk/Manifest.txt
+A         trunk/History.txt
+A         trunk/doc
+A         trunk/setup.rb
+A         trunk/tmp
+A         trunk/test
+A         trunk/test/test_theproject.rb
+A         trunk/test/test_helper.rb
+A         trunk/tasks
+A         trunk/tasks/deployment.rake
+A         trunk/tasks/website.rake
+A         trunk/tasks/environment.rake
+A         trunk/lib
+A         trunk/lib/theproject.rb
+A         trunk/lib/theproject
+A         trunk/lib/theproject/version.rb
+A         trunk/script
+A         trunk/script/txt2html
+A         trunk/script/destroy
+A         trunk/script/generate
+A         trunk/Rakefile
+A         trunk/website
+A         trunk/website/stylesheets
+A         trunk/website/stylesheets/screen.css
+A         trunk/website/javascripts
+A         trunk/website/javascripts/rounded_corners_lite.inc.js
+A         trunk/website/index.txt
+A         trunk/website/template.rhtml
+A         trunk/website/index.html
+A         trunk/log
+A         trunk/log/debug.log
+A         trunk/config
+A         trunk/config/requirements.rb
+A         trunk/config/hoe.rb
+A         trunk/License.txt
+A         trunk/README.txt
++ svn commit -m 'Initial revision'
+Adding         branches
+Adding         tags
+Adding         trunk
+Adding         trunk/History.txt
+Adding         trunk/License.txt
+Adding         trunk/Manifest.txt
+Adding         trunk/README.txt
+Adding         trunk/Rakefile
+Adding         trunk/config
+Adding         trunk/config/hoe.rb
+Adding         trunk/config/requirements.rb
+Adding         trunk/doc
+Adding         trunk/lib
+Adding         trunk/lib/theproject
+Adding         trunk/lib/theproject/version.rb
+Adding         trunk/lib/theproject.rb
+Adding         trunk/log
+Adding         trunk/log/debug.log
+Adding         trunk/script
+Adding         trunk/script/destroy
+Adding         trunk/script/generate
+Adding         trunk/script/txt2html
+Adding         trunk/setup.rb
+Adding         trunk/tasks
+Adding         trunk/tasks/deployment.rake
+Adding         trunk/tasks/environment.rake
+Adding         trunk/tasks/website.rake
+Adding         trunk/test
+Adding         trunk/test/test_helper.rb
+Adding         trunk/test/test_theproject.rb
+Adding         trunk/tmp
+Adding         trunk/website
+Adding         trunk/website/index.html
+Adding         trunk/website/index.txt
+Adding         trunk/website/javascripts
+Adding         trunk/website/javascripts/rounded_corners_lite.inc.js
+Adding         trunk/website/stylesheets
+Adding         trunk/website/stylesheets/screen.css
+Adding         trunk/website/template.rhtml
+Transmitting file data ........................
+Committed revision 1.
++ cd ..
+++ pwd
++ git svn clone file:////home/francois/src/repro/repos theproject
+Initialized empty Git repository in .git/
+        A       trunk/History.txt
+        A       trunk/test/test_helper.rb
+        A       trunk/test/test_theproject.rb
+        A       trunk/License.txt
+        A       trunk/log/debug.log
+        A       trunk/Rakefile
+        A       trunk/setup.rb
+        A       trunk/website/template.rhtml
+        A       trunk/website/index.txt
+        A       trunk/website/javascripts/rounded_corners_lite.inc.js
+        A       trunk/website/index.html
+        A       trunk/website/stylesheets/screen.css
+        A       trunk/Manifest.txt
+        A       trunk/script/txt2html
+        A       trunk/script/destroy
+        A       trunk/script/generate
+        A       trunk/config/requirements.rb
+        A       trunk/config/hoe.rb
+        A       trunk/tasks/deployment.rake
+        A       trunk/tasks/website.rake
+        A       trunk/tasks/environment.rake
+        A       trunk/lib/theproject/version.rb
+        A       trunk/lib/theproject.rb
+        A       trunk/README.txt
+W: +empty_dir: branches
+W: +empty_dir: tags
+W: +empty_dir: trunk/doc
+W: +empty_dir: trunk/tmp
+r1 = 01d09dc543711efb5bbd39e71ea2d1fe12516926 (git-svn)
+
+Checked out HEAD:
+  file:////home/francois/src/repro/repos r1
++ cd theproject
++ echo 'The new revision'
++ git add README
++ git commit -a -m 'New README content'
+Created commit 16eaad5: New README content
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ create mode 100644 README
++ git checkout -b mainline
+Branch mainline set up to track local branch refs/heads/master.
+Switched to a new branch "mainline"
++ git checkout master
+Switched to branch "master"
++ git svn dcommit
+        A       README
+Committed r2
+        A       README
+r2 = 5b2c01dde36111a37f942d9fb6670689089ad9ed (git-svn)
+No changes between current HEAD and refs/remotes/git-svn
+Resetting to the latest refs/remotes/git-svn
++ git checkout mainline
+Switched to branch "mainline"
++ echo 'More content'
++ git commit -a -m 'More README goodness'
+Created commit 49df2b5: More README goodness
+ 1 files changed, 1 insertions(+), 0 deletions(-)
++ git remote add github git@github.com:francois/theproject.git
++ git push github mainline
+error: remote 'refs/heads/mainline' is not a strict subset of local ref 'refs/heads/mainline'. maybe you are not up-to-date and need to pull first?
+error: failed to push to 'git@github.com:francois/theproject.git'
++ git checkout master
+Switched to branch "master"
++ git merge mainline
+Auto-merged README
+CONFLICT (add/add): Merge conflict in README
+Automatic merge failed; fix conflicts and then commit the result.
++ git svn dcommit
+No changes between current HEAD and refs/remotes/git-svn
+Resetting to the latest refs/remotes/git-svn
+README: needs update
+</textarea>

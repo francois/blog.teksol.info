@@ -1,0 +1,15 @@
+--- 
+title:      "Montreal on Rails 7:  Google Charts Demo"
+created_at: 2008-02-20 20:47:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you weren't at Montreal on Rails 7, you really should have been there.  Not because of me, but because "Marc-André":http://macournoyer.wordpress.com/ showed how "Thin":http://code.macournoyer.com/thin/ integrates with "Rack":http://rack.rubyforge.org/, and coded a web framework in 15 minutes.  Then, "Julien Guimont":http://jguimont.com/ demoed his "Encrypted URL Helper":http://jguimont.com/encrypted_url_helper.  Very interesting stuff, if you need to obfuscate URLs.
+
+Then, there was me.  A quick demo of "Google Charts":http://code.google.com/apis/chart/, and this post to provide you all with the link to the "mor7-google-charts-demo":http://github.com/francois/mor7-google-charts-demo/tree/master Git repository:
+
+"git://github.com/francois/mor7-google-charts-demo.git":git://github.com/francois/mor7-google-charts-demo.git
+
+Go ahead and have fun.  If you make significant changes, please contact me so I can pull your changes and push them back to the public repository.

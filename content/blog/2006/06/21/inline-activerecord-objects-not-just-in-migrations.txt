@@ -1,0 +1,44 @@
+--- 
+title:      "Inline ActiveRecord objects, not just in migrations"
+created_at: 2006-06-21 10:18:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+In February, "Tim Lucas":http://toolmantim.com/ wrote about "Migrating with Models":http://toolmantim.com/article/2006/2/23/migrating_with_models.  In this article, Tim advises writing migrations that use models like this:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="db/migrate/003_add_position_to_products.rb">class AddPositionToProducts < ActiveRecord::Migration
+  class Product < Product; end
+  class SoftwareProduct < Product; end
+  class CourseProduct < Product; end
+
+  def self.up
+    SoftwareProduct.find(:all).inject(0) do |i,p|
+      ...
+    end
+  end
+end
+</textarea>
+
+_abridged code from Tim's example_
+
+Well, I just found another use of the same technique.  I need to import data from a legacy system into a Rails application.  I wrote the following:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="lib/importer/billing.rb">module Importer
+  module Billing
+    def self.import
+      OldSitting.each do |os|
+        NewSitting.create!(...)
+      end
+    end
+
+    # Use only these models during the import, as the real
+    # models might have changed significantly.
+    class OldSitting < ActiveRecord::Base; end
+    class NewSitting < ActiveRecord::Base
+      set_table_name :sitting
+    end
+  end
+end
+</textarea>

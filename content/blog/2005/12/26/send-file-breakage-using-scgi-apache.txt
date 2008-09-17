@@ -1,0 +1,32 @@
+--- 
+title:      "Send file breakage using SCGI/Apache"
+created_at: 2005-12-26 16:42:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+The project I'm working on currently must protect access to some files.  They are Flash applications which the user must be authenticated to use.
+
+The best way to do that in Rails is to hide the files in a non-public directory, and then use "send_file":http://api.rubyonrails.com/classes/ActionController/Streaming.html#M000045 to stream the file to the browser.
+
+Unfortunately, it seems that using SCGI and Apache breaks <code class="method">#send_file</code>.  The following errors are shown in Apache's error log:
+<pre>[Mon Dec 26 14:39:47 2005] [error]
+[client 69.70.167.187]
+malformed header from script. Bad header=FWS\x05\xbf\x97: binary
+[Mon Dec 26 14:39:47 2005] [error]
+[client 69.70.167.187]
+(500)Unknown error: scgi: Unknown error: error reading response headers
+</pre>
+
+<em>(Content reformatted for readability)</em>
+
+I searched the Rails mailing list, and found "SCGI error with send_data":http://thread.gmane.org/gmane.comp.lang.ruby.rails/26257.  No conclusive information in the thread, and Zed has not released another version of SCGI yet.
+
+Just for the heck, I removed the default buffering that <code class="method">#send_file</code> does:
+<textarea name="code" cols="55" rows="15" class="ruby">send_file request_file, :disposition => 'inline',
+                        :filename => @app.name,
+                        :stream => false
+</textarea>
+
+Bingo !  Things started working perfectly fine after that.

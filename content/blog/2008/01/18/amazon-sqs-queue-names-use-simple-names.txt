@@ -1,0 +1,47 @@
+--- 
+title:      "Amazon SQS Queue names: use simple names"
+created_at: 2008-01-18 20:31:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I was playing with "Amazon SQS":http://www.amazon.com/Simple-Queue-Service-home-page/b/ref=sc_fe_l_2?ie=UTF8&node=13584001&no=3435361&me=A36L942TSJ2AJA yesterday night, using "RightScale":http://info.rightscale.com/'s "gems":http://rightaws.rubyforge.org/, and I was getting strange errors:
+
+<textarea name="code" cols="55" rows="15" class="xml"><?xml version="1.0"?>
+<Response>
+  <Errors>
+    <Error>
+      <Code>InvalidParameterValue</Code>
+      <Message/>
+    </Error>
+  </Errors>
+  <RequestID>da0bcbc2-967d-4f26-a7f1-36b87079d2ba</RequestID>
+</Response>
+</textarea>
+
+This looked strange until I thought about using a plainer queue name.  I switched from "xlsuite.development.resize" to "xlsuite-development-resize".  Sure enough, the error disappeared.  I only found out about the requirements for the queue name this morning:
+
+<blockquote>
+<table cellspacing="0" cellpadding="1" border="1" width="100%">
+<colgroup><col/><col/><col/></colgroup>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr valign="top">
+<td><p align="center"><tt>QueueName</tt></p></td>
+<td><p>The name to use for the queue created. The queue name must be unique within the scope of all your queues.</p><p>Type: String</p><p>Constraints: Maximum 80 characters; alphanumeric characters, hyphens (-), and underscores (_) are allowed.</p></td>
+<td><p align="center">Yes</p></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+
+<p style="text-align:right"><a href="http://docs.amazonwebservices.com/AWSSimpleQueueService/2007-05-01/SQSDeveloperGuide/Query_QueryCreateQueue.html">CreateQueue</a> in the "Amazon Simple Queue Service Developer Guide (API Version 2007-05-01)":http://docs.amazonwebservices.com/AWSSimpleQueueService/2007-05-01/SQSDeveloperGuide/</p>
+
+"RTFM":http://en.wikipedia.org/wiki/RTFM already, François.  Notwithstanding my own stupidity, RightScale's gems are very easy to use.

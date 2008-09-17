@@ -1,0 +1,52 @@
+--- 
+title:      "Piston 2.0 Progress:  Piston can import Subversion repositories into Subversion working copies"
+created_at: 2008-03-14 21:30:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, it's working.  Piston 2.0 (aka 1.9.0 in "Piston's GitHub repository":http://github.com/francois/piston) can import from a "Subversion":http://subversion.tigris.org/ repository, into a Subversion working copy.  And it's mostly saving the same information as it was previously, in the same way.
+
+But, I received a suggestion/comment from "Faisal":http://faisal.com/:
+
+<blockquote>so i'm wondering if it wouldn't make sense to have the per-vcs metadata formats replaced with something like config/piston.yml, read by piston.  the main advantage to doing so would be easier conversion between format types, especially in cases where one type is checking out from another (e.g. svk or git-svn against an svn back-end). </blockquote>
+
+<p style="text-align:right">"Faisal N Jawdat":http://faisal.com/ in a private E-Mail conversation</p>
+
+Actually, this is not a bad idea.  Using this method, a Subversion project, imported in a "Git":http://git.or.cz/ repository, would still be able to use "Piston":http://piston.rubyforge.org to update the vendor branch.  The more the information is accessible, the better it will be.
+
+This means Piston needs to provide an upgrade path.  I shall do like Subversion, which "silently upgrades the working copy when necessary":http://svn.haxx.se/users/archive-2006-09/0445.shtml.  And to be on the safe side, I shall also include a format in the piston metadata to enable future upgrades with easier handling.
+
+Recapping, Pistonized directories will now have a new, hidden, file:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ ls -A1 vendor/rails
+.piston-metadata.yml
+activerecord/
+...
+</textarea>
+
+And the <code class="file">.piston-metadata.yml</code> file would contain something like this:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ cat vendor/rails/.piston-metadata.yml
+# What data can Piston expect from this file ?
+format: 1
+
+# Which repository handler must we use ?
+repository: svn
+
+# Properties that the handler wanted us to save
+handler-metadata:
+  # Same as piston:remote-revision
+  remote-revision: 9025
+  # Same as piston:root
+  svn-root: http://dev.rubyonrails.org/svn/rails/trunk
+  # Same as piston:uuid
+  svn-uuid: 5ecf4fe2-1ee6-0310-87b1-e25e094e27de
+</textarea>
+
+If you were aware of how Piston was storing properties, you might not that the piston:local-revision property is gone.  Instead of hard-coding which revision we need to import, I'll instead use the last changed date/time.  It's less precise, but makes interoperability with different repository handlers much easier.  No need to map between revision 8920 of Subversion to Git commits.
+
+That looks promising, no ?
+
+Next step ?  Implementing the "Git":http://git.or.cz/ backend.  After that, it's testing Svn+Git, Git+Svn, Git+Git and Svn+Svn.  Hurray!

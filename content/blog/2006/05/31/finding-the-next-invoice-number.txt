@@ -1,0 +1,31 @@
+--- 
+title:      "Finding the next invoice number"
+created_at: 2006-05-31 17:03:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Since 1.1.0, "Rails":http://www.rubyonrails.org/ includes grouping and calculation functions.  "maximum":http://api.rubyonrails.com/classes/ActiveRecord/Calculations/ClassMethods.html#M000826 is what we want to use here.
+
+The system I am building has many users, and each user has it's own invoice number sequence.  Here is the code in it's entirity:
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/invoice.rb">class Invoice < ActiveRecord::Base
+  belongs_to :user
+
+  def self.find_next_available_number_for(user, default=999)
+    (user.invoices.maximum(:no) || default).succ
+  end
+end
+</textarea>
+
+This code is pretty simple to read.  In fact, in English, it translates to:
+
+bq. Find the maximum value of *no* in invoices for user, or use the default value, and then take the successor of this value.
+
+You see, Ruby code is so much more succint !
+
+Anyway, the features used in this article were:
+
+* "ActiveRecord::Calculations":http://api.rubyonrails.com/classes/ActiveRecord/Calculations/ClassMethods.html
+* "Integer#succ":http://www.ruby-doc.org/core/classes/Integer.html#M000277 and "String#succ":http://www.ruby-doc.org/core/classes/String.html#M001851 (MySQL does not return the type of the aggregate column, so Rails returns a plain String.  Duck typing does the rest)
+* "ActiveRecord::Associations::HasManyAssociation#method_missing":http://dev.rubyonrails.org/browser/trunk/activerecord/lib/active_record/associations/has_many_association.rb#L93 (makes the class methods of the associated class available through the association collection, with a proper scope)

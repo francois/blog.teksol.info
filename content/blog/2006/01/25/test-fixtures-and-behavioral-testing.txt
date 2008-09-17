@@ -1,0 +1,88 @@
+--- 
+title:      "Test fixtures and behavioral testing"
+created_at: 2006-01-25 15:10:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Yesterday, I was coding a new set of tests for a <code class="class">Picture</code> class.  I wanted to introduce an on-disk cache, when the picture is public.
+
+I already had an existing <code class="filename">test/unit/picture_test.rb</code>, which I extended.
+
+The tests looked like this:
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/picture_test.rb">class PictureTest < Test::Unit::TestCase
+  def test_picture_exists_on_disk
+    pict = uploaded_file('large.jpg', 'image/jpeg', 'somepicture.jpg')
+    @picture = Picture.build(pict)
+    @picture.public = true
+    assert_model_saved @picture
+
+    assert File.exist?(@picture.cache_filename), 'file copied to disk'
+  end
+
+  def test_thumbnail_exists_on_disk
+    pict = uploaded_file('large.jpg', 'image/jpeg', 'somepicture.jpg')
+    @picture = Picture.build(pict)
+    @picture.public = true
+    assert_model_saved @picture
+
+    assert File.exist?(@picture.cache_thumbnail), 'file copied to disk'
+  end
+end
+</textarea>
+
+I knew this was the wrong way to go - the fixture was repeated more than once.  Then, I realized that what I wanted was a new <code class="class">TestCase</code>.  I had already reached for my mouse to hit _New File_ when I had a flash:  what prevents me from simply adding a new class to <code class="filename">picture_test.rb</code> ?
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/picture_test.rb">class PictureTest < Test::Unit::TestCase
+  def test_read_from_stringio
+    ...
+  end
+end
+
+class PublicPictureTest < Test::Unit::TestCase
+  def setup
+    pict = uploaded_file('large.jpg', 'image/jpeg', 'somepicture.jpg')
+    @picture = Picture.build(pict)
+    @picture.public = true
+    assert_model_saved @picture
+  end
+
+  def test_picture_exists_on_disk
+    assert File.exist?(@picture.cache_filename), 'file copied to disk'
+  end
+
+  def test_thumbnail_exists_on_disk
+    assert File.exist?(@picture.cache_thumbnail), 'thumbnail copied to disk'
+  end
+end
+
+class PrivatePictureTest < Test::Unit::TestCase
+  include PicturePathHelper
+
+  def setup
+    pict = uploaded_file('large.jpg', 'image/jpeg', 'somepicture.jpg')
+    @picture = Picture.build(pict)
+    @picture.public = false
+    assert_model_saved @picture
+  end
+
+  def test_picture_not_copied_to_disk_when_private
+    assert !File.exist?(@picture.cache_filename),
+        'image should not be on disk when picture is private'
+  end
+
+  def test_thumbnail_not_copied_to_disk_when_private
+    assert !File.exist?(@picture.cache_thumbnail),
+        'thumbnail should not be on disk when picture is private'
+  end
+end
+</textarea>
+
+I also had another flash:  is <code class="class">TestCase</code> the right name ?  Shouldn't it be called <code class="class">TestFixture</code> instead ?  Because that is what instances of this class represent - a test fixture.
+
+This is very much akin to <a href="http://rspec.rubyforge.org/classes/Spec/Context.html"><code class="class">Spec::Context</code></a>, from "RSpec":http://rspec.rubyforge.org/.
+
+And you see the tests ?  They all respect the "one assertion per test":http://www.artima.com/weblogs/viewpost.jsp?thread=35578.  I was quite happy with the results.
+
+Now, I need to refactor those other instances in my test suite...

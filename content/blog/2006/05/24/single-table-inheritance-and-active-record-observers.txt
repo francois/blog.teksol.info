@@ -1,0 +1,67 @@
+--- 
+title:      "Single Table Inheritance and Active Record Observers"
+created_at: 2006-05-24 16:53:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Active Record has a nice feature that enables the programmer to separate concerns.  In the application I am building, I need to reject some transactions based on business rules.  For example, if an attacker attemps to empty an account by requesting multiple payouts, or attempting to load more than a specific amount of money in the user's account.
+
+In this application, I am using STI (Single Table Inheritance) to represent the different types of transaction.  The hierarchy looks like this:
+
+<textarea name="code" cols="55" rows="15" class="ruby">class GreenbackTransaction < ActiveRecord::Base
+end
+
+class AccountRechargeTransaction < GreenbackTransaction
+end
+
+class AccountPayoutTransaction < GreenbackTransaction
+end
+</textarea>
+
+I defined my observer like this:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/greenback_transaction_observer.rb">class GreenbackTransactionObserver < ActiveRecord::Observer
+  def after_create(txn)
+    # Code to reject the transaction if it is suspicious
+  end
+end
+</textarea>
+
+Using the console, everything was working fine.  So, off I went to write a test for it (I know, it should have been the other way around, but I haven't used observers much, and I wanted to see what was going on).
+
+My test is defined like this:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="test/unit/greenback_transaction_observer_test.rb">class GreenbackTransactionObserverTest < Test::Unit::TestCase
+  fixtures :greenback_transactions, :users, :accounts, :affected_accounts
+  
+  def setup
+    @sam = users(:sam)
+    Setting.recharge_amount_threshold = 150.to_money
+  end
+  
+  def test_suspicious_transaction_rejected
+    assert_nothing_raised do
+      AccountRechargeTransaction.new(:account => @sam.account, :amount => 100.to_money)
+    end
+    
+    assert_raise(TransactionFailureException) do
+      AccountRechargeTransaction.new(:account => @sam.account, :amount => 100.to_money)
+    end
+  end
+end
+</textarea>
+
+To my complete surprise, this didn't work.  After much investigation, I found that the observer was not loaded for GreenbackTransaction.  After some fooling around, adding logging statements in Rails core, I finally stumbled upon the solution:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/account_recharge_transaction_observer.rb">class AccountRechargeTransactionObserver < ActiveRecord::Observer
+  observe AccountRechargeTransaction
+
+  def after_create(txn)
+    # Code to reject the transaction if it is suspicious
+  end
+end
+</textarea>
+
+The problem was the observer was registered on <code class="class">GreenbackTransaction</code>, and it seems the observers aren't inherited in subclasses.  This is important and bears repeating: *if you use STI and observers, observe your subclasses !*.

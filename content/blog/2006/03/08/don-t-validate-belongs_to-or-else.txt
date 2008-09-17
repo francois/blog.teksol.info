@@ -1,0 +1,77 @@
+--- 
+title:      "Don't validate belongs_to, or else..."
+created_at: 2006-03-08 21:46:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Over on "rails-core":http://www.ruby-forum.com/forum/16, I posted "Edge Rails fails saving parent when has_many child ?":http://www.ruby-forum.com/topic/56968.
+
+The models I am using are:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/invoice.rb">class Invoice < ActiveRecord::Base
+  belongs_to :customer
+  has_many :lines, :class_name => 'InvoiceItem'
+  validates_presence_of :no, :customer
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/invoice_item.rb">class InvoiceItem < ActiveRecord::Base
+  belongs_to :invoice
+  validates_presence_of :invoice
+end
+</textarea>
+
+As is, it was impossible to use the normal _build and save_ idiom:
+
+<textarea name="code" cols="55" rows="15" class="ruby">$ ruby script\console
+Loading development environment.
+>> invoice = Invoice.new
+=> #<Invoice:0x3a76060 ...>
+>> line = invoice.lines.build
+=> #<InvoiceItem:0x3a5d610 ...>
+>> invoice.save!
+ActiveRecord::RecordInvalid: Validation failed: Lines is invalid
+        from 
+./script/../config/../config/../vendor/rails/activerecord/lib/active_record/validations.rb:736:in
+`save!'
+        from (irb):3
+>> puts line.errors.full_messages
+Invoice can't be blank
+</textarea>
+
+Well, of course.  I know invoice can't be blank.  If I remove <code class="symbol">:invoice</code> from the <code class="method">validates_presence_of</code>, things work out fine:
+
+<textarea name="code" cols="55" rows="15" class="ruby">...
+>> invoice.save!
+=> nil
+>> invoice.new_record?
+=> false
+>> line.new_record?
+=> false
+>> line.invoice
+=> nil
+>> # Huh?
+</textarea>
+
+Digging into the code, "ActiveRecord::Associations::AssociationProxy#set_belongs_to_association_for":http://dev.rubyonrails.org/browser/trunk/activerecord/lib/active_record/associations/association_proxy.rb#L82 it turns out that only the foreign key is assigned to the child instance, not the full parent model.  The behavior as seen above is therefore "normal".
+
+Turns out that if I validate the foreign key instead, things work perfectly:
+
+<textarea name="code" cols="55" rows="15" class="ruby" title="app/models/invoice_item.rb">class InvoiceItem < ActiveRecord::Base
+  belongs_to :invoice
+  validates_presence_of :invoice_id
+end
+</textarea>
+
+<textarea name="code" cols="55" rows="15" class="ruby">...
+>> invoice.save!
+=> nil
+>> line.new_record?
+=> false
+>> line.invoice
+=> #<Invoice:0x39fbea8 ...>
+</textarea>
+
+Lesson learned:  don't validate the presence of the associated model, only it's foreign key.

@@ -1,0 +1,11 @@
+--- 
+title:      "When are associated objects saved ?"
+created_at: 2006-07-25 12:00:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A friend of mine asked me a question today.  He wanted to know "When are associated objects saved" ?
+
+See "ActiveRecord::Associations":http://api.rubyonrails.com/classes/ActiveRecord/Associations/ClassMethods.html.  Look for the section titled "_Unsaved objects and associations_".

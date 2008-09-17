@@ -1,0 +1,17 @@
+--- 
+title:      "RubyFringe: Reginald Braithwaite's Talk"
+created_at: 2008-07-21 00:09:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+For the first time ever, "ragan":http://weblog.raganwald.com/ crystallized *why* he didn't like the original #andand implementation, or my own "implementation"http://blog.teksol.info/2007/11/23/a-little-smalltalk-in-ruby-if_nil-and-if_not_nil, #if_not and #if_not_nil and other implementations.
+
+His point is that if you are writing a library, and you want to use the "andand":http://andand.rubyforge.org/ gem, you, the author of the library, will pollute the Object namespace of the application that's using our library.
+
+In effect, the library's author dependencies will become dependencies of the application that's using it, even though they don't want or need the extensions.
+
+The same problem happens with "Mongrel":http://mongrel.rubyforge.org/ and "Thin":http://code.macournoyer.com/thin/ : all the libraries these servers use are loaded in the application that's running on top of them.
+
+Thank you Reginald for clearing this up for me.  I now fully understand the need for the "Ruby.rewrite(Ruby)":http://rewrite.rubyforge.org/ project.

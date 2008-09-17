@@ -1,0 +1,19 @@
+--- 
+title:      "Nice customer support from DreamHost"
+created_at: 2008-01-17 20:06:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"DreamHost":http://www.dreamhost.com/ had a "teensy little problem with their billing system":http://blog.dreamhost.com/2008/01/15/um-whoops/.  Specifically, Josh Jones ran his biller for a couple of days in *2008*, when it should have been 2007.  The biller dutifully ran along and billed all the customers that hadn't been billed yet as of December 2008.
+
+That's OK, I can understand things like that happen.  But what I like best is this:
+
+bq. If this/these erroneous charge(s) by us resulted in you having any sort of overdraft/bounced check/nsf fee from your financial institution, please contact our support team from the web panel. &hellip; When we get this, we will put money on your credit card equal to the amount your bank charged you, as well as give you a DreamHost account credit for the same amount on top of that.
+
+<p style="text-align: right;">Josh Jones in <a href="http://blog.dreamhost.com/2008/01/16/the-aftermath/">The Aftermath</a></p>
+
+Not only will they refund the charges, but they will also *credit your account for the same amount*.  They didn't have to do that, but it's nice of them to do so.
+
+I use DreamHost for mail and file hosting / backups.  I don't use them anymore to deploy Rails applications.  But this is good service.

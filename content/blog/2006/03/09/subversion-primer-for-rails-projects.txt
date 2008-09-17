@@ -1,0 +1,323 @@
+--- 
+title:      "Subversion Primer for Rails projects"
+created_at: 2006-03-09 20:22:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+h2. Pinkatio - our latest Rails application
+
+We just had a killer idea to get us thousands of dollars of revenue per month.  We will call it *pinkatio*, and we will put it on Rails.
+
+h2. Creating the Subversion repository
+
+This is the most variable step in the whole procedure.  If you know your way around a Unix/Linux system, go ahead and put the repository in <code class="folder">/var</code>.  Watch your permissions, though.  Else, I suggest sticking with a <var class="env">HOME</var> based repository, like I did below.  You can use the <code class="protocol">file</code> repository access method.  The only caveat is that you will not be able to share your repository with other people using that method.
+
+To create the repository, we simply call svnadmin's create subcommand:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ mkdir ~/svn
+$ svnadmin create --fs-type=fsfs ~/svn/pinkatio
+</textarea>
+
+To ease our poor fingers, let us create an environment variable to refer tot he repository's root URL:
+<textarea name="code" cols="55" rows="15" class="shell">$ REPOS=file://`pwd`/svn/pinkatio
+</textarea>
+
+Subversion recommends creating all repositories with three folders at the root:  <code class="folder">trunk</code>, <code class="folder">tags</code> and <code class="folder">branches</code>.  This is if you use the one project per repository.  This is explained in more details in "Choosing a Repository Layout":http://svnbook.red-bean.com/nightly/en/svn.reposadmin.projects.html#svn.reposadmin.projects.chooselayout.
+
+This is by no means a requirement to use Subversion, but I suggest sticking to this convention anyway.  Most Subversion repositories I have seen adhere to the convention, and if you have only one project in your repository, it makes sense to be able to tag and branch at will.
+
+<typo:code>$ svn mkdir --message="Initial project layout" $REPOS/trunk $REPOS/tags $REPOS/branches
+
+Committed revision 1.
+</textarea>
+
+With the repository creation out of the way, let us now turn to creating our Rails application.
+
+h2. Creating the Rails application and importing into the repository
+
+Creating the Rails application is straightforward:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ rails ~/pinkatio
+      create
+      create  app/controllers
+      ...
+$ cd ~/pinkatio
+</textarea>
+
+At this point, you could do an svn import and import the whole application into Subversion.  I recommend against doing that.  If you use the "in-place import" procedure, you can commit only the pieces that you want, not the whole tree (log files being ones we *don't* want under version control).   See Subversion's "How can I do an in-place 'import'":http://subversion.tigris.org/faq.html#in-place-import FAQ for the full details.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn checkout $REPOS/trunk .
+Checked out revision 1.
+</textarea>
+
+Next, let us add the whole tree to the working copy.  This is no different than if we had done an <code class="command">svn import</code> initially, except all changes are local, and we can selectively revert files and folders.
+<textarea name="code" cols="55" rows="15" class="shell">$ svn add --force .
+A         app
+...
+A         README
+</textarea>
+
+The Rails command helpfully creates most of the tree.  Since I use migrations in all of my Rails projects, I immediately create the <code class="folder">db/migrate/</code> folder.  Edge Rails and Rails 1.1 also include a <code class="folder">tmp/</code> folder.  For completeness' sake, I create it at the same time.
+<textarea name="code" cols="55" rows="15" class="shell">$ svn mkdir db/migrate tmp 
+A         db/migrate
+A         tmp
+</textarea>
+
+h3. Removing the log files from version control
+
+Right now, Subversion will helpfully track changes to the log files.  This is not really useful for us, as the log files can be pruned at any point.
+
+To ease our burden, the easiest thing is to tell Subversion to ignore the logs.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn revert log/*
+Reverted 'log/development.log'
+Reverted 'log/production.log'
+Reverted 'log/server.log'
+Reverted 'log/test.log'
+
+$ svn propset svn:ignore "*.log" log
+property 'svn:ignore' set on 'log'
+</textarea>
+
+See "svn:ignore":http://svnbook.red-bean.com/nightly/en/svn.advanced.props.html#svn.advanced.props.special.ignore in the Subversion book for more details on the property format.
+
+h3. Managing the database configuration
+
+Again the Subversion FAQ comes to the rescue:  "I have a file in my project that every developer must change, but I don't want those local mods to ever be committed. How can I make 'svn commit' ignore the file?":http://subversion.tigris.org/faq.html#ignore-commit.
+
+The solution is to have a template of the file in the repository, and to force each working copy to copy the template file to the real file.  Let us simply revert the add of the config/database.yml file, and add a sample file instead:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn revert config/database.yml
+Reverted 'config/database.yml'
+
+$ mv config/database.yml config/database.yml.sample
+$ svn add config/database.yml.sample
+A         config/database.yml.sample
+
+$ svn propset svn:ignore "database.yml" config
+property 'svn:ignore' set on 'config'
+$ cp config/database.yml.sample config/database.yml
+</textarea>
+
+The only problem with this procedure is if important changes are made to the config.yml.sample file, the developers might not notice the changes.  Most of the time though, the sample file will not change, and leaving it as-is is ok.
+
+h3. Database structure dumps during testing
+
+When you run the tests, Rails dumps the development database's structure to a file in <code class="folder">db/</code>.  Usually, this file should not be under version control.  Your migration scripts should be under version control instead, and your migrations should enable you to recreate the development database at will.
+
+Additionally, this step will depend on which configuration setting you use for the <var class="global">config.active_record.schema_format</var>.  If you use the <code class="symbol">:ruby</code> (the default on Edge Rails and Rails 1.1), you should ignore the <code class="file">schema.rb</code> file from <code class="folder">db/</code>.  If you use <code class="symbol">:sql</code>, simply ignore <code class="file">development_structure.sql</code> instead.  Alternatively, you could ignore both files, making this a moot point.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propset svn:ignore "schema.rb" db
+property 'svn:ignore' set on 'db'
+</textarea>
+
+h3. tmp/, documentation, scripts and public
+
+Edge Rails and Rails 1.1 now possess a <code class="folder">tmp/</code> folder.  Since this folder will hold socket and session files, we can safely ignore everything in it.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propset svn:ignore "*" tmp
+property 'svn:ignore' set on 'tmp'
+</textarea>
+
+The <code class="folder">doc/</code> folder can hold two subfolders:  <code class="folder">appdoc/</code> and <code class="folder">apidoc/</code>.  If you don't plan on building the documentation for your project, you can ignore setting <var class="property">svn:ignore</var> on <code class="folder">doc/</code>.  Else, you should ignore like this:
+
+<textarea name="code" cols="55" rows="15" class="shell">
+$ svn propset svn:ignore "*doc" doc
+property 'svn:ignore' set on 'doc'
+</textarea>
+
+Subversion also has a property that tells it which files are executable.  We can set the property on files that are intended to be run from the command line:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propset svn:executable "*" `find script -type f | grep -v '.svn'` public/dispatch.*
+property 'svn:executable' set on 'script/performance/benchmarker'
+...
+</textarea>
+
+Last but not least, my projects usually have a default home page served by a Rails action.  This means building a route and removing <code class="file">public/index.html</code>:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn revert public/index.html
+Reverted 'public/index.html'
+
+$ rm public/index.html
+</textarea>
+
+h3. Saving our work
+
+After all of these changes, it is important to commit our work to the repository.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn commit --message="New Rails project"
+Adding         README
+...
+Adding         vendor/plugins
+Transmitting file data .......................................
+Committed revision 2.
+</textarea>
+
+After this step, it is time to start coding your application, unless you need to go on the Edge...
+
+h2. Using Rails Edge and protecting against overzealous gem upgrades
+
+When you are going to put your application into production, you don't want an upgrade in your host's environment to affect your application.  To prevent such problems, you should keep a local copy of Rails in your application's vendor folder.
+
+If you want to live on the Edge (with all the latest features), this step is a necessity.  If you are not so comfortable with Edge, replace <code class="folder">trunk/</code> with <code class="folder">tags/rel_1-0-0</code> (or <code class="folder">tags/rel_1-1-0</code> when Rails 1.1 is out) in the <var class="property">svn:externals</var> property below.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propset svn:externals "rails http://dev.rubyonrails.org/svn/rails/trunk/" vendor
+property 'svn:externals' set on 'vendor'
+
+$ svn update vendor
+
+Fetching external item into 'vendor/rails'
+A    vendor/rails/cleanlogs.sh
+...
+ U   vendor/rails
+Updated external to revision 3830.
+
+Updated to revision 2.
+</textarea>
+
+If you went for Rails Edge, you should really rerun the <code class="command">rails .</code> command after you update.  This will ensure you get the latest version of the scripts and javascript files.  And since we have not made any changes to the contents of any files, now is the best time to do this.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ yes | rails .
+      exists
+      exists  app/controllers
+...
+   identical  log/test.log
+</textarea>
+
+Don't forget to commit your changes:
+<textarea name="code" cols="55" rows="15" class="shell">$ svn commit --message="Living on the Edge - set svn:externals on vendor/ for Rails"
+Sending        vendor
+
+Committed revision 3.
+</textarea>
+
+h3. Tracking Edge Rails
+
+Next time you <code class="command">svn update</code>, Subversion will go out to the Rails repository and retrieve all changes since your last checkout.  If the JavaScript files changed, you should copy them over using the <code class="task">rails:update</code> Rake command:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn update
+...
+Updated external to revision 3831.
+
+Updated to revision 2.
+
+$ rake rails:update
+(in /home/fbos/pinkachio)
+
+$ svn status
+M      public/javascripts/prototype.js
+M      public/javascripts/effects.js
+M      public/javascripts/dragdrop.js
+M      public/javascripts/controls.js
+
+$ svn commit --message="Updated JavaScripts to latest revision"
+M      public/javascripts/prototype.js
+...
+</textarea>
+
+h3. Gems
+
+Gem features a useful subcommand: <code class="subcommand">unpack</code>.  When you run it on a gem, it will unpack that gem's content into the current folder.  We can then move the code to our <code class="folder">vendor/</code> folder, and again protect ourselves against host upgrades.
+
+As an example, let us unpack the "Money":http://rubyforge.org/projects/money gem:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ cd vendor
+$ gem unpack money
+Unpacked gem: 'money-1.7.1'
+</textarea>
+
+Gems all have a <code class="folder">lib/</code> folder into which the gem's source code is stored.  Copying the *contents* of the <code class="folder">lib/</code> folder into <code class="folder">vendor/</code> is the important trick here.  If you move <code class="folder">lib/</code> to vendor, it won't help, as Rails automatic dependency loading mechanism will not know how to find your code.
+
+At the same time, to comply with the library's license, we copy the library verbatim to our <code class="folder">vendor/</code> folder.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ cp -Rf money-1.7.1/lib/* .
+$ cp -Rf money-1.7.1/MIT-LICENSE LICENSE-money
+$ cp -Rf money-1.7.1/README README-money
+</textarea>
+
+Let us tell Subversion what files we now want to version control:
+<textarea name="code" cols="55" rows="15" class="shell">$ svn add bank money support money.rb LICENSE-money README-money
+A         bank
+..
+A         README-money
+</textarea>
+
+To help me remember which version I unpacked, I set a custom property on the main file of the library I just unpacked:
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propset version "1.7.1 (Gem)" money.rb
+property 'version' set on 'money.rb'
+</textarea>
+
+Next, we cleanup after ourselves:
+<textarea name="code" cols="55" rows="15" class="shell">$ rm -Rf money-1.7.1
+</textarea>
+
+Finally, let us commit our changes back to the repository.
+<textarea name="code" cols="55" rows="15" class="shell">$ cd ..
+$ svn commit --message="Unpacked Money 1.7.1 into vendor/"
+Adding         vendor/LICENSE-money
+...
+Transmitting file data ........
+Committed revision 4.
+</textarea>
+
+h3. Gem upgrades
+
+When the next version of the Money gem will come around, we simply follow the same procedure as above.  Of course, you will use <code class="command">svn status</code> to know what files changed exactly.  You might have to add new files, and remove old ones.
+
+One tool that can help automate this process "svn_load_dirs.pl":http://svn.collab.net/repos/svn/trunk/contrib/client-side/svn_load_dirs.pl.in, from the Subversion's <code class="folder">contrib/</code> area.
+
+h2. Plugins
+
+For plugins, you have to take the same decision as for Rails - Edge or safe.  For plugins, I have found that sticking to released version is safer for me.  <acronym title="Your mileage may vary">YMMV</acronym>.
+
+As an example, I will use the "FileColumn":http://www.kanthak.net/opensource/file_column/ plugin.  Unfortunately, this plugin is not ready to be used by the <code class="command">script/plugin install -x</code> procedure.  So, we have to resort to a manual one.
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn propset svn:externals "file_column http://opensvn.csie.org/rails_file_column/plugins/file_column/tags/rel_0-3-1/" vendor/plugins
+property 'svn:externals' set on 'vendor/plugins'
+
+$ svn update vendor/plugins
+
+Fetching external item into 'vendor/plugins/file_column'
+A    vendor/plugins/file_column/test
+...
+ U   vendor/plugins/file_column
+Updated external to revision 58.
+
+Updated to revision 4.
+</textarea>
+
+Again, we must not forget to commit our changes to the repository:
+<textarea name="code" cols="55" rows="15" class="shell">$ svn commit --message="Added FileColumn plugin"
+Sending        vendor/plugins
+
+Committed revision 5.
+</textarea>
+
+h2. Creating migrations, models and controllers
+
+The Rails <code class="command">generate</code> has a helpful option: <code class="option">--svn</code> (<code class="option">-c</code>):
+<textarea name="code" cols="55" rows="15" class="shell">$ script/generate migration --svn InitialSchema
+      exists  db/migrate
+      create  db/migrate/001_initial_schema.rb
+A         db/migrate/001_initial_schema.rb
+
+$ svn status
+A      db/migrate/001_initial_schema.rb
+</textarea>
+
+All <code class="command">generate</code> and <code class="command">destroy</code> generators accept the <code class="option">--svn</code> option.  This makes it easy for the developer to keep his changes under version control.
+
+h2. Final words
+
+I follow this script more or less verbatim for all of my Rails projects.  After the first two or three times, this becomes automatic.  For the adventurous, I have a shell script which does most of the steps above automatically.  You can get "rails2.sh":/assets/2007/10/13/rails2.sh.
+
+<code class="command">rails2</code> license:
+
+<pre># Distributed in the Public Domain by Francois Beausoleil.
+# This script might destroy twenty years worth of work, and I cannot be held
+# responsible.  You are your own master.  Read this file in detail before
+# you use it.
+#
+# NO IMPLIED WARRANTY.</pre>

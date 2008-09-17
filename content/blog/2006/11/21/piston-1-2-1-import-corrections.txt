@@ -1,0 +1,16 @@
+--- 
+title:      "Piston 1.2.1: import corrections"
+created_at: 2006-11-21 22:58:40
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A minor correction to "Piston":http://piston.rubyforge.org/:
+
+* Import subcommand would fail with a "svn: Explicit target required ('vendor/rails' interpreted as prop value)" error.  This was a minor error in the import code.  Reported by Daniel N.
+* The import subcommand could import another revision than what was intended, if HEAD was updated while the import is in progress.
+
+Install using:
+<textarea name="code" cols="55" rows="8" class="shell">$ gem install piston
+</textarea>

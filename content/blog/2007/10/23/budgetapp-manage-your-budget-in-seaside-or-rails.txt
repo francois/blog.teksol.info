@@ -1,0 +1,31 @@
+--- 
+title:      "BudgetApp: Manage your budget in Seaside or Rails"
+created_at: 2007-10-23 06:45:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+*UPDATE 2007-10-23*: Changed repository URLs.
+
+Me and my wife have a funny relationship with money:  it never stays in our hands.  I would guess the majority of people have the same problem.  Back in the days, I started by making ourselves a budget using "OpenOffice.org":http://www.openoffice.org/'s spreadsheet.  That was fine, until I realized my wife was always changing the numbers.  She used it to record a budget of sorts, but when she actually paid the utilities, she'd change the numbers.
+
+At about the same time, I read about "Big Visible Charts":http://www.xprogramming.com/xpmag/BigVisibleCharts.htm.  I took a piece of 2 ft &times; 4 ft of paper, and started at the top:
+
+<p style="font-size: 24pt; line-height: 1.25; text-align: center;">Month of November 2007</p>
+
+That worked OK, until we were both tired of doing all the calculations by hand...  The computer *is* the perfect tool for the job.  So now, I'm back to square one, but this time, I am armed with a lot more knowledge.  I want a solution that will:
+
+* record budgets (planned income and expenditures);
+* record actuals (actual income and expenditures);
+* report planned vs actual values, to see where we're over-budget (it's the restaurants!).
+
+After learning how to make a simple "todo application":http://blog.teksol.info/2007/10/15/todoapp-on-seaside-in-218-lines on "Seaside":http://www.seaside.st/, I think this application is just a little bit meatier that it's not going to be too hard to do.  At the same time, I will use this opportunity to contrast both Seaside and "Rails":http://www.rubyonrails.com/, to help the community at large to see the differences between both of the frameworks.
+
+Both applications are released under the "MIT License":http://www.opensource.org/licenses/mit-license.php.
+
+I have setup two repositories:
+* Monticello: "http://mirror.teksol.info/monticello/budgetapp":http://mirror.teksol.info/monticello/budgetapp/
+* Subversion: "http://mirror.teksol.info/repos/budgetapp/trunk":http://mirror.teksol.info/repos/budgetapp/trunk
+
+You can already grab the code from the Monticello repository:  I am done coding the models on Seaside.  I checked in the skeleton Rails application, and will add a couple of pieces shortly.  Expect to see this series pretty regularly in the coming weeks.

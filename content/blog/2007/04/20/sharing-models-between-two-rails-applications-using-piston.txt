@@ -1,0 +1,32 @@
+--- 
+title:      "Sharing models between two Rails applications using Piston"
+created_at: 2007-04-20 23:50:31
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I recently had to share specifications and models between two applications.  Here's how I did it:
+
+# Create a shared/ directory in Subversion
+# svn copy the current models there
+# svn copy the specifications (or unit tests)
+# svn remove the app/models and spec/ folder from your project root
+# piston import /shared/app/models app/models
+# piston import /shared/spec spec/
+
+The nice thing about this technique is that you can add models to one or the other application and they won't care about it.  You have to be careful not to have name clashes though.
+
+h3. Example
+
+You have one application in your repository named flow/.  You are creating a new one named /bark.  Here are the steps ($REPOS_ROOT is obviously your repository root):
+
+<textarea name="code" cols="55" rows="15" class="shell">$ svn mkdir $REPOS_ROOT/shared $REPOS_ROOT/shared/app -m "Creating shared models root"
+$ svn move $REPOS_ROOT/flow/trunk/app/models $REPOS_ROOT/shared/app/models
+$ svn move $REPOS_ROOT/flow/trunk/spec $REPOS_ROOT/shared/spec # or test/
+$ svn checkout $REPOS_ROOT/flow/trunk
+$ cd trunk
+$ piston import $REPOS_ROOT/shared/app/models app/models
+$ piston import $REPOS_ROOT/shared/spec spec
+$ svn commit -m "Copied shared models back in using Piston"
+</textarea>

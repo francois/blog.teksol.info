@@ -1,0 +1,15 @@
+--- 
+title:      "Gutsy Gibbon:  First Impressions"
+created_at: 2007-11-08 19:55:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I upgraded to "Ubuntu":http://www.ubuntulinux.org/ "Gutsy Gibbon":http://www.ubuntu.com/getubuntu/releasenotes/710tour today.  First impressions: not much changes.  That's on the surface, of course.  The system came up normally, and I could start my applications.
+
+There's a new "Screen and Graphics Preferences":http://www.ubuntu.com/getubuntu/releasenotes/710tour#head-c309b3e36eecb725455df9a7460684ed87395a74 for setting up dual screens.  Unfortunately, after 20 minutes I couldn't get my second screen to come up correctly.  I have other things to do, so I stopped playing with that.
+
+On the downside, my keyboard layout moved some keys.  I can't put a pipe character (|) on the command line.  That's very bad for me: no Ruby block parameters, no Smalltalk temporary variable declarations, and certainly no command chaining on the command line.
+
+All in all, I should have waited another month or so before upgrading.  I'll know better next time around.  But I still *love* my Ubuntu Desktop, compared to the klunky Windows XP.

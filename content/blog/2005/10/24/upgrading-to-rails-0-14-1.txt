@@ -1,0 +1,42 @@
+--- 
+title:      "Upgrading to Rails 0.14.1"
+created_at: 2005-10-24 13:26:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+After updating my externals to Rails 0.14.1, I ran into a few snags.  First one is a difference in the handling of boolean attributes between both versions.  I had the following assertion:
+<textarea name="code" cols="55" rows="15" class="ruby">class EstimateTest < Test::Unit::TestCase
+  def test_converts_base_information_to_quote
+    # ...
+    assert_equal e.pst_active, q.pst_active, 'copied pst active'
+  end
+end
+</textarea>
+
+<var>q</var> is an instance of <var>Quote</var>, and <var>e</var> is an instance of <var>Estimate</var>.  In both cases, <var>pst_active</var> determines if the provincial tax is active.  It is a boolean attribute, but I had forgotten to use the <var>attr_name?</var> form.  In 0.13.1, this worked, but with 0.14.1, it failed with the following:
+<textarea name="code" cols="55" rows="15" class="shell">  1) Failure:
+test_converts_base_information_to_quote(EstimateTest) [./test/unit/estimate_test.rb:493]:
+copied pst active.
+<1> expected but was
+<true>.
+</textarea>
+
+When I switched both calls to <var>pst_active</var> to the boolean form, the assertion passed again.
+
+Next, I had *44* failures in my functionnal tests:
+<textarea name="code" cols="55" rows="15" class="shell"> 44) Error:
+test_destroyed_pictures_dont_appear_in_the_slideshow(WelcomeControllerTest):
+TypeError: cannot convert Symbol into String
+    D:/rails-app/config/../lib/productize.rb:38:in `+'
+    D:/rails-app/config/../lib/productize.rb:38:in `full_template_path'
+</textarea>
+
+This application makes use of the "Rails Product Generator":http://wiki.rubyonrails.com/rails/pages/RailsProductGenerator.  Notice the bug is in <code>lib/productize.rb</code>, and not my code per se.  Line 38 of <var>lib/productize.rb</var> looks like this:
+<textarea name="code" cols="55" rows="15" class="ruby">site_specific_path = File.join(SITE_ROOT, 'app', 'views', template_path + '.' + extension)
+</textarea>
+
+I corrected the error by simply calling <var>to_s</var> on both <var>template_path</var> and <var>extension</var>.
+
+After that, my tests ran perfectly !  Shows how important it is to have even a minimal test suite.

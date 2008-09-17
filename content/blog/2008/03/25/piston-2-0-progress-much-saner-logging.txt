@@ -1,0 +1,92 @@
+--- 
+title:      "Piston 2.0 Progress:  Much saner logging"
+created_at: 2008-03-25 08:25:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Instead of using Logger, I'm now using "Log4r":http://log4r.rubyforge.org/.  This is a departure for me, as I initially gave myself the goal of not depending on too many libraries.  But since I'm already depending on "Main":http://codeforpeople.com/lib/ruby/main/ (which itself has 2 dependencies) and "open4":http://codeforpeople.com/lib/ruby/open4/, I thought, "why not another one ?"
+
+But this new dependency gives me much greater freedom in logging.  I'm not done coding all of this, but --verbose won't just be a flag.  It will represent a level, and the higher the level, the more logging will be done.  Obvious, but much more interesting.
+
+Anyway, here's what 1.9.1 was logging for a simple svn/git pistonization:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ ruby -I lib bin/piston import http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+D, [2008-03-25T00:41:13.494826 #13759] DEBUG -- : Piston::Commands::Import with options {:verbose=>false, :force=>false, :quiet=>false, :lock=>false, :dry_run=>false}
+D, [2008-03-25T00:41:13.495078 #13759] DEBUG -- : Guessing the repository type of "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement"
+D, [2008-03-25T00:41:13.495386 #13759] DEBUG -- : git ls-remote --heads http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+D, [2008-03-25T00:41:13.495543 #13759] DEBUG -- : > "git ls-remote --heads http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement"
+D, [2008-03-25T00:41:13.721569 #13759] DEBUG -- : > #<Process::Status: pid=13760,exited(1)>, success? false, status: 1
+D, [2008-03-25T00:41:13.722096 #13759] DEBUG -- : svn info http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+D, [2008-03-25T00:41:19.142407 #13759] DEBUG -- : Path: ssl_requirement
+URL: http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+Repository Root: http://dev.rubyonrails.org/svn/rails
+Repository UUID: 5ecf4fe2-1ee6-0310-87b1-e25e094e27de
+Revision: 9088
+Node Kind: directory
+Last Changed Author: bitsweat
+Last Changed Rev: 8780
+Last Changed Date: 2008-02-02 00:16:53 -0500 (Sat, 02 Feb 2008)
+
+
+D, [2008-03-25T00:41:19.142810 #13759] DEBUG -- : Guessing the working copy type of #<Pathname:repository>
+D, [2008-03-25T00:41:19.142950 #13759] DEBUG -- : Asking Piston::Git::WorkingCopy if it understands repository
+D, [2008-03-25T00:41:19.143063 #13759] DEBUG -- : git status on repository
+D, [2008-03-25T00:41:19.143490 #13759] DEBUG -- : git status on .
+D, [2008-03-25T00:41:19.143681 #13759] DEBUG -- : git status
+D, [2008-03-25T00:41:19.143848 #13759] DEBUG -- : > "git status"
+D, [2008-03-25T00:41:19.166951 #13759] DEBUG -- : > #<Process::Status: pid=13772,exited(1)>, success? false, status: 1
+D, [2008-03-25T00:41:19.167193 #13759] DEBUG -- : # On branch my1.9.1
+nothing to commit (working directory clean)
+
+D, [2008-03-25T00:41:19.167443 #13759] DEBUG -- : Initialized on repository
+D, [2008-03-25T00:41:19.167920 #13759] DEBUG -- : svn checkout --revision HEAD http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement .repository.tmp
+D, [2008-03-25T00:41:25.100301 #13759] DEBUG -- : A    .repository.tmp/test
+A    .repository.tmp/test/ssl_requirement_test.rb
+A    .repository.tmp/lib
+A    .repository.tmp/lib/ssl_requirement.rb
+A    .repository.tmp/README
+Checked out revision 9088.
+
+D, [2008-03-25T00:41:25.100986 #13759] DEBUG -- : svn ls --recursive .repository.tmp
+D, [2008-03-25T00:41:30.056625 #13759] DEBUG -- : README
+lib/
+lib/ssl_requirement.rb
+test/
+test/ssl_requirement_test.rb
+
+D, [2008-03-25T00:41:30.057107 #13759] DEBUG -- : Copying README to repository/README
+D, [2008-03-25T00:41:30.058074 #13759] DEBUG -- : Copying lib/ssl_requirement.rb to repository/lib/ssl_requirement.rb
+D, [2008-03-25T00:41:30.058994 #13759] DEBUG -- : Copying test/ssl_requirement_test.rb to repository/test/ssl_requirement_test.rb
+D, [2008-03-25T00:41:30.059800 #13759] DEBUG -- : svn info --revision 9088 http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+D, [2008-03-25T00:41:34.750474 #13759] DEBUG -- : Path: ssl_requirement
+URL: http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+Repository Root: http://dev.rubyonrails.org/svn/rails
+Repository UUID: 5ecf4fe2-1ee6-0310-87b1-e25e094e27de
+Revision: 9088
+Node Kind: directory
+Last Changed Author: bitsweat
+Last Changed Rev: 8780
+Last Changed Date: 2008-02-02 00:16:53 -0500 (Sat, 02 Feb 2008)
+
+
+D, [2008-03-25T00:41:34.751037 #13759] DEBUG -- : Remembering {"piston:remote-revision"=>9088, "piston:root"=>"http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement", "piston:uuid"=>"5ecf4fe2-1ee6-0310-87b1-e25e094e27de"}
+D, [2008-03-25T00:41:34.752256 #13759] DEBUG -- : Calling #after_remember on repository/.piston.yml
+D, [2008-03-25T00:41:34.752475 #13759] DEBUG -- : git add .
+D, [2008-03-25T00:41:34.752605 #13759] DEBUG -- : > "git add ."
+D, [2008-03-25T00:41:34.758728 #13759] DEBUG -- : > #<Process::Status: pid=13785,exited(0)>, success? true, status: 0
+D, [2008-03-25T00:41:34.758993 #13759] DEBUG -- : Removing temporary directory: .repository.tmp
+</textarea>
+
+And here's the current master branch:
+
+<textarea name="code" cols="55" rows="15" class="shell">$ ruby -I lib bin/piston import http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement
+ INFO main: Guessing the repository type
+ INFO main: Guessing the working copy type
+ INFO main: Checking out the repository
+ INFO main: Copying from Piston::Revision(http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement@9088)
+ INFO main: Checked out "http://dev.rubyonrails.org/svn/rails/plugins/ssl_requirement" r9088 to "ssl_requirement"
+</textarea>
+
+Obviously, in 1.9.1, I hadn't configured the logger at all, and *everything* was logged.  Not so anymore !

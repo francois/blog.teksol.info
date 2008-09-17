@@ -1,0 +1,28 @@
+--- 
+title:      "More Defensio + Mephisto Administrative Goodness"
+created_at: 2008-03-04 23:51:00
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Why should you switch to "Defensio":http://defensio.com/ instead of "Akismet":http://akismet.com/ ?  Because of this:
+
+<p style="text-align:center"><a href="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-spaminess.png"><img src="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-spaminess.png" width="360" alt="The Mephisto interface, when interfaced with Defensio shows the spaminess of each comment, as well as use different shades of orange to show spammy comments"/></a><br/>
+<a href="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-spaminess.png">Click for larger version</a></p>
+
+Defensio provides useful statistics to the blogger.  A typical response would look like:
+
+<textarea name="code" cols="55" rows="15" class="yaml">---
+defensio-result: 
+  message: ""
+  status: success
+  signature: awnc057e1a132p1jj3t4x
+  spaminess: 0.7
+  api-version: "1.1"
+  spam: true
+</textarea>
+
+Notice how Defensio returned the spaminess and a signature ?  The signature can be used to retrain Defensio.  When a false positive or negative comes through, the "Defensio API":http://defensio.com/api simply accepts a series of signatures, and will retrain itself.  Since the signature is a short-hand for the whole comment, *all* of the data is available for retraining:  IP, author email, author name, comment's body, etc.
+
+It is not obvious from the screenshot above (as I mostly get spammy comments), but there are actually many shades of orange to highlight the spaminess of comments.  Lighter shades are non-spammy, and darker ones, spammier.
