@@ -8,11 +8,11 @@ filter:
 --- 
 "Gregory Brown":http://www.oreillynet.com/pub/au/2593, of Ruby Reports and PDF::Writer fame, wants to "quit his job, sort of":http://www.oreillynet.com/ruby/blog/2008/03/id_love_to_quit_my_job_sort_of.html.
 
-<blockquote cite="http://www.oreillynet.com/ruby/blog/2008/03/id_love_to_quit_my_job_sort_of.html"><p>Here’s a crazy idea I just had, and I’m wondering what folks think about it.</p>
+<blockquote cite="http://www.oreillynet.com/ruby/blog/2008/03/id_love_to_quit_my_job_sort_of.html"><p>Here's a crazy idea I just had, and I'm wondering what folks think about it.</p>
 <p>People do open source for a lot of reasons, ranging from pragmatic to idealistic. &hellip;</p>
 <p>What if I could just do open source for a while, non-commercially?</p>
 <p>How much would it cost for me to do at least 80 hours a month of development on software projects such as PDF::Writer, Ruport, and some other projects I wish I had the time to get my hands on?</p>
-<p>I did the math, and the number came out low (subjective). I could meet all my expenses and save some money for about $2000 a month. Basically, if 200 people donated $60 right now, I could take 6 months off and do nearly 500 hours of work, and that’s only if I didn’t find myself obsessed with and doing extra hours on a project.</p></blockquote>
+<p>I did the math, and the number came out low (subjective). I could meet all my expenses and save some money for about $2000 a month. Basically, if 200 people donated $60 right now, I could take 6 months off and do nearly 500 hours of work, and that's only if I didn't find myself obsessed with and doing extra hours on a project.</p></blockquote>
 <p style="text-align:right">Gregory Brown, in "I'd love to quit my job! (sort of)":http://www.oreillynet.com/ruby/blog/2008/03/id_love_to_quit_my_job_sort_of.html</p>
 
 Gregory started a Wiki where he documented his proposal.  Head on over to the "Ruby Mendicant":http://rubymendicant.wikidot.com/proposal for the details.
