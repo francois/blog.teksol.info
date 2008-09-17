@@ -13,7 +13,7 @@ Most of the Rails application I build these days have no use whatsoever for the 
 This attribute may be set to _on_ or _off_, indicating whether autocomplete should be enabled, on a field-per-field basis.
 
 In Rails, that translates to:
-<textarea name="code" cols="55" rows="15" class="rhtml"><%= text_field :payment, :credit_card,
+<textarea name="code" cols="55" rows="15" class="rhtml"><#%= text_field :payment, :credit_card,
         :autocomplete => 'off' %>
 </textarea>
 
@@ -37,9 +37,9 @@ This is great when most of your fields need to have autocomplete disabled.  But,
  for "Mozilla":http://www.mozilla.com/ based browsers.
 
 You do it this way:
-<textarea name="code" cols="55" rows="15" class="rhtml"><%= start_form_tag({}, {:autocomplete => 'off'}) %>
+<textarea name="code" cols="55" rows="15" class="rhtml"><#%= start_form_tag({}, {:autocomplete => 'off'}) %>
   ...
-<%= end_form_tag %>
+<#%= end_form_tag %>
 </textarea>
 
 The same trick as above for overriding <code class="method">text_field_tag</code> can be used to override <code class="method">form_tag</code>.

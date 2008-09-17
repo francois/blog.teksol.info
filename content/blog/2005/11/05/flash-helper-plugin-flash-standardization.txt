@@ -37,12 +37,12 @@ In the spirit of open source, I started coding a new "Rails plugin":http://wiki.
 
 <textarea name="code" cols="55" rows="15" title="app/views/layouts/application.rhtml" class="html"><html>
 <head>
-  <%= stylesheet_link_tag 'scaffold', 'application',
+  <#%= stylesheet_link_tag 'scaffold', 'application',
       :media => 'all' %>
 </head>
 <body>
-  <%= show_flash_messages %>
-  <%= @content_for_layout %>
+  <#%= show_flash_messages %>
+  <#%= @content_for_layout %>
 </body>
 </html>
 </textarea>

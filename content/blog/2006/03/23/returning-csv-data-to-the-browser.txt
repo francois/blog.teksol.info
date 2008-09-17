@@ -52,9 +52,9 @@ end
 </textarea>
 
 <textarea name="code" cols="55" rows="15" class="html" title="app/views/report/report.rhtml">Title,Value
-<% @models.each do |model| -%>
-"<%= model.title.gsub('"', '""') %>",<%= model.value %>
-<% end -%>
+<#% @models.each do |model| -%>
+"<#%= model.title.gsub('"', '""') %>",<#%= model.value %>
+<#% end -%>
 </textarea>
 
 Notice how I escape quotes in the view ?  This is important, or else your parsing will be broken when you read the file back in.  Of course, if you use <code class="class">CSV::Writer</code>, you won't have to muck with that - it will all be taken care of for you.

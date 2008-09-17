@@ -31,20 +31,20 @@ Edit <code>app/views/photos/new.erb.html</code> and replace everything with this
 
 <textarea name="code" cols="55" rows="15" class="html" title="app/views/photos/new.erb.html"><h1>New photo</h1>
 
-<%= error_messages_for :photo %>
+<#%= error_messages_for :photo %>
 
-<% form_for(@photo, :html => {:multipart => true}) do |f| %>
+<#% form_for(@photo, :html => {:multipart => true}) do |f| %>
   <p>
     <label for="photo_uploaded_data">File:</label>
-    <%= f.file_field :uploaded_data %>
+    <#%= f.file_field :uploaded_data %>
   </p>
 
   <p>
-    <%= f.submit "Create" %>
+    <#%= f.submit "Create" %>
   </p>
-<% end %>
+<#% end %>
 
-<%= link_to 'Back', photos_path %>
+<#%= link_to 'Back', photos_path %>
 </textarea>
 
 What we did here is simply tell Rails to use a "multipart encoded":http://www.w3.org/TR/html4/interact/forms.html#adef-enctype form, and to only provide us with a single file upload field.

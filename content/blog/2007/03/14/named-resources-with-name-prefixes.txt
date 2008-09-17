@@ -27,12 +27,12 @@ test_can_show(AddressContactRoutesControllerTest::PartyWithAddressTest):
 ActionView::TemplateError: undefined method `party_address_path' for #<#<Class:0xb768f6ac>:0xb63ee41c>
     On line #3 of app/views/address_contact_routes/_address_contact_route.rhtml
 
-    1: <%
+    1: <#%
     2:   if address_contact_route.routable && !address_contact_route.new_record? then
     3:     update_url = "#{party_address_path(address_contact_route.routable, address_contact_route)}.txt"
     4:   end
     5: -%>
-    6: <% inline_fields_for(:address, address_contact_route, :url => update_url) do |f| -%>
+    6: <#% inline_fields_for(:address, address_contact_route, :url => update_url) do |f| -%>
 
     #{RAILS_ROOT}/app/views/address_contact_routes/_address_contact_route.rhtml:3:in `_run_rhtml_47app47views47address_contact_routes47_address_contact_route46rhtml'
 </textarea>

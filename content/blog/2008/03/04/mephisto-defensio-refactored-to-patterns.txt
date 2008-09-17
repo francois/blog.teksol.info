@@ -82,7 +82,7 @@ Finally, Defensio provides statistics through it's API.  I wanted to show nice g
 
 I had a bit of discussion with "Carl Mercier":http://blog.carlmercier.com/ about the accuracy graph.  He said Defensio looked poor because the green bar is very low.  I countered that the difference between 95 and 96 percent, if the graph were 100 pixels high, would only be 1 pixel.  The graph's scale is actually 95 to 100%, so now the difference between 95 and 96 percent will be 20 pixels, if the bar is 100 pixels high.  Anyway, this is an unresolved issue, and I'd like to know what people feel.  You can change this yourself by cloning the repository and editing the Defensio statistics template:
 
-<textarea name="code" cols="55" rows="15" class="ruby"><%
+<textarea name="code" cols="55" rows="15" class="ruby"><#%
   spam = @statistics.spam.to_i
   ham = @statistics.ham.to_i
   accuracy = @statistics.accuracy.to_f * 100.0

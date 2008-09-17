@@ -17,7 +17,7 @@ end
 </textarea>
 
 His partial being:
-<textarea name="code" cols="55" rows="15" title="app/views/shared/_address.rhtml" class="rhtml"><%= text_area('address', 'street') %>
+<textarea name="code" cols="55" rows="15" title="app/views/shared/_address.rhtml" class="rhtml"><#%= text_area('address', 'street') %>
 </textarea>
 
 Reading FileColumn helper's code, and the code in Rails own helpers, the following idiom is used to get a hold of the instance variable:

@@ -28,9 +28,9 @@ When creating a product, we would like to select the color of said product.  The
 
 Rails makes it easy to have <code class="html">SELECT</code> boxes coming from some table:
 <textarea name="code" cols="55" rows="15" class="rhtml" title="app/views/products/_form.rhtml"><p><label>Description:
-  <%= text_field 'product', 'description' %></p>
+  <#%= text_field 'product', 'description' %></p>
 <p><label>Color:
-  <%= collection_select 'product', 'color_id',
+  <#%= collection_select 'product', 'color_id',
       Color.all, :id, :name %></p>
 </textarea>
 
@@ -46,10 +46,10 @@ There are two ways to resolve that:
 <li>Change the validation to require both <code class="method">color</code> and <code class="sql column">color_id</code> (adding two messages to the message area), or;</li>
 <li>Add the error <code class="html">DIV</code> manually when an error is found on the counterpart field, such as this:
 <textarea name="code" cols="55" rows="15" class="rhtml" title="app/views/products/_form.rhtml"><p><label>Description:
-<%= text_field 'product', 'description' %></p>
+<#%= text_field 'product', 'description' %></p>
 <p><label>Color:
-<div class="<%= 'fieldWithErrors' if error_message_on 'product', 'color' %>">
-<%= collection_select 'product', 'color_id',
+<div class="<#%= 'fieldWithErrors' if error_message_on 'product', 'color' %>">
+<#%= collection_select 'product', 'color_id',
     Color.all, :id, :name %></div></p>
 </textarea>
 </li>
