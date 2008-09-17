@@ -14,11 +14,11 @@ end
 </textarea>
 
 The test case will fail with this:
-<typo:code>  1) Failure:
+<% code(:lang => "shell") do -%>  1) Failure:
 test_substract_from_zero(MoneyTest) [./test/unit/money_test.rb:29]:
 <#<Money:0x3accb68 @cents=-1200, @currency="USD">> expected but was
 <#<Money:0x3acca60 @cents=1200, @currency="USD">>.
-</textarea>
+<% end -%>
 
 The error is caused by <code class="method">Money#-(other_money)</code>:
 

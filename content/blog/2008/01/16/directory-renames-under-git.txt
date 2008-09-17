@@ -32,7 +32,7 @@ git merge master
 find | grep -v .git
 </textarea>
 
-<typo:code>$ . repro.sh 
+<% code(:lang => "shell") do -%>$ . repro.sh 
 /home/francois/src/recipe
 Initialized empty Git repository in .git/
 Created initial commit a50ea59: initial version
@@ -59,7 +59,7 @@ Merge made by recursive.
 ./lib/helper.rb
 ./lib0
 ./lib0/main.rb
-</textarea>
+<% end -%>
 
 In prose, here's what I did:
 

@@ -18,9 +18,9 @@ h3. Introducing Piston
 
 h3. Installation
 
-<typo:code>$ gem install piston
+<% code(:lang => "shell") do -%>$ gem install piston
 Successfully installed piston, version 1.0.1
-</textarea>
+<% end -%>
 
 There is no need to install "Piston":http://piston.rubyforge.org/ on your server.  A local installation on your development machine is all that you need to administer the remote code.
 
@@ -28,14 +28,14 @@ h3. Examples
 
 For a Rails project:
 
-<typo:code>$ piston import \
+<% code(:lang => "shell") do -%>$ piston import \
   http://dev.rubyonrails.org/svn/rails/trunk \
   vendor/rails
 Exported r4818 from 'http://dev.rubyonrails.org/svn/rails/trunk' to 'vendor/rails'
 
 $ svn st -N vendor
 A      vendor/rails
-</textarea>
+<% end -%>
 
 As you can see, "Piston":http://piston.rubyforge.org/ copied the full contents of Rails Edge to my working copy.
 

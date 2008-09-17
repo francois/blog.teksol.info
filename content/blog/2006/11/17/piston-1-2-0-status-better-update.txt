@@ -15,9 +15,9 @@ Piston 1.2.0 is here.  From the "ChangeLog":http://rubyforge.org/viewvc?view=rev
 
 h2. Installation
 
-<typo:code>$ gem install piston
+<% code(:lang => "shell") do -%>$ gem install piston
 Successfully installed piston, version 1.2.0
-</textarea>
+<% end -%>
 
 There is no need to install "Piston":http://piston.rubyforge.org/ on your server.  A local installation on your development machine is all that you need to administer the remote code.
 

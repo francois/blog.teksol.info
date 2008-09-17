@@ -14,8 +14,8 @@ bq. Around 18:08 UTC (11:08:09 PDT), our main MySQL database server went down. L
 
 Unfortunately, I did not have the scripts in place yet to do the database failover, so it was a manual process.  It wasn't *too* hard, but I did have to remember one thing:
 
-<typo:code lang="shell">Mysql::Error: The MySQL server is running with the --read-only option so it cannot execute this statement: INSERT INTO sessions (`updated_at`, `sessid`, `data`) VALUES('2008-08-22 18:50:58', '589efd77796b913a1cdd7875693ea0c2', 'BAh7BzoWaW5jb21pbmdfcmVxdWVzdHNbBiI1L2FkbWluL2ZvcnVtX2NhdGVn\nb3JpZXMvODMvZm9ydW1zLzEzMS90b3BpY3MvMzgyIgpmbGFzaElDOidBY3Rp\nb25Db250cm9sbGVyOjpGbGFzaDo6Rmxhc2hIYXNoewAGOgpAdXNlZHsA\n')
-</typo:code>
+<% code(:lang => "bash") do -%>Mysql::Error: The MySQL server is running with the --read-only option so it cannot execute this statement: INSERT INTO sessions (`updated_at`, `sessid`, `data`) VALUES('2008-08-22 18:50:58', '589efd77796b913a1cdd7875693ea0c2', 'BAh7BzoWaW5jb21pbmdfcmVxdWVzdHNbBiI1L2FkbWluL2ZvcnVtX2NhdGVn\nb3JpZXMvODMvZm9ydW1zLzEzMS90b3BpY3MvMzgyIgpmbGFzaElDOidBY3Rp\nb25Db250cm9sbGVyOjpGbGFzaDo6Rmxhc2hIYXNoewAGOgpAdXNlZHsA\n')
+<% end -%>
 
 In "High Performance MySQL":http://oreilly.com/catalog/9780596101718/, the authors recommend, in Chapter 8:
 

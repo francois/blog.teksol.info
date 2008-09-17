@@ -28,10 +28,10 @@ Subversion recommends creating all repositories with three folders at the root: 
 
 This is by no means a requirement to use Subversion, but I suggest sticking to this convention anyway.  Most Subversion repositories I have seen adhere to the convention, and if you have only one project in your repository, it makes sense to be able to tag and branch at will.
 
-<typo:code>$ svn mkdir --message="Initial project layout" $REPOS/trunk $REPOS/tags $REPOS/branches
+<% code(:lang => "shell") do -%>$ svn mkdir --message="Initial project layout" $REPOS/trunk $REPOS/tags $REPOS/branches
 
 Committed revision 1.
-</textarea>
+<% end -%>
 
 With the repository creation out of the way, let us now turn to creating our Rails application.
 
