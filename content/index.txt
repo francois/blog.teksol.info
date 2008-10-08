@@ -1,0 +1,21 @@
+---
+title: A Single Programmer's Blog
+filter:
+  - erb
+---
+<% @pages.find(10, :reverse => true, :sort_by => :created_at) {|resource| Webby::Resources::Page === resource}.each do |page| %>
+  <div class="post">
+    <div class="header">
+      <h3><%= link_to_page(page.title) %></h3>
+      <div class="date"><%= page.created_at[0, 10]%></div>
+    </div>
+    <div class="content">
+      <p>
+        <%= render(page) %>
+      </p>
+    </div>
+    <div class="footer">
+      <!-- Disqus Comments go here -->
+    </div>
+  </div>
+<% end %>
