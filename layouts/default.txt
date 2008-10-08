@@ -27,6 +27,7 @@ filter:
       <div id="menu">
         <ul>
           <li>Projects I work on:</li>
+          <li><a title="Easy vendor branch management" href="http://piston.rubyforge.org/">Piston</a></li>
           <li><a title="Hosted CRM | CMS | ERP" href="http://xlsuite.com/">XLsuite.com</a></li>
           <li><a title="Open Source full stack CRM | CMS | ERP" href="http://xlsuite.org/">XLsuite.org</a></li>
         </ul>
