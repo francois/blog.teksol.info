@@ -10,12 +10,14 @@ module Code
     text.gsub!("<#%", "<%")
     text.gsub!(" ---\n", "---\n")
 
-    options = args.last.kind_of?(Hash) ? args.pop : Hash.new
+    options = args.extract_options!
+    options.reverse_merge!(DEFAULT_CODERAY_OPTIONS)
+    language = (options.delete(:lang) || args.shift).to_s
     the_code = returning([]) do |buffer|
       buffer << %Q(<div class="code">)
       buffer << %Q(<h5>#{h(args.first)}</h5>) unless args.empty?
       buffer << %Q(<div class="CodeRay"><pre>)
-      buffer << ::CodeRay.scan(text, options.delete(:lang)).html(options.reverse_merge(DEFAULT_CODERAY_OPTIONS))
+      buffer << ::CodeRay.scan(text, language).html(options)
       buffer << %Q(</pre></div>)
       buffer << %Q(</div>)
     end.join("\n")
