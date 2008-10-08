@@ -11,6 +11,7 @@ filter:
   <title>A Single Programmer's Blog</title>
   <link rel="stylesheet" type="text/css" href="/stylesheets/default.css"/>
   <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
+  <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 </head>
 <body>
   <div id="outer">
