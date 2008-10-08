@@ -370,3 +370,5 @@ code, var { font-family: monospace; font-weight: bold; }
 
 a > img { text-decoration: none; border: 0; }
 textarea { width: 100%; }
+
+#sform #q.default { color: #999; }
