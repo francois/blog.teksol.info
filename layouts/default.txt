@@ -64,7 +64,7 @@ filter:
             <li><a href="/pages/bio" title="Typo">Author Biography</a></li>
             <li><a href="/pages/privacy" title="Typo">Privacy Policy</a></li>
             <li><script type="text/javascript" src="http://embed.technorati.com/embed/m24hq7g983.js"></script></li>
-            <li><a href="http://chineseprogrammer.blogspot.com/"> About Chinese software programmer & Developer</a></li>
+            <li><a href="http://chineseprogrammer.blogspot.com/"> About Chinese software programmer &amp; Developer</a></li>
           </ul>
         </div>
         <h3>Projects I work on</h3>
