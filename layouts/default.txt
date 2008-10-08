@@ -42,8 +42,8 @@ filter:
         <!--Search-->
         <h3>Search</h3>
         <div class="content">
-          <form action="/search" id="sform" method="get" name="sform">
-            <p><input type="text" id="q" name="q" value="" /></p>
+          <form action="http://www.google.com/" id="sform" method="get" name="sform">
+            <p><input type="text" id="q" name="q" value="Google Search" /></p>
           </form>
         </div>
         <div class="content">
