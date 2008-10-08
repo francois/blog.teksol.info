@@ -47,7 +47,7 @@ filter:
           </form>
         </div>
         <div class="content">
-          <img src="/assets/2007/10/13/francois.jpg" class="picB" alt="A picture of me" />
+          <img src="/images/francois.jpg" class="picB" alt="A picture of me" />
           <p>I am <strong><a href="mailto:francois@teksol.info">François Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="/pages/bio">biography</a></p>
         </div>
         <!--tags-->
