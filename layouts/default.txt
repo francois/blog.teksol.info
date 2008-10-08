@@ -45,7 +45,7 @@ filter:
         <h3>Search</h3>
         <div class="content">
           <form action="http://www.google.com/" id="sform" method="get" name="sform">
-            <p><input type="text" id="q" name="q" value="Google Search" /></p>
+            <p><input type="text" id="q" name="q" class="default" value="Google Search" /></p>
           </form>
         </div>
         <h3>Your Host</h3>
