@@ -4,4 +4,113 @@ filter:
   - erb
   - tidy
 --- 
-<%= @content %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>A Single Programmer's Blog</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/default.css"/>
+  <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
+</head>
+<body>
+  <div id="outer">
+    <div id="upbg"></div>
+    <div id="inner">
+      <div id="header">
+        <h1><a href="/"><span>A Single Programmer's Blog</span></a></h1>
+        <h2>by Fran&ccedil;ois Beausoleil</h2>
+      </div>
+      <div id="splash"></div>
+      <!--PAGES-->
+      <div id="menu">
+        <ul>
+          <li>Projects I work on:</li>
+          <li><a title="Hosted CRM | CMS | ERP" href="http://xlsuite.com/">XLsuite.com</a></li>
+          <li><a title="Open Source full stack CRM | CMS | ERP" href="http://xlsuite.org/">XLsuite.org</a></li>
+          <li>Other projects:</li>
+          <li><a title="Fun and jackpots everyday" href="http://greenbackgames.com/">GreenbackGames.com</a></li>
+        </ul>
+      </div>
+      <!--PAGES END-->
+      <div id="primarycontent">
+        <!-- primary content start -->
+        <%= @content %>
+        <!-- primary content end -->
+      </div>
+      <div id="secondarycontent">
+        <!-- secondary content start -->
+        <!--Search-->
+        <h3>Search</h3>
+        <div class="content">
+          <form action="/search" id="sform" method="get" name="sform">
+            <p><input type="text" id="q" name="q" value="" /></p>
+          </form>
+        </div>
+        <div class="content">
+          <img src="/assets/2007/10/13/francois.jpg" class="picB" alt="A picture of me" />
+          <p>I am <strong><a href="mailto:francois@teksol.info">François Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="/pages/bio">biography</a></p>
+        </div>
+        <!--tags-->
+        <h3>Tags</h3>
+        <div class="content">
+          {% for tag in site.tags %}
+          {{ tag | link_to_tag }} 
+          <span class="count">({{ tag | tagged_articles | size }})</span>
+          {% endfor %}
+        </div>
+        <h3>Links</h3>
+        <div class="content">
+          <ul>
+            <li><a href="/pages/bio" title="Typo">Author Biography</a></li>
+            <li><a href="/pages/privacy" title="Typo">Privacy Policy</a></li>
+            <li><script type="text/javascript" src="http://embed.technorati.com/embed/m24hq7g983.js"></script></li>
+            <li><a href="http://chineseprogrammer.blogspot.com/"> About Chinese software programmer & Developer</a></li>
+          </ul>
+        </div>
+        <h3>Projects I work on</h3>
+        <div class="content">
+          <ul>
+            <li><a href="http://xlsuite.org/">XLSuite.org : CRM and CMS</a></li>
+            <li><a href="http://weputuplights.com">We Put Up Lights.com: Specialty Lighting Installation for all Occasions</a></li>
+            <li><a href="http://smrty.com/">SMRTY.com: issue tracking, time management, billing</a></li>
+            <li><a href="http://ixld.com/">iXLd.com: XLellent application development</a></li>
+            <li><a href="http://undernet.ca/">undernet.ca: VOIP</a></li>
+          </ul>
+        </div>
+        <h3>Categories</h3>
+        <div class="content">
+          <ul>
+            {% for section in site.blog_sections %}
+            <li>{{ section | link_to_section }} ({{ section.articles | size }})</li>
+            {% endfor %}		
+          </ul>
+        </div>
+        <!--END CATEGORIES-->
+        <!--archives-->
+        <h3>Archives</h3>
+        <div class="content">
+          <ul>
+            {{ '' | section | months | assign_to: 'home_section' }}
+            {% for month in home_section.months %}
+            {{ home_section | monthly_articles: month | size | assign_to: 'articles_count' }}
+            {% if articles_count > 0 %}
+            <li>{{ home_section | link_to_month: month }} ({{ articles_count }})</li>	
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        <!--archives-->
+        <!-- secondary content end -->
+      </div>
+      <div id="footer">
+        Design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree</a>, Ported by <a href="http://www.railsgrunt.com/">RailsGrunt</a>, Powered by <a href="http://mephistoblog.com/">Mephisto</a>
+      </div>
+    </div>
+  </div>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  _uacct = "UA-106198-1";
+  urchinTracker();
+  </script>
+</body>
+</html>
