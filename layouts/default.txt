@@ -105,7 +105,7 @@ filter:
         <!-- secondary content end -->
       </div>
       <div id="footer">
-        Design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree</a>, Ported by <a href="http://www.railsgrunt.com/">RailsGrunt</a>, Powered by <a href="http://mephistoblog.com/">Mephisto</a>
+        Design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree</a>, Ported by <a href="http://www.railsgrunt.com/">RailsGrunt</a>, Powered by <a href="http://webby.rubyforge.org/">Webby</a>
       </div>
     </div>
   </div>
