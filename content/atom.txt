@@ -1,0 +1,36 @@
+---
+title:     A Single Programmer's Blog
+subtitle:  A really swell blog built with Webby
+site:      blog.teksol.info
+author:    François Beausoleil
+email:     francois@teksol.info
+extension: xml
+layout:    nil
+dirty:     true
+filter:    erb
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><%= h(@page.title) %></title>
+  <subtitle><%= h(@page.subtitle) %></subtitle>
+  <link href="http://<%= @page.site %>/" rel="alternate" type="text/html" />
+  <link href="http://<%= @page.site %><%= @page.url %>" rel="self" type="application/atom+xml"/>
+  <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
+  <author>
+    <name><%= h(@page.author) %></name>
+    <email><%= h(@page.email) %></email>
+  </author>
+  <id>http://<%= @page.site %>/</id>
+<% articles = @pages.find(10, :reverse => true, :sort_by => :created_at, :blog_post => true) -%>
+  <updated><%= (articles.first ? Time.parse(articles.first.created_at) : Time.now).utc.xmlschema %></updated>
+<% articles.each do |article| -%>
+<% created_at = Time.parse(article.created_at) -%>
+  <entry>
+    <title><%= h(article.title) %></title>
+    <link href="<%= article.url %>" />
+    <id>tag:<%= @page.site %>,<%= created_at.strftime("%Y-%m-%d") %>:<%= article.id || created_at.to_i %></id>
+    <updated><%= created_at.xmlschema %></updated>
+    <content type="html"><%= h(render(article)) %></content>
+  </entry>
+<% end -%>
+</feed>
