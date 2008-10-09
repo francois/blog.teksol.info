@@ -11,8 +11,8 @@ At the last "Montreal on Rails":http://montrealonrails.com/, I presented "Piston
 
 The files which I used to do the presentation are "OpenOffice.org 2":http://www.openoffice.org/:
 
-* "Piston: Easy Vendor Branch Management":http://blog.teksol.info/assets/2007/10/13/mor3-20071002-3.odp
-* "Piston Cheatsheet":http://blog.teksol.info/assets/2007/10/13/cheatsheet.odt
+* "Piston: Easy Vendor Branch Management":mor3-20071002-3.odp
+* "Piston Cheatsheet":cheatsheet.odt
 
 "Marc-André":http://macournoyer.wordpress.com/ got my only hard-copy of the cheatsheet, authographed by yours truly.  Way to go Marc !
 

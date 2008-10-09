@@ -10,8 +10,8 @@ filter:
 I have worked some more on my home budget planner application.  The current version is implemented on "Seaside":http://www.seaside.st/, and it's doing great.  I haven't had as much time as I wanted, but it's coming along nicely.  I have some formal training in accounting practices, and I treat my house as being a business: we have income and expense accounts, equity for ourselves, and assets (our bank account) as well as liability accounts (credit cards and bank loans).
 
 <p>
-  <a href="http://blog.teksol.info/assets/2007/10/31/budgetapp-admin-tab.png">
-    <img src="http://blog.teksol.info/assets/2007/10/31/budgetapp-admin-tab.png" alt="" width="480"/>
+  <a href="budgetapp-admin-tab.png">
+    <img src="budgetapp-admin-tab.png" alt="" width="480"/>
     <span class="caption">BudgetApp's administration tab.  Click for larger view.</span>
   </a>
 </p>
@@ -19,8 +19,8 @@ I have worked some more on my home budget planner application.  The current vers
 This is the administration tab.  This is where you add and change accounts.  Not much more to show here.
 
 <p>
-  <a href="http://blog.teksol.info/assets/2007/10/31/budgetapp-budget-tab.png">
-    <img src="http://blog.teksol.info/assets/2007/10/31/budgetapp-budget-tab.png" alt="" width="480"/>
+  <a href="budgetapp-budget-tab.png">
+    <img src="budgetapp-budget-tab.png" alt="" width="480"/>
     <span class="caption">BudgetApp's budget tab.  Click for larger view.</span>
   </a>
 </p>
@@ -28,8 +28,8 @@ This is the administration tab.  This is where you add and change accounts.  Not
 The budget tab.  This is where you actually set your budget targets for the month.  Historical data is kept around, and you can immediately see when your budget is under the actual value.
 
 <p>
-  <a href="http://blog.teksol.info/assets/2007/10/31/budgetapp-real-tab.png">
-    <img src="http://blog.teksol.info/assets/2007/10/31/budgetapp-real-tab.png" alt="" width="480"/>
+  <a href="budgetapp-real-tab.png">
+    <img src="budgetapp-real-tab.png" alt="" width="480"/>
     <span class="caption">BudgetApp's real tab.  Click for larger view.</span>
   </a>
 </p>
