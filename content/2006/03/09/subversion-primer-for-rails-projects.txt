@@ -312,7 +312,7 @@ All <code class="command">generate</code> and <code class="command">destroy</cod
 
 h2. Final words
 
-I follow this script more or less verbatim for all of my Rails projects.  After the first two or three times, this becomes automatic.  For the adventurous, I have a shell script which does most of the steps above automatically.  You can get "rails2.sh":/assets/2007/10/13/rails2.sh.
+I follow this script more or less verbatim for all of my Rails projects.  After the first two or three times, this becomes automatic.  For the adventurous, I have a shell script which does most of the steps above automatically.  You can get "rails2.sh":rails2.sh.
 
 <code class="command">rails2</code> license:
 
