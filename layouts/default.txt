@@ -9,10 +9,10 @@ filter:
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>A Single Programmer's Blog</title>
-  <link rel="stylesheet" type="text/css" href="/stylesheets/default.css"/>
+  <link rel="stylesheet" type="text/css" href="<%= "../" * @page.directory.split("/").length %>stylesheets/default.css"/>
   <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
-  <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
-  <script type="text/javascript" src="/javascripts/blog.js"></script>
+  <script type="text/javascript" src="<%= "../" * @page.directory.split("/").length %>javascripts/jquery.min.js"></script>
+  <script type="text/javascript" src="<%= "../" * @page.directory.split("/").length %>javascripts/blog.js"></script>
 </head>
 <body>
   <div id="outer">
@@ -49,7 +49,7 @@ filter:
         </div>
         <h3>Your Host</h3>
         <div class="content">
-          <img src="/images/francois.jpg" class="picB" alt="A picture of me" />
+          <img src="<%= "../" * @page.directory.split("/").length %>images/francois.jpg" class="picB" alt="A picture of me" />
           <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="/pages/bio">biography</a></p>
         </div>
         <!--tags-->
