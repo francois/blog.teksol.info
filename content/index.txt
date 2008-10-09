@@ -3,7 +3,7 @@ title: A Single Programmer's Blog
 filter:
   - erb
 ---
-<% @pages.find(10, :reverse => true, :sort_by => :created_at) {|resource| Webby::Resources::Page === resource}.each do |page| %>
+<% @pages.find(10, :reverse => true, :sort_by => :created_at, :blog_post => true).each do |page| %>
   <div class="post">
     <div class="header">
       <h3><%= link_to_page(page.title) %></h3>
