@@ -21,7 +21,7 @@ filter:    erb
     <email><%= h(@page.email) %></email>
   </author>
   <id>http://<%= @page.site %>/</id>
-<% articles = @pages.find(10, :reverse => true, :sort_by => :created_at, :blog_post => true) -%>
+<% articles = @pages.find(50, :reverse => true, :sort_by => :created_at, :blog_post => true) -%>
   <updated><%= (articles.first ? Time.parse(articles.first.created_at) : Time.now).utc.xmlschema %></updated>
 <% articles.each do |article| -%>
 <% created_at = Time.parse(article.created_at) -%>
