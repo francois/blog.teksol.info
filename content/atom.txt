@@ -27,7 +27,7 @@ filter:    erb
 <% created_at = Time.parse(article.created_at) -%>
   <entry>
     <title><%= h(article.title) %></title>
-    <link href="<%= article.url %>" />
+    <link href="http://<%= @page.site %><%= article.url %>" type="text/html" />
     <id>tag:<%= @page.site %>,<%= created_at.strftime("%Y-%m-%d") %>:<%= article.id || created_at.to_i %></id>
     <updated><%= created_at.xmlschema %></updated>
     <content type="html"><%= h(render(article)) %></content>
