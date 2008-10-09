@@ -68,20 +68,10 @@ class Comment < Content; end
 
 Article.find(:all, :conditions => "published_at IS NOT NULL", :order => "published_at").each do |article|
   puts article.permalink
-  filename = "content/blog/%04d/%02d/%02d/%s.txt" % [article.published_at.year, article.published_at.month, article.published_at.day, article.permalink]
-  FileUtils.mkdir_p(File.dirname(filename))
+  filename = "content/%04d/%02d/%02d/%s.txt" % [article.published_at.year, article.published_at.month, article.published_at.day, article.permalink]
+  content = File.read(filename)
+  content.sub!("blog_post:  true", "blog_post:  true\r\nid:         #{article.id}")
   File.open(filename, "wb") do |io|
-    io.puts <<-EOF
---- 
-title:      "#{article.title}"
-created_at: #{article.published_at.utc.to_s(:db)}
-blog_post:  true
-filter:
-  - erb
-  - textile
---- 
-EOF
-
-    io.write article.body
+    io.write content
   end
 end

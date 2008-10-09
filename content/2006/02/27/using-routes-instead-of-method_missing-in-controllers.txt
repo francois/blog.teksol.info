@@ -2,6 +2,7 @@
 title:      "Using routes instead of method_missing in Controllers"
 created_at: 2006-02-27 13:25:00
 blog_post:  true
+id:         33
 filter:
   - erb
   - textile

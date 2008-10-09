@@ -2,6 +2,7 @@
 title:      "object.blank? differences with new Rails 0.14.3"
 created_at: 2005-11-08 02:18:00
 blog_post:  true
+id:         13
 filter:
   - erb
   - textile

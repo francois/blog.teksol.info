@@ -2,6 +2,7 @@
 title:      "Continuous Integration Choice: Cerberus"
 created_at: 2007-01-11 21:20:54
 blog_post:  true
+id:         74
 filter:
   - erb
   - textile

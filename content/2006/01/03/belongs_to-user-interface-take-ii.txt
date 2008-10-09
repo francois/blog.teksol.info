@@ -2,6 +2,7 @@
 title:      "belongs_to user interface, take II"
 created_at: 2006-01-03 12:08:00
 blog_post:  true
+id:         28
 filter:
   - erb
   - textile

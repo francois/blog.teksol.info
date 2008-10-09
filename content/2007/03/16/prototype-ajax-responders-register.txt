@@ -2,6 +2,7 @@
 title:      "Prototype Ajax.Responders.register"
 created_at: 2007-03-16 05:26:26
 blog_post:  true
+id:         86
 filter:
   - erb
   - textile

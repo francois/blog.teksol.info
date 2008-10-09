@@ -2,6 +2,7 @@
 title:      "Named Test Fixtures"
 created_at: 2005-10-18 13:45:00
 blog_post:  true
+id:         2
 filter:
   - erb
   - textile

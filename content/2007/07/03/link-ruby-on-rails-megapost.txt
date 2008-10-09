@@ -2,6 +2,7 @@
 title:      "Link: Ruby on Rails megapost"
 created_at: 2007-07-03 18:10:49
 blog_post:  true
+id:         98
 filter:
   - erb
   - textile

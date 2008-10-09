@@ -2,6 +2,7 @@
 title:      "respond_to order is important"
 created_at: 2006-05-03 17:59:00
 blog_post:  true
+id:         43
 filter:
   - erb
   - textile

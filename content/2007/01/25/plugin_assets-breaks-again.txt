@@ -2,6 +2,7 @@
 title:      "plugin_assets: breaks, again"
 created_at: 2007-01-25 10:10:39
 blog_post:  true
+id:         76
 filter:
   - erb
   - textile
