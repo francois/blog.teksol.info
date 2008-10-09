@@ -348,6 +348,8 @@ color: #A8A88D;
 color: #8C8C73;
 }
 
+.code h5 { margin: 0; background: #eee; border-bottom: 1px solid #004; font-size: 8pt; font-family: monaco, monospace; }
+
 .CodeRay {
   background: #eee; width: 100%; color: #004;
   display: block; overflow: auto;
