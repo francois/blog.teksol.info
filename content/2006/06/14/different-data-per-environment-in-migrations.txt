@@ -2,6 +2,7 @@
 title:      "Different data per environment in migrations"
 created_at: 2006-06-14 21:44:00
 blog_post:  true
+tags:       tips, migration
 id:         46
 filter:
   - erb

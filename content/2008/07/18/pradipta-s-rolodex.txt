@@ -2,6 +2,7 @@
 title:      "Pradipta's Rolodex"
 created_at: 2008-07-18 16:38:00
 blog_post:  true
+tags:       rails, job offer, recruitment
 id:         115692
 filter:
   - erb

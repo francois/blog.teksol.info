@@ -9,6 +9,14 @@ ActiveRecord::Base.logger = Logger.new(STDERR)
 
 RAILS_ROOT = "/home/blog/blog.teksol.info/"
 
+class Tag < ActiveRecord::Base
+  def to_s; name; end
+end
+class Tagging < ActiveRecord::Base
+  belongs_to :tag
+  belongs_to :taggable, :polymorphic => true
+end
+
 class Asset < ActiveRecord::Base
   def permalink
     date = created_at || Time.now.utc
@@ -32,6 +40,8 @@ end
 
 class Content < ActiveRecord::Base; end
 class Article < Content
+  has_many :taggings, :as => :taggable
+  has_many :tags, :through => :taggings
 =begin
   `id` int(11) NOT NULL auto_increment,
   `article_id` int(11) default NULL,
@@ -70,7 +80,7 @@ Article.find(:all, :conditions => "published_at IS NOT NULL", :order => "publish
   puts article.permalink
   filename = "content/%04d/%02d/%02d/%s.txt" % [article.published_at.year, article.published_at.month, article.published_at.day, article.permalink]
   content = File.read(filename)
-  content.sub!("blog_post:  true", "blog_post:  true\r\nid:         #{article.id}")
+  content.sub!("blog_post:  true", "blog_post:  true\r\ntags:       #{article.tags.join(", ")}")
   File.open(filename, "wb") do |io|
     io.write content
   end

@@ -2,6 +2,7 @@
 title:      "Mephisto + Defensio: a completely different approach"
 created_at: 2008-03-04 02:37:00
 blog_post:  true
+tags:       scm, git, mephisto
 id:         4022
 filter:
   - erb

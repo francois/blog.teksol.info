@@ -2,6 +2,7 @@
 title:      "Model Serialization in Session"
 created_at: 2005-10-21 07:35:00
 blog_post:  true
+tags:       serialization, session
 id:         3
 filter:
   - erb

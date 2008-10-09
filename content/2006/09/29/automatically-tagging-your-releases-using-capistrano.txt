@@ -2,6 +2,7 @@
 title:      "Automatically tagging your releases using Capistrano"
 created_at: 2006-09-29 17:48:47
 blog_post:  true
+tags:       tips, capistrano
 id:         56
 filter:
   - erb

@@ -2,6 +2,7 @@
 title:      "Missing fixtures declarations cause test failures"
 created_at: 2006-11-14 22:05:36
 blog_post:  true
+tags:       fixtures, unit, testing
 id:         60
 filter:
   - erb

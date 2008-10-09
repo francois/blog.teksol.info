@@ -2,6 +2,7 @@
 title:      "About sharing models between Rails applications"
 created_at: 2007-04-23 07:27:40
 blog_post:  true
+tags:       version, control
 id:         94
 filter:
   - erb

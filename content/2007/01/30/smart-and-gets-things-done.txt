@@ -2,6 +2,7 @@
 title:      "Smart and Gets Things Done"
 created_at: 2007-01-30 21:15:15
 blog_post:  true
+tags:       hiring
 id:         77
 filter:
   - erb

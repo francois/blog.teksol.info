@@ -2,6 +2,7 @@
 title:      "Erlang xUnit Implementation: EUnit"
 created_at: 2007-04-16 18:40:14
 blog_post:  true
+tags:       unit, testing, xunit
 id:         92
 filter:
   - erb

@@ -2,6 +2,7 @@
 title:      "Moving to LayeredTech"
 created_at: 2006-08-26 05:22:26
 blog_post:  true
+tags:       
 id:         54
 filter:
   - erb

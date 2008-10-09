@@ -2,6 +2,7 @@
 title:      "New TodoApp Tutorial: not mine"
 created_at: 2007-10-19 19:30:00
 blog_post:  true
+tags:       seaside smalltalk todo
 id:         229
 filter:
   - erb

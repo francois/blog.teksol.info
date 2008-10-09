@@ -2,6 +2,7 @@
 title:      "Named resources with name prefixes"
 created_at: 2007-03-14 20:09:47
 blog_post:  true
+tags:       routing
 id:         84
 filter:
   - erb

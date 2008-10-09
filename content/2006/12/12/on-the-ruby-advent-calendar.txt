@@ -2,6 +2,7 @@
 title:      "On the Ruby Advent Calendar"
 created_at: 2006-12-12 05:53:55
 blog_post:  true
+tags:       piston
 id:         68
 filter:
   - erb

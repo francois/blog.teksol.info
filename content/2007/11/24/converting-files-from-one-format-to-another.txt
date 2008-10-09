@@ -2,6 +2,7 @@
 title:      "Converting files from one format to another"
 created_at: 2007-11-24 21:46:00
 blog_post:  true
+tags:       conversion,flash,tips
 id:         615
 filter:
   - erb
