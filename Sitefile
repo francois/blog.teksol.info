@@ -4,4 +4,8 @@ task :default => :build
 desc 'deploy the site to the webserver'
 task :deploy => [:build, 'deploy:rsync']
 
-# EOF
+SITE.rsync_args = ["--archive", "--human-readable", "--verbose", "--compress", "--checksum", "--delete", "--force", "--exclude=.DS_Store"]
+SITE.output_dir = "output"
+SITE.user       = "fbeausoleil"
+SITE.host       = "bloggy.teksol.info"
+SITE.remote_dir = "/home/fbeausoleil/bloggy.teksol.info/"
