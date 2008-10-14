@@ -1,4 +1,4 @@
---- 
+ --- 
 title:      "Building a plugin on RSpec"
 created_at: 2005-11-17 18:00:00
 blog_post:  true
@@ -55,6 +55,7 @@ task :test_behaviors => [:set_load_path] do
   Spec::TextRunner.new.run
 end
 <% end -%>
+
 
 h2. First behavioral expectation
 
@@ -228,7 +229,7 @@ class OneSelectedEntry < Spec::Context
 end
 <% end -%>
 
-<a style="display:block; float:left; margin-right: .5em;" href="http://www.refactoring.com/catalog/extractSuperclass.html" title="Extract Superclass refactoring on the refactoring.com website"><img src="refactoring-icon.gif" alt="Refactoring.com website logo"/></a>The setup method is very similar - in fact, it's nearly identical, the only difference being the value we assign to the params <code class="class">Hash</code>.  Probably something we can "extract superclass":http://www.refactoring.com/catalog/extractSuperclass.html from.  Let's wait for the fabled "three strikes and you refactor":http://c2.com/cgi/wiki?ThreeStrikesAndYouRefactor before we do so, though.
+<a style="display:block; float:left; margin-right: .5em;" href="http://www.refactoring.com/catalog/extractSuperclass.html" title="Extract Superclass refactoring on the refactoring.com website"><img src="<%= same_folder_url("refactoring-icon.gif") %>" alt="Refactoring.com website logo"/></a>The setup method is very similar - in fact, it's nearly identical, the only difference being the value we assign to the params <code class="class">Hash</code>.  Probably something we can "extract superclass":http://www.refactoring.com/catalog/extractSuperclass.html from.  Let's wait for the fabled "three strikes and you refactor":http://c2.com/cgi/wiki?ThreeStrikesAndYouRefactor before we do so, though.
 
 Next, we get our behavioral specifications.  The first one says when we have "One selected entry" we "should have one element in the array".  This is all very readable and reasonable.  Then, when we have "One selected entry" we "should have the id as the first element".  Let's see this in action:
 <% code(:lang => "shell") do -%>$ rake
