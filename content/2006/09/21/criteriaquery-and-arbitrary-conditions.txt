@@ -2,7 +2,9 @@
 title:      "CriteriaQuery and arbitrary conditions"
 created_at: 2006-09-21 19:14:13
 blog_post:  true
-tags:       tips, plugins
+tags: 
+  - tips
+  - plugins
 id:         55
 filter:
   - erb

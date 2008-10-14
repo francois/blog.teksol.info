@@ -2,7 +2,9 @@
 title:      "Piston 1.2.0: status, better update"
 created_at: 2006-11-17 20:27:46
 blog_post:  true
-tags:       tools, piston
+tags: 
+  - tools
+  - piston
 id:         61
 filter:
   - erb

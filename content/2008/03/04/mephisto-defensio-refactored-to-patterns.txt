@@ -2,7 +2,10 @@
 title:      "Mephisto + Defensio: refactored to patterns"
 created_at: 2008-03-04 07:29:00
 blog_post:  true
-tags:       mephisto, defensio, patterns
+tags: 
+  - mephisto
+  - defensio
+  - patterns
 id:         4031
 filter:
   - erb

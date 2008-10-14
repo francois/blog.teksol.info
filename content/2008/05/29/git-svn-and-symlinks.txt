@@ -2,7 +2,10 @@
 title:      "git-svn and symlinks"
 created_at: 2008-05-29 23:15:00
 blog_post:  true
-tags:       svn, git, git-svn
+tags: 
+  - svn
+  - git
+  - git-svn
 id:         5848
 filter:
   - erb

@@ -2,7 +2,10 @@
 title:      "AutoScope: better handling of has_many relationships"
 created_at: 2007-04-05 00:03:15
 blog_post:  true
-tags:       scope, rails, auto_scope
+tags: 
+  - scope
+  - rails
+  - auto_scope
 id:         91
 filter:
   - erb

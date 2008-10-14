@@ -15,4 +15,3 @@ Wow, without my ever doing anything special, searching for "piston" on Google re
 </p>
 
 Thanks to everyone who linked to "Piston":http://piston.rubyforge.org/ and made this happen.
-

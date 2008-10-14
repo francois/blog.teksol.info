@@ -2,7 +2,9 @@
 title:      "Worst error message ever"
 created_at: 2007-01-09 01:25:58
 blog_post:  true
-tags:       svn, error
+tags: 
+  - svn
+  - error
 id:         73
 filter:
   - erb

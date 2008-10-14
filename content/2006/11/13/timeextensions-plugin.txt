@@ -2,7 +2,10 @@
 title:      "TimeExtensions Plugin"
 created_at: 2006-11-14 01:59:57
 blog_post:  true
-tags:       plugins, core, extensions
+tags: 
+  - plugins
+  - core
+  - extensions
 id:         59
 filter:
   - erb

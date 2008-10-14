@@ -2,7 +2,9 @@
 title:      "Model Objects in the Session"
 created_at: 2007-01-03 21:10:13
 blog_post:  true
-tags:       serialization, session
+tags: 
+  - serialization
+  - session
 id:         72
 filter:
   - erb

@@ -9,4 +9,3 @@ filter:
   - textile
 --- 
 I started evaluating the "e Text Editor":http://www.e-texteditor.com/ this morning.  At first, I thought I would be in honeymoon, but I quickly realized that was not to be.
-

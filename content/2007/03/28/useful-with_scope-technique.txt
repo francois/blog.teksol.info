@@ -2,7 +2,9 @@
 title:      "Useful #with_scope technique"
 created_at: 2007-03-28 17:40:03
 blog_post:  true
-tags:       scope, activerecord
+tags: 
+  - scope
+  - activerecord
 id:         89
 filter:
   - erb

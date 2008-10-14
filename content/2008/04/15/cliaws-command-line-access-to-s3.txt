@@ -2,7 +2,10 @@
 title:      "Cliaws: command-line access to S3"
 created_at: 2008-04-15 05:43:00
 blog_post:  true
-tags:       release, cliaws, gem
+tags: 
+  - release
+  - cliaws
+  - gem
 id:         4886
 filter:
   - erb
