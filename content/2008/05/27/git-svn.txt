@@ -11,7 +11,7 @@ filter:
   - erb
   - textile
 --- 
-I just found out "Howto use Git and svn together":http://www.flavio.castelli.name/howto_use_git_with_svn, by "Flavio Castelli":http://www.flavio.castelli.name/howto_use_git_with_svn.  In there, he lists the steps he uses to develop using "Git":http://git.or.cz/, but keeping a "Subversion":http://subversion.tigris.org/ repository in the loop.
+I just found out "Howto use Git and svn together":http://www.flavio.castelli.name/howto_use_git_with_svn, by "Flavio Castelli":http://www.flavio.castelli.name/.  In there, he lists the steps he uses to develop using "Git":http://git.or.cz/, but keeping a "Subversion":http://subversion.tigris.org/ repository in the loop.
 
 In his *Solve git-svn rebase problems* section, Flavio uses <code>git-stash</code> to workaround <code>git-svn rebase</code> problems when your tree has local modifications.  I use a different solution.  I develop locally on a branch and never commit directly on master.  This way I can <code>git-svn rebase</code> with impunity.  When I'm ready to merge, I'll <code>git-svn rebase</code>, followed by <code>git checkout my-branch</code>, <code>git rebase master</code> (to freshen my changes with the remote repository), and finally, I'll <code>git merge onto master</code>.  The steps:
 
@@ -28,4 +28,4 @@ git svn dcommit # push to Subversion<% end -%>
 
 Overall, my experience with this workflow has been great.  I can the features of each system to it's fullest advantage.  I can be on the road, still _Gittin' it done_, and the rest of the team can still use Subversion when appropriate.  This is a great combination!
 
-Thanks to "Jean-François Couture":http://jfcouture.com/ for showing me the light.
+Thanks to "Jean-Fran&ccedil;ois Couture":http://jfcouture.com/ for showing me the light.
