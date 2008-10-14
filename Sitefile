@@ -2,10 +2,61 @@
 task :default => :build
 
 desc 'deploy the site to the webserver'
-task :deploy => [:build, 'deploy:rsync']
+task :deploy => [:build_tags_indexes, :build, 'deploy:rsync']
 
 SITE.rsync_args = ["--archive", "--human-readable", "--verbose", "--compress", "--checksum", "--delete", "--force", "--exclude=.DS_Store"]
 SITE.output_dir = "output"
 SITE.user       = "fbeausoleil"
 SITE.host       = "bloggy.teksol.info"
 SITE.remote_dir = "/home/fbeausoleil/bloggy.teksol.info/"
+
+task :build_tags_indexes do
+  require "rubygems"
+  require "active_support"
+
+  Webby::Builder.new.load_files
+  tags = Hash.new {|h, k| h[k] = Array.new}
+  Webby::Resources.pages.find(:all, :blog_post => true).map do |page|
+    next unless page.tags
+    page.tags.each do |tag|
+      tags[tag] << page
+    end
+  end
+
+  FileUtils.mkdir_p(File.dirname(__FILE__) + "/content/tags")
+  tags.each_pair do |tag, pages|
+    filename = File.dirname(__FILE__) + "/content/tags/#{tag}.txt"
+    File.open(filename, "w") do |io|
+      io.puts <<EOF
+---
+title:      "#{tag}"
+created_at: #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
+blog_post:  false
+layout:     default
+filter:
+  - erb
+  - textile
+---
+EOF
+
+      io.puts <<EOF
+<% @pages.find(:all) {|page| #{pages.map(&:id).inspect}.include?(page.id)}.sort_by(&:created_at).reverse.each do |page| -%>
+<div class="post">
+  <div class="header">
+    <h3><%= link_to_page(page.title) %></h3>
+    <div class="date"><%= page.created_at[0, 10]%></div>
+  </div>
+  <div class="content">
+    <p>
+      <%= render(page) %>
+    </p>
+  </div>
+  <div class="footer">
+    <!-- Disqus Comments go here -->
+  </div>
+</div>
+<% end -%>
+EOF
+    end
+  end
+end
