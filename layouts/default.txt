@@ -53,12 +53,14 @@ filter:
           <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="/pages/bio">biography</a></p>
         </div>
         <!--tags-->
-        <h3>Tags</h3>
+        <h3>Top Tags</h3>
         <div class="content">
-          {% for tag in site.tags %}
-          {{ tag | link_to_tag }} 
-          <span class="count">({{ tag | tagged_articles | size }})</span>
-          {% endfor %}
+          <ul id="toptags">
+          <% @pages.find(:all, :blog_post => true).map(&:tags).compact.flatten.inject(Hash.new {|h, k| h[k] = 0}) {|taggings, tag| taggings[tag] += 1; taggings }.sort_by(&:last).reverse.first(12).each do |info| -%>
+          <li><%= link_to("%s <span class=\"count\">%d</span>" % info, "../" * @page.directory.split("/").length + "tags/#{h(info.first)}") %></li>
+          <% end -%>
+          <li class="last"><a href="<%= "../" * @page.directory.split("/").length %>tags">See all tags&hellip;</a></li>
+        </ul>
         </div>
         <h3>Links</h3>
         <div class="content">
