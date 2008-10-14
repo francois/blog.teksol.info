@@ -81,14 +81,6 @@ filter:
             <li><a href="http://undernet.ca/">undernet.ca: VOIP</a></li>
           </ul>
         </div>
-        <h3>Categories</h3>
-        <div class="content">
-          <ul>
-            {% for section in site.blog_sections %}
-            <li>{{ section | link_to_section }} ({{ section.articles | size }})</li>
-            {% endfor %}		
-          </ul>
-        </div>
         <!--END CATEGORIES-->
         <!--archives-->
         <h3>Archives</h3>
