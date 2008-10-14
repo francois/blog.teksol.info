@@ -6,7 +6,7 @@ tags:
   - ubuntu
   - linux
   - desktop
-  - butsy gibbon
+  - gutsy gibbon
 id:         349
 filter:
   - erb

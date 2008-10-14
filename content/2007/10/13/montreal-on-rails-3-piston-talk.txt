@@ -2,7 +2,10 @@
 title:      "Montreal on Rails 3:  Piston Talk"
 created_at: 2007-10-13 12:20:00
 blog_post:  true
-tags:       mor3 mor piston
+tags: 
+  - mor3
+  - mor
+  - piston
 id:         203
 filter:
   - erb
