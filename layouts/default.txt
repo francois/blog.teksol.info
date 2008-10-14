@@ -9,17 +9,17 @@ filter:
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>A Single Programmer's Blog</title>
-  <link rel="stylesheet" type="text/css" href="<%= "../" * @page.directory.split("/").length %>stylesheets/default.css"/>
+  <link rel="stylesheet" type="text/css" href="<%= absolute_url("stylesheets/default.css") %>"/>
   <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
-  <script type="text/javascript" src="<%= "../" * @page.directory.split("/").length %>javascripts/jquery.min.js"></script>
-  <script type="text/javascript" src="<%= "../" * @page.directory.split("/").length %>javascripts/blog.js"></script>
+  <script type="text/javascript" src="<%= absolute_url("javascripts/jquery.min.js") %>"></script>
+  <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
 </head>
 <body>
   <div id="outer">
     <div id="upbg"></div>
     <div id="inner">
       <div id="header">
-        <h1><a href="/"><span>A Single Programmer's Blog</span></a></h1>
+        <h1><a href="<%= absolute_url("index.html") %>"><span>A Single Programmer's Blog</span></a></h1>
         <h2>by Fran&ccedil;ois Beausoleil</h2>
       </div>
       <div id="splash"></div>
@@ -49,24 +49,24 @@ filter:
         </div>
         <h3>Your Host</h3>
         <div class="content">
-          <img src="<%= "../" * @page.directory.split("/").length %>images/francois.jpg" class="picB" alt="A picture of me" />
-          <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="/pages/bio">biography</a></p>
+          <img src="<%= absolute_url("images/francois.jpg") %>" class="picB" alt="A picture of me" />
+          <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="<%= absolute_url("pages/bio.html") %>">biography</a></p>
         </div>
         <!--tags-->
         <h3>Top Tags</h3>
         <div class="content">
           <ul id="toptags">
           <% @pages.find(:all, :blog_post => true).map(&:tags).compact.flatten.inject(Hash.new {|h, k| h[k] = 0}) {|taggings, tag| taggings[tag] += 1; taggings }.sort_by(&:last).reverse.first(12).each do |info| -%>
-          <li><%= link_to("%s <span class=\"count\">%d</span>" % info, "../" * @page.directory.split("/").length + "tags/#{h(info.first)}") %></li>
+          <li><%= link_to("%s <span class=\"count\">%d</span>" % info, absolute_url("tags/#{h(info.first)}.html")) %></li>
           <% end -%>
-          <li class="last"><a href="<%= "../" * @page.directory.split("/").length %>tags">See all tags&hellip;</a></li>
+          <li class="last"><a href="<%= absolute_url("tags.html") %>">See all tags&hellip;</a></li>
         </ul>
         </div>
         <h3>Links</h3>
         <div class="content">
           <ul>
-            <li><a href="/pages/bio" title="Typo">Author Biography</a></li>
-            <li><a href="/pages/privacy" title="Typo">Privacy Policy</a></li>
+            <li><a href="<%= absolute_url("pages/bio.html") %>">Author Biography</a></li>
+            <li><a href="<%= absolute_url("pages/privacy") %>">Privacy Policy</a></li>
             <li><script type="text/javascript" src="http://embed.technorati.com/embed/m24hq7g983.js"></script></li>
             <li><a href="http://chineseprogrammer.blogspot.com/"> About Chinese software programmer &amp; Developer</a></li>
           </ul>
