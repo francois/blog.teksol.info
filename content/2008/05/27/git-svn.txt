@@ -26,6 +26,6 @@ git checkout master
 git merge francois # I might use --squash if the new feature warrants it
 git svn dcommit # push to Subversion<% end -%>
 
-Overall, my experience with this workflow has been great.  I can the features of each system to it's fullest advantage.  I can be on the road, still _Gittin' it done_, and the rest of the team can still use Subversion when appropriate.  This is a great combination!
+Overall, my experience with this workflow has been great.  I can the features of each system to it's fullest advantage.  I can be on the road, still _Gittin' it done_, and the rest of the team still uses Subversion.  This is a great combination!
 
 Thanks to "Jean-Fran&ccedil;ois Couture":http://jfcouture.com/ for showing me the light.
