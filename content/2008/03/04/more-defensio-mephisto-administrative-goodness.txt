@@ -12,8 +12,8 @@ filter:
 --- 
 Why should you switch to "Defensio":http://defensio.com/ instead of "Akismet":http://akismet.com/ ?  Because of this:
 
-<p style="text-align:center"><a href="<%= "../" * @page.directory.split("/").length %><%= @page.directory %>/mephisto-defensio-spaminess.png"><img src="<%= "../" * @page.directory.split("/").length %><%= @page.directory %>/mephisto-defensio-spaminess.png" width="360" alt="The Mephisto interface, when interfaced with Defensio shows the spaminess of each comment, as well as use different shades of orange to show spammy comments"/></a><br/>
-<a href="<%= "../" * @page.directory.split("/").length %><%= @page.directory %>/mephisto-defensio-spaminess.png">Click for larger version</a></p>
+<p style="text-align:center"><a href="<%= same_folder_url("mephisto-defensio-spaminess.png") %>"><img src="<%= same_folder_url("mephisto-defensio-spaminess.png") %>" width="360" alt="The Mephisto interface, when interfaced with Defensio shows the spaminess of each comment, as well as use different shades of orange to show spammy comments"/></a><br/>
+<a href="<%= same_folder_url("mephisto-defensio-spaminess.png") %>">Click for larger version</a></p>
 
 Defensio provides useful statistics to the blogger.  A typical response would look like:
 
