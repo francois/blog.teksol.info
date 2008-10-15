@@ -4,7 +4,7 @@ task :default => :build
 desc 'deploy the site to the webserver'
 task :deploy => [:build_tags_indexes, :build, 'deploy:rsync']
 
-SITE.rsync_args = ["--archive", "--human-readable", "--verbose", "--compress", "--checksum", "--delete", "--force", "--exclude=.DS_Store"]
+SITE.rsync_args = ["--archive", "--human-readable", "--verbose", "--compress", "--checksum", "--delete", "--force", "--exclude=.DS_Store", "--exclude=.gitignore"]
 SITE.output_dir = "output"
 SITE.user       = "fbeausoleil"
 SITE.host       = "bloggy.teksol.info"
