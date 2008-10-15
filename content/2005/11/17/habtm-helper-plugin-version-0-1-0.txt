@@ -14,7 +14,7 @@ I just wrote another plugin: habtm_helper_plugin.  This plugin will generate HTM
 
 What does it look like ?  See here:
 
-<p align="center"><img alt="HABTM generated manager" src="/assets/2007/10/13/habtm-manager.png"/></p>
+<p align="center"><img alt="HABTM generated manager" src="<%= same_folder_url("habtm-manager.png") %>"/></p>
 
 Release 0.1.0 is up for grabs, in one of four ways:
 * svn propset http://opensvn.csie.org/habtm_helper_plugin/tags/0.1.0 svn:externals vendor/plugins *WARNING: Destructive if you already set other externals*

@@ -14,7 +14,7 @@ filter:
 --- 
 Yesterday (Tuesday May 20th, 2008), I presented at "Montreal on Rails":http://montrealonrails.com/.  I made a short and sweet presentation on "Mephisto":http://mephistoblog.com/, and how I refactored it to support both "Akismet":http://akismet.com/ and "Defensio":http://defensio.com/.
 
-You can grab the slides for "Refactoring to Patterns: How Mephisto went from a single engine Lada to a multi-engine jet fighter":http://blog.teksol.info/assets/2008/5/21/refactoring-to-patterns.pdf (PDF).
+You can grab the slides for "Refactoring to Patterns: How Mephisto went from a single engine Lada to a multi-engine jet fighter"<%= same_folder_url("refactoring-to-patterns.pdf") %> (PDF).
 
 h2. References
 

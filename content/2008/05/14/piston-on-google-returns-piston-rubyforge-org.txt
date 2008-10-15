@@ -11,7 +11,7 @@ filter:
 Wow, without my ever doing anything special, searching for "piston" on Google returns this:
 
 <p style="text-align:center">
-<a href="http://google.com/search?q=piston"><img src="http://blog.teksol.info/assets/2008/5/14/piston-number-1.jpg" alt="Piston is the #1 search result on Google for the string 'piston'"/></a>
+<a href="http://google.com/search?q=piston"><img width="560" src="<%= same_folder_url("piston-number-1.jpg") %>" alt="Piston is the #1 search result on Google for the string 'piston'"/></a>
 </p>
 
 Thanks to everyone who linked to "Piston":http://piston.rubyforge.org/ and made this happen.

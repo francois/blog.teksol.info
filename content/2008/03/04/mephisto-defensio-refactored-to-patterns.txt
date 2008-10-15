@@ -83,7 +83,7 @@ end
 
 Finally, Defensio provides statistics through it's API.  I wanted to show nice graphics, and turned to the "Google Chart API":http://code.google.com/apis/chart/ to generate them.  In the end, what does all of this look like ?  Well, this:
 
-<p style="text-align:center"><a href="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-statistics.png"><img src="http://blog.teksol.info/assets/2008/3/4/mephisto-defensio-statistics.png" width="360" alt="The Defensio engine's configuration and statistics"/><br/>Click for larger version</a></p>
+<p style="text-align:center"><a href="<%= same_folder_url("mephisto-defensio-statistics.png") %>"><img src="<%= same_folder_url("mephisto-defensio-statistics.png") %>" width="360" alt="The Defensio engine's configuration and statistics"/><br/>Click for larger version</a></p>
 
 I had a bit of discussion with "Carl Mercier":http://blog.carlmercier.com/ about the accuracy graph.  He said Defensio looked poor because the green bar is very low.  I countered that the difference between 95 and 96 percent, if the graph were 100 pixels high, would only be 1 pixel.  The graph's scale is actually 95 to 100%, so now the difference between 95 and 96 percent will be 20 pixels, if the bar is 100 pixels high.  Anyway, this is an unresolved issue, and I'd like to know what people feel.  You can change this yourself by cloning the repository and editing the Defensio statistics template:
 
