@@ -1,0 +1,14 @@
+--- 
+title:      RailsRumble Training Video
+created_at: 2008-10-15 16:58:34
+blog_post:  true
+id:         20081015165834
+tags:
+  - railsrumble
+filter:
+  - erb
+  - textile
+--- 
+You know what, training for the "RailsRumble":http://railsrumble.com/ was very hard.  I had to work at it.  Hope you enjoy my workout as much as I did!
+
+<object width="400" height="300">	<param name="allowfullscreen" value="true" />	<param name="allowscriptaccess" value="always" />	<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=1977477&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" />	<embed src="http://vimeo.com/moogaloop.swf?clip_id=1977477&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="400" height="300"></embed></object><br /><a href="http://vimeo.com/1977477?pg=embed&amp;sec=1977477">RailsRumble 2008 Training</a> from <a href="http://vimeo.com/user784889?pg=embed&amp;sec=1977477">François Beausoleil</a> on <a href="http://vimeo.com?pg=embed&amp;sec=1977477">Vimeo</a>.

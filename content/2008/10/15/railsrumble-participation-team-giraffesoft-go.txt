@@ -1,0 +1,16 @@
+--- 
+title:      "RailsRumble Participation:  Team GiraffeSoft Go!"
+created_at: 2008-10-15 16:48:07
+blog_post:  true
+id:         20081015164807
+tags:
+  - railsrumble
+filter:
+  - erb
+  - textile
+--- 
+Are you participating to the "RailsRumble":http://railsrumble.com/ ?  I'm part of *Team GiraffeSoft*, with the other team members being "James Golick":http://jamesgolick.com/, "Daniel Haran":http://danielharan.com/ and "Mathieu Martin":http://programblings.com/.
+
+None of us are designers, so our application might suffer a bit for that, but we've got so many great ideas.  What's our idea you're saying?  Oh, that's "What does this error mean":http://whatdoesthiserrormean.com/ (obviously, the website isn't up yet).  We intend people (not just developers!) to come in, paste an error message they don't understand and get an instant answer.
+
+I certainly hope to see you there!
