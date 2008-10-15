@@ -70,7 +70,7 @@ filter:
           <% @pages.find(:all, :blog_post => true).map(&:tags).compact.flatten.inject(Hash.new {|h, k| h[k] = 0}) {|taggings, tag| taggings[tag] += 1; taggings }.sort_by(&:last).reverse.first(12).each do |info| -%>
           <li><%= link_to("%s <span class=\"count\">%d</span>" % info, absolute_url("tags/#{h(info.first)}.html")) %></li>
           <% end -%>
-          <li class="last"><a href="<%= absolute_url("tags") %>">See all tags&hellip;</a></li>
+          <li class="last"><a href="<%= absolute_url("tags/") %>">See all tags&hellip;</a></li>
         </ul>
         </div>
         <h3>Links</h3>
