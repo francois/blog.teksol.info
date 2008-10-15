@@ -9,6 +9,7 @@ SITE.output_dir = "output"
 SITE.user       = "fbeausoleil"
 SITE.host       = "blog.teksol.info"
 SITE.remote_dir = "/home/fbeausoleil/blog.teksol.info/"
+SITE.blog_dir   = ""
 
 task :build_tags_indexes do
   require "rubygems"
