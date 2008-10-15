@@ -13,7 +13,7 @@ filter:
 Just in case you spot me in the crowd, here's what I look like:
 
 <p style="text-align:center">
-  <a href="http://blog.teksol.info/assets/2008/7/18/WebFairy-2.0.jpg"><img src="http://blog.teksol.info/assets/2008/7/18/WebFairy-2.0.jpg" width="375" alt="The Web 2.0 Fairy"/></a>
+  <a href="<%= absolute_url("WebFairy-2.0.jpg") %>"><img src="<%= absolute_url("WebFairy-2.0.jpg") %>" width="375" alt="The Web 2.0 Fairy"/></a>
 </p>
 
 Hope to see you there!
