@@ -43,7 +43,8 @@ filter:
         <!--Search-->
         <h3>Search</h3>
         <div class="content">
-          <form action="http://www.google.com/" id="sform" method="get" name="sform">
+          <form action="http://www.google.ca/search" id="sform" method="get" name="sform">
+            <div style="display:none;padding:0;margin:0"><input type="hidden" name="hl" value="en"/></div>
             <p><input type="text" id="q" name="q" class="default" value="Google Search" /></p>
           </form>
         </div>
