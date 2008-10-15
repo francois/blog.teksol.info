@@ -93,20 +93,6 @@ filter:
           </ul>
         </div>
         <!--END CATEGORIES-->
-        <!--archives-->
-        <h3>Archives</h3>
-        <div class="content">
-          <ul>
-            {{ '' | section | months | assign_to: 'home_section' }}
-            {% for month in home_section.months %}
-            {{ home_section | monthly_articles: month | size | assign_to: 'articles_count' }}
-            {% if articles_count > 0 %}
-            <li>{{ home_section | link_to_month: month }} ({{ articles_count }})</li>	
-            {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
-        <!--archives-->
         <!-- secondary content end -->
       </div>
       <div id="footer">
