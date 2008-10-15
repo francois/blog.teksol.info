@@ -11,7 +11,7 @@ filter:
   - erb
   - textile
 --- 
-Today sees a new release of "Cliaws":http://github.com/francois/cliaws/wikis.  This is a simple library to interact with "S3":http://www.amazon.com/S3-AWS-home-page-Money/b/ref=sc_fe_l_2?ie=UTF8&node=16427261&no=3435361&me=A36L942TSJ2AJA (and other services) through the command-line.  This library is very similar to Amazon's own ec2-* scripts, except this library is written in "Ruby":http://ruby-lang.org/.
+Today sees a new release of "Cliaws":http://github.com/francois/cliaws/wikis.  This is a simple library to interact with "S3":http://aws.amazon.com/s3/ (and other services) through the command-line.  This library is very similar to Amazon's own ec2-* scripts, except this library is written in "Ruby":http://ruby-lang.org/.
 
 Interacting with S3 should be no harder than:
 
