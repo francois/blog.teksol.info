@@ -23,6 +23,45 @@ task :build_tags_indexes do
     end
   end
 
+  File.open(File.dirname(__FILE__) + "/content/tags.txt", "w") do |io|
+    puts "Building tags index"
+    io.puts <<EOF
+---
+title:      "Tags Index"
+created_at: #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
+blog_post:  false
+layout:     default
+filter:
+  - erb
+  - textile
+---
+EOF
+
+    tags.sort_by {|k, v| v.length}.reverse.each do |tag, pages|
+      latest = pages.sort_by(&:created_at).last
+      io.puts <<EOF
+<h2>#{tag.humanize} <span class="count">#{pages.length} articles</span></h2>
+<% @pages.find(:all) {|page| page.id == #{latest.id}}.each do |page| -%>
+<div class="post">
+  <div class="header">
+    <h3><%= link_to_page(page.title) %></h3>
+    <div class="date"><%= page.created_at[0, 10]%></div>
+  </div>
+  <div class="content">
+    <p>
+      <%= render(page) %>
+    </p>
+  </div>
+  <div class="footer">
+    <!-- Disqus Comments go here -->
+  </div>
+</div>
+<% end -%>
+<p><a href="<%= absolute_url("/tags/#{tag}.html") %>">See all #{pages.length} articles in #{tag}</a></p>
+EOF
+    end
+  end
+
   FileUtils.mkdir_p(File.dirname(__FILE__) + "/content/tags")
   tags.each_pair do |tag, pages|
     puts "Building #{tag} (#{pages.length} articles)"
