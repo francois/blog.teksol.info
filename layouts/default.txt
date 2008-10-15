@@ -35,7 +35,18 @@ filter:
       <!--PAGES END-->
       <div id="primarycontent">
         <!-- primary content start -->
+<% if @page.blog_post then -%>
+        <div class="header">
+          <h3><%= link_to_page(@page.title) %></h3>
+          <div class="date"><%= @page.created_at[0, 10]%></div>
+        </div>
+<% end -%>
         <%= @content %>
+<% if @page.blog_post then -%>
+        <div class="comments">
+          <%= comments_form(@page) %>
+        </div>
+<% end -%>
         <!-- primary content end -->
       </div>
       <div id="secondarycontent">
@@ -109,5 +120,17 @@ filter:
   _uacct = "UA-106198-1";
   urchinTracker();
   </script>
+  <script type="text/javascript">//<![CDATA[
+    (function() {
+      var links = document.getElementsByTagName('a');
+      var query = '?';
+      for(var i = 0; i < links.length; i++) {
+          if(links[i].href.indexOf('#disqus_thread') >= 0) {
+            query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+          }
+        }
+        document.write('<script type="text/javascript" src="http://disqus.com/forums/asingleprogrammersblog/get_num_replies.js' + query + '"></' + 'script>');
+      })();
+    //]]></script>
 </body>
 </html>

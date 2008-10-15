@@ -15,7 +15,7 @@ filter:
       </p>
     </div>
     <div class="footer">
-      <!-- Disqus Comments go here -->
+      <%= comments_count(page) %>
     </div>
   </div>
 <% end %>
