@@ -66,7 +66,7 @@ filter:
         <div class="content">
           <ul>
             <li><a href="<%= absolute_url("pages/bio.html") %>">Author Biography</a></li>
-            <li><a href="<%= absolute_url("pages/privacy") %>">Privacy Policy</a></li>
+            <li><a href="<%= absolute_url("pages/privacy.html") %>">Privacy Policy</a></li>
             <li><script type="text/javascript" src="http://embed.technorati.com/embed/m24hq7g983.js"></script></li>
             <li><a href="http://chineseprogrammer.blogspot.com/"> About Chinese software programmer &amp; Developer</a></li>
           </ul>
