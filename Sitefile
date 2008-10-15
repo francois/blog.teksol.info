@@ -23,7 +23,7 @@ task :build_tags_indexes do
     end
   end
 
-  File.open(File.dirname(__FILE__) + "/content/tags.txt", "w") do |io|
+  File.open(File.dirname(__FILE__) + "/content/tags/index.txt", "w") do |io|
     puts "Building tags index"
     io.puts <<EOF
 ---
