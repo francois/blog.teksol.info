@@ -25,6 +25,7 @@ task :build_tags_indexes do
 
   FileUtils.mkdir_p(File.dirname(__FILE__) + "/content/tags")
   tags.each_pair do |tag, pages|
+    puts "Building #{tag} (#{pages.length} articles)"
     filename = File.dirname(__FILE__) + "/content/tags/#{tag}.txt"
     File.open(filename, "w") do |io|
       io.puts <<EOF
