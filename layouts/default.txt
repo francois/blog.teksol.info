@@ -7,7 +7,7 @@ filter:
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <title><%=h @page.title %> &mdash; A Single Programmer's Blog</title>
+  <title><%= @page.title.nil? ? "" : h(@page.title) + " &mdash; " %>A Single Programmer's Blog</title>
   <link rel="stylesheet" type="text/css" href="<%= absolute_url("stylesheets/default.css") %>"/>
   <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
   <script type="text/javascript" src="<%= absolute_url("javascripts/jquery.min.js") %>"></script>

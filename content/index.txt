@@ -1,5 +1,4 @@
 ---
-title: A Single Programmer's Blog
 filter:
   - erb
 ---
