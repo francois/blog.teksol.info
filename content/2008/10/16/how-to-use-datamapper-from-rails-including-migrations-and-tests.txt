@@ -1,0 +1,212 @@
+--- 
+title:      How to Use DataMapper From Rails, Including Migrations and Tests
+created_at: 2008-10-16 21:31:58
+blog_post:  true
+id:         20081016213158
+tags:
+  - datamapper
+  - rails
+filter:
+  - erb
+  - textile
+--- 
+I was bored this evening and wanted to do something at least semi interesting.  I settled on integrating "DataMapper":http://datamapper.org/ with "Rails":http://www.rubyonrails.org/.  Seemed like a nice enough thing to do.  Searching for "datamapper on rails":http://www.google.com/search?q=datamapper+on+rails on Google gave me a link to "DataMapper 0.9 avec Rails":http://blog.boldr.fr/posts/datamapper-0-9-avec-rails ("Google translation":http://translate.google.ca/translate?u=http%3A%2F%2Fblog.boldr.fr%2Fposts%2Fdatamapper-0-9-avec-rails&sl=fr&tl=en&hl=fr&ie=UTF-8).  Nicolas' article was very interesting, but it's focus is just on the basics.  I decided to tackle migrations and testing.
+
+h2. Unit testing DataMapper models from within Rails
+
+Let's start by generating a blank Rails application:
+
+<% code(:lang => :shell) do %>$ rails dm_on_rails
+<% end %>
+
+* GitHub commit: "Initial version":http://github.com/francois/dm_on_rails/commit/28edc32c9dac8e34ecc93659fa3da63892315e90
+
+Then, we'll remove as much dependency on "ActiveRecord":http://api.rubyonrails.org/classes/ActiveRecord/Base.html as we can.  From <tt>config/environment.rb</tt>, uncomment the <code>config.frameworks</code> line and edit it to the following:
+
+<% code("config/environment.rb") do %># Skip frameworks you're not going to use. To use Rails without a database
+# you must remove the Active Record framework.
+config.frameworks -= [ :active_record ]
+<% end %>
+
+* GitHub commit: "Don't load ActiveRecord - we aren't going to use it.":http://github.com/francois/dm_on_rails/commit/1137da888d64fa0714821599f71332ab8bdfb1fc
+
+Rails 2.1 installs some new defaults in <tt>config/initializers/new_rails_defaults.rb</tt>.  Remove the ones that reference ActiveRecord.
+
+* GitHub commit: "Remove new rails defaults that talk about ActiveRecord.":http://github.com/francois/dm_on_rails/commit/2a07b7baf965a6fc2c45a3a3f8328bf7f70c6000
+
+Then we need to load the DataMapper gem.  Do it by editing <tt>config/environment.rb</tt> and loading gems:
+
+<% code("config/environment.rb") do %># I use SQLite3 here, but if you need/want MySQL, replace sqlite3 with mysql
+config.gem "do_sqlite3", :version => "0.9.6"
+config.gem "dm-core", :version => "0.9.6"
+<% end %>
+
+* GitHub commit: "Reference the DataMapper gems we need":http://github.com/francois/dm_on_rails/commit/8ae469192a6f376a662667085c47da6bf7462756
+
+Make sure your gems are up to date by running <tt>rake gems:install</tt>.  I had problems with older versions of dm-core polluting my system.  You might want to remove those if you get dependency issues.
+
+Then, we need to configure <tt>config/database.yml</tt>.  Completely replace the data in there with this:
+
+<% code("config/database.yml", :lang => :yaml) do %>development: &defaults
+  :adapter: sqlite3
+  :database: db/development.sqlite3
+
+test:
+  <<: *defaults
+  :database: db/test.sqlite3
+
+production:
+  <<: *defaults
+  :database: db/production.sqlite3
+<% end %>
+
+Then, we need to load this YAML file to configure DataMapper.  Create <tt>config/initializers/datamapper.rb</tt>:
+
+<% code("config/initializers/datamapper.rb") do %>require "dm-core"
+hash = YAML.load(File.new(Rails.root + "/config/database.yml"))
+DataMapper.setup(:default, hash[Rails.env])
+<% end %>
+
+* GitHub commit: "Configured DataMapper to work with SQLite3":http://github.com/francois/dm_on_rails/commit/2005ba9d541cf10325fc8673781dee6f75b06219
+
+Next, let's generate a model to play with.
+
+<% code(:lang => :shell) do %>$ script/generate model article title:string body:text
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/article.rb
+      create  test/unit/article_test.rb
+      create  test/fixtures/articles.yml
+uninitialized constant Rails::Generator::GeneratedAttribute::ActiveRecord
+<% end %>
+
+Seems we can't use <tt>script/generate model</tt>.  But the the important files have been created: the fixtures, test and model.
+
+Running rake test:recent gives us another error:
+
+<% code(:lang => :shell) do %>$ rake test:recent
+(in /Users/francois/Documents/work/dm_on_rails)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb" "test/unit/article_test.rb" 
+/Library/Ruby/Gems/1.8/gems/activesupport-2.1.0/lib/active_support/dependencies.rb:414:in `to_constant_name': Anonymous modules have no name to be referenced by (ArgumentError)
+	from /Library/Ruby/Gems/1.8/gems/activesupport-2.1.0/lib/active_support/dependencies.rb:226:in `qualified_name_for'
+	from /Library/Ruby/Gems/1.8/gems/activesupport-2.1.0/lib/active_support/dependencies.rb:491:in `const_missing'
+	from /Library/Ruby/Gems/1.8/gems/activerecord-2.1.0/lib/active_record/fixtures.rb:869:in `require_fixture_classes'
+	from /Library/Ruby/Gems/1.8/gems/activerecord-2.1.0/lib/active_record/fixtures.rb:867:in `each'
+	from /Library/Ruby/Gems/1.8/gems/activerecord-2.1.0/lib/active_record/fixtures.rb:867:in `require_fixture_classes'
+	from /Library/Ruby/Gems/1.8/gems/activerecord-2.1.0/lib/active_record/fixtures.rb:850:in `fixtures'
+	from ./test/test_helper.rb:35
+	from ./test/unit/article_test.rb:1:in `require'
+	from ./test/unit/article_test.rb:1
+	from /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb:5:in `load'
+	from /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb:5
+	from /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb:5:in `each'
+	from /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb:5
+rake aborted!
+Command failed with status (1): [/System/Library/Frameworks/Ruby.framework/...]
+
+(See full trace by running task with --trace)
+<% end %>
+
+This is caused by the default <code>fixtures :all</code> line in <tt>test/test_helper.rb</tt>.  In fact, all the fixtures code is highly dependent on ActiveRecord.  So, we won't use Rails fixtures with DataMapper.  Comment out the <code>fixtures :all</code> line, as well as the lines that specify transactional fixtures options.
+
+* GitHub commit: "Copy the test_help.rb code in test/test_helper":http://github.com/francois/dm_on_rails/commit/f3d233d4c69a2f35648096d35e48f54b5271896f
+
+Next up, the database isn't created.  Ooops!  Let's use a nice DataMapper feature, auto migrations.  Append to the end of <tt>test/test_helper.rb</tt>:
+
+<% code("test/test_helper.rb") do %>Dir[File.join(Rails.root, "app", "models", "*")].each {|f| require f}
+DataMapper.auto_migrate!
+<% end %>
+
+* GitHub commit: "Running auto migrations on test start":http://github.com/francois/dm_on_rails/commit/63a012c50689c685824ed9a040f0f75e6453acfc
+
+We begin by loading all models, because at the end of <code>test/test_helper.rb</code>, no model files have been loaded yet.  So we have to define the models in memory before DataMapper can auto migrate them.
+
+Edit <tt>test/unit/article_test.rb</tt> and put the following:
+
+<% code("test/unit/article_test.rb") do %>class ArticleTest < ActiveSupport::TestCase
+  def test_create
+    article = Article.create("First Post", :body => "This is my first-ever post", :published_at => Time.now.utc)
+    assert !article.new_record?
+  end
+end
+<% end %>
+
+And put real code in <tt>app/models/article.rb</tt>:
+
+<% code("app/models/article.rb") do %>class Article
+  include DataMapper::Resource
+
+  property :id,           Integer, :serial => true
+  property :title,        String
+  property :body,         Text
+  property :published_at, DateTime
+end
+<% end %>
+
+* GitHub commit: "Added green test for creating an Article":http://github.com/francois/dm_on_rails/commit/1ff281e82c8bd234441bb36e3c5d2a00031ded3c
+
+And with that, we get a fully functional DataMapper integration!
+
+<% code(:lang => :shell) do %>$ rake test:units
+(in /Users/francois/Documents/work/dm_on_rails)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb" "test/unit/article_test.rb" 
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader
+Started
+.
+Finished in 0.005368 seconds.
+
+1 tests, 0 assertions, 0 failures, 0 errors
+<% end %>
+
+h2. Running DataMapper migrations from Rails
+
+What about migrations?  Well, now we need to enter the world of dm-migrations.  Back in <tt>config/environment.rb</tt>, depend on a new gem:
+
+<% code("config/environment.rb") do %>config.gem "dm-migrations", :version => "0.9.6"
+<% end %>
+
+* GitHub commit: "Depend on dm-migrations":http://github.com/francois/dm_on_rails/commit/a8b76d82ade7b7978e739a44953d629aa1057eb5
+
+Then, create the migration file itself (remember!  no <tt>script/generate</tt> migration for you):
+
+<% code("db/migrate/articles.rb") do %>migration 1, :create_articles do
+  up do
+    create_table :articles do
+      column :id, Integer, :serial => true, :nullable? => false
+      column :title, String
+      column :body, "TEXT"
+    end
+  end
+
+  down do
+    drop_table :articles
+  end
+end
+<% end %>
+
+Finally, we want a Rake task which will run the migrations.  Since the <tt>db:migrate</tt> namespace is already used, we'll create a <tt>dm:migrate</tt> namespace instead.  Create <code>lib/tasks/migrations.rake</code>:
+
+<% code("lib/tasks/migrations.rake") do %>namespace :dm do
+  task :migrate => :environment do
+    gem "dm-migrations", "=0.9.6"
+    require "migration_runner"
+    Dir[File.join(Rails.root, "db", "migrate", "*")].each {|f| require f}
+    migrate_up!
+  end
+end
+<% end %>
+
+* GitHub commit: "Added migrations support and an initial migration":http://github.com/francois/dm_on_rails/commit/5e685c506e87378450ed34e6e54d6a8b31224f82
+
+With all that support in place, it's time to run the migrations:
+
+<% code(:lang => :shell) do %>$ rake dm:migrate
+(in /Users/francois/Documents/work/dm_on_rails)
+ == Performing Up Migration #1: create_articles
+   CREATE TABLE "articles" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "title" VARCHAR(50), "body" TEXT)
+   -> 0.0005s
+ -> 0.0010s
+<% end %>
+
+If you wish to see the code in action, you may checkout the GitHub repository "dm_on_rails":http://github.com/francois/dm_on_rails.  Each commit corresponds to a step in this article.
