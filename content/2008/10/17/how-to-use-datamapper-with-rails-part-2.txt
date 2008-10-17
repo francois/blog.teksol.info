@@ -1,0 +1,83 @@
+--- 
+title:      "How to Use DataMapper With Rails: Part 2"
+created_at: 2008-10-17 08:35:25
+blog_post:  true
+id:         20081017083525
+tags: 
+  - datamapper
+  - rails
+filter:
+  - erb
+  - textile
+--- 
+In "Part I":/2008/10/16/how-to-use-datamapper-from-rails-including-migrations-and-tests, I showed how to configure "Rails":http://rubyonrails.org/ to use "DataMapper":http://datamapper.org/ instead of "ActiveRecord":http://api.rubyonrails.org/classes/ActiveRecord/Base.html.  Well, after some thought, I realized we couldn't really test anything.  Here's the proof:
+
+<% code(:title => "test/unit/article_test.rb") do %>class ArticleTest < ActiveSupport::TestCase
+  def test_database_is_empty
+    assert Article.all.empty?
+  end
+end
+<% end %>
+
+Running the tests results in a failure:
+
+<% code(:lang => :shell) do %>$ rake test:units
+(in /Users/francois/Documents/work/dm_on_rails)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb" "test/unit/article_test.rb" 
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader
+Started
+.F
+Finished in 0.049976 seconds.
+
+  1) Failure:
+test_database_is_empty(ArticleTest)
+    [./test/unit/article_test.rb:10:in `test_db_empty_on_start'
+     /Library/Ruby/Gems/1.8/gems/activesupport-2.1.0/lib/active_support/testing/setup_and_teardown.rb:67:in `__send__'
+     /Library/Ruby/Gems/1.8/gems/activesupport-2.1.0/lib/active_support/testing/setup_and_teardown.rb:67:in `run']:
+<false> is not true.
+
+2 tests, 2 assertions, 1 failures, 0 errors
+rake aborted!
+Command failed with status (1): [/System/Library/Frameworks/Ruby.framework/...]
+
+(See full trace by running task with --trace)
+<% end %>
+
+Time to open the wonderful world of transactions!  At the time of this writing, DataMapper is at 0.9.6.  There is a comment in <tt>lib/dm-core/transaction.rb</tt> saying <q cite="http://github.com/sam/dm-core/tree/master/lib/dm-core/transaction.rb#L1">TODO: move to dm-more/dm-transactions</q>.  If the code below doesn't work, add a new dependency on <tt>dm-transaction</tt>.
+
+So, let's begin by adding new <code>setup</code> / <code>teardown</code> hooks to <code>Test::Unit::TestCase</code>:
+
+<% code("test/test_helper.rb") do %>class Test::Unit::TestCase
+  setup do
+    @__transaction = DataMapper::Transaction.new(DataMapper.repository(:default))
+    @__transaction.begin
+
+    # FIXME: Should I really be calling #push_transaction like that, or is there a better way?
+    DataMapper.repository(:default).adapter.push_transaction(@__transaction)
+  end
+
+  teardown do
+    if @__transaction
+      DataMapper.repository(:default).adapter.pop_transaction
+      @__transaction.rollback
+      @__transaction = nil
+    end
+  end
+end
+<% end %>
+
+* GitHub commit:  "Handle transactions during testing to allow each test to be independent of the other ones":http://github.com/francois/dm_on_rails/commit/97a7f253ff09aa18bc95ad549dccac15ae27e636
+
+With that code in place, we can run the tests again and see the results of our hard work:
+
+<% code(:lang => :shell) do %>$ rake test:units
+(in /Users/francois/Documents/work/dm_on_rails)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader.rb" "test/unit/article_test.rb" 
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.2/lib/rake/rake_test_loader
+Started
+..
+Finished in 0.009485 seconds.
+
+2 tests, 2 assertions, 0 failures, 0 errors
+<% end %>
+

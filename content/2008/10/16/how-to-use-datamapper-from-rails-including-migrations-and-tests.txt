@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+*UPDATE 2008/10/17*: See "Part 2":/2008/10/17/how-to-use-datamapper-with-rails-part-2 for transation support, including the ability to run multiple tests (which the code below fails to do because of missing transaction support).
+
 I was bored this evening and wanted to do something at least semi interesting.  I settled on integrating "DataMapper":http://datamapper.org/ with "Rails":http://www.rubyonrails.org/.  Seemed like a nice enough thing to do.  Searching for "datamapper on rails":http://www.google.com/search?q=datamapper+on+rails on Google gave me a link to "DataMapper 0.9 avec Rails":http://blog.boldr.fr/posts/datamapper-0-9-avec-rails ("Google translation":http://translate.google.ca/translate?u=http%3A%2F%2Fblog.boldr.fr%2Fposts%2Fdatamapper-0-9-avec-rails&sl=fr&tl=en&hl=fr&ie=UTF-8).  Nicolas' article was very interesting, but it's focus is just on the basics.  I decided to tackle migrations and testing.
 
 h2. Unit testing DataMapper models from within Rails
