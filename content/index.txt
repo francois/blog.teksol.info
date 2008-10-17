@@ -1,4 +1,5 @@
 ---
+dirty: true
 filter:
   - erb
 ---
