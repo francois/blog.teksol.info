@@ -31,6 +31,12 @@ filter:    erb
     <id>tag:<%= @page.site %>,<%= created_at.strftime("%Y-%m-%d") %>:<%= article.id || created_at.to_i %></id>
     <updated><%= created_at.xmlschema %></updated>
     <content type="html"><%= h(render(article)) %></content>
+    <% (article.tags || []).each do |tag| %>
+    <category>
+      <term><%=h tag %></term>
+      <label><%= h tag.humanize %></term>
+    </category>
+    <% end -%>
   </entry>
 <% end -%>
 </feed>
