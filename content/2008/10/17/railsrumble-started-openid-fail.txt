@@ -1,0 +1,20 @@
+--- 
+title:      "RailsRumble Started: OpenID FAIL"
+created_at: 2008-10-17 23:27:07
+id: 20081017232707
+tags: 
+  - railsrumble-2008
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Well, the competition is started, but I can't access my account.  I use "Technorati":http://technorati.com/ as my "OpenID":http://openid.net/ provider, but Technorati won't let me grant "RailsRumble":http://railsrumble.com/ permission to read my profile.
+
+<p style="background:#999;padding:2px;border:1px solid black;text-align:center;width:100%"><img src="<%= same_folder_url("technorati-openid-failed-assoc.png") %>" width="533" height="160" alt="Error: You do not have permission to authorize this url. Please sign in to the appropriate account."/></p>
+
+Yee ha!  The wonders of OpenID!  But the saddest fact is that I *did* authorized RailsRumble at Technorati at least once, since I could sign in and register.
+
+Who said OpenID solved all problems?  If I had an account at RailsRumble, this wouldn't be a problem...
+
+Anyway, that won't prevent me from kickin' asses!
