@@ -1,0 +1,16 @@
+--- 
+title:      "Team GiraffeSoft Built 28 Story Points in a Day"
+created_at: 2008-10-18 19:52:46
+id:         20081018195246
+tags: 
+  - railsrumble
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+We used "Pivotal Tracker":http://pivotaltracker.com/ to track our stories to build.  Initially, I thought we'd do maybe 15 points in a day.  Looks like I was really, really, wrong:
+
+<p style="text-align:center"><img src="<%= same_folder_url("28-points-in-a-day.png") %>" alt="28 points in a day, according to Pivotal Tracker"/></p>
+
+We delivered 28 story points in a single day.  Team GiraffeSoft really rocks!
