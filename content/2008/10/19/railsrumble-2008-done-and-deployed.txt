@@ -20,7 +20,9 @@ The concept behind "What Does this Error Mean?":http://whatdoesthiserrormean.com
 
 To help us poor developers, "Team GiraffeSoft":http://giraffesoft.com/ even took the time to create two plugins:  "What Does this Error Mean? Rails Edition":http://github.com/giraffesoft/what_does_this_error_mean-rails and "What Does this Error Mean? Merb Edition":http://github.com/giraffesoft/what_does_this_error_mean-merb (both plugins have only been tested on the latest released branch).  Install the plugins, and suddenly your development error page becomes a direct link to "What Does this Error Mean?":http://whatdoesthiserrormean.com/.
 
-To top it all off, "James":http://jamesgolick.com/  made a screencast for your viewing pleasure:  "wdtem-screencast.mov":http://giraffecasts.s3.amazon.com/wdtem-screencast.mov (QuickTime MP4, 59 Mb).
+To top it all off, "James":http://jamesgolick.com/  made a screencast for your viewing pleasure:  "wdtem_screencast.mov":http://s3.amazonaws.com/giraffecasts/wdtem_screencast.mov (QuickTime MP4, 75 Mb, 3 minutes).
+
+If you like our idea, but most of all it's implementation, "vote for us":http://www.railsrumble.com/teams/team-giraffesoft.  We will be very thankful.
 
 h2. Things that worked
 
