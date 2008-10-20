@@ -17,4 +17,4 @@ During the "RailsRumble":http://railsrumble.com/, we really had to guard against
 
 While pairing with "Daniel":http://danielharan.com/, it happened to us a couple of times when he or I would say "What does our story say already?  Oh, let's add a story for later".  That was really the essence of the competition.  Delay *anything* (features, infrastructure, what have you) that could be delayed.
 
-We're really excited about "What Does this Error Mean?":http://whatdoesthiserrormean.com/ and the way it panned out.  Happy "voting":http://railsrumble.com/team/team-giraffesoft !
+We're really excited about "What Does this Error Mean?":http://whatdoesthiserrormean.com/ and the way it panned out.  Happy "voting":http://railsrumble.com/teams/team-giraffesoft !
