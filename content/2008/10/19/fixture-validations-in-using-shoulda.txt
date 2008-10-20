@@ -10,7 +10,7 @@ filter:
   - erb
   - textile
 --- 
-I was working on my family budget application and wanted to validate existing fixtures.  I wrote the following:
+I was working on my "family budget":http://github.com/francois/family_budget application and wanted to validate existing fixtures.  I wrote the following:
 
 <% code("test/shoulda_macros/validation_macros.rb") do %>module ValidationMacros
   def self.included(base)
@@ -36,7 +36,8 @@ class AccountTest < Test::Unit::TestCase
 end
 
 class StrangeNameTest < Test::Unit::TestCase
-  # Pass the ActiveRecord (or anything that respond_to?(:valid?) and respond_to?(:all)) class to validate against
+  # Pass the ActiveRecord (or anything that respond_to?(:valid?)
+  # and respond_to?(:all)) class to validate against.
   should_have_valid_fixtures Account
 end
 <% end %>
