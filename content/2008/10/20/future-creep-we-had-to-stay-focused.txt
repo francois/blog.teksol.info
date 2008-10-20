@@ -1,0 +1,20 @@
+--- 
+title:      "Future creep?  We simply *had* to Stay Focused"
+created_at: 2008-10-20 12:24:39
+id:         20081020122439
+tags: 
+  - railsrumble
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+During the "RailsRumble":http://railsrumble.com/, we really had to guard against future creep.  Jamis summarized it well in "Beware of future creep":http://www.37signals.com/svn/posts/1324-beware-of-future-creep
+
+<blockquote cite="http://www.37signals.com/svn/posts/1324-beware-of-future-creep"><p>First, never implement more than you need to. That sounds harsh, in a grasshopper-and-the-ant kind of way, except it really isn’t. It isn’t a mandate to slack off, it’s a command to do what you know. Implement the feature you’re working on, not the feature you hope will land someday. Keep it simple, keep it minimal, and keep it _real_.</p>
+<p style="text-align:right">Jamis in "Beware of future creep":http://www.37signals.com/svn/posts/1324-beware-of-future-creep</p>
+</blockquote>
+
+While pairing with "Daniel":http://danielharan.com/, it happened to us a couple of times when he or I would say "What does our story say already?  Oh, let's add a story for later".  That was really the essence of the competition.  Delay *anything* (features, infrastructure, what have you) that could be delayed.
+
+We're really excited about "What Does this Error Mean?":http://whatdoesthiserrormean.com/ and the way it panned out.  Happy "voting":http://railsrumble.com/team/team-giraffesoft !
