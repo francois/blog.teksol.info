@@ -19,14 +19,17 @@ Interacting with S3 should be no harder than:
 <% end -%>
 
 Put many files at once:
+
 <% code(:lang => "bash") do -%>$ clis3 put my-local-file0 my-local-file1 my-bucket/my-s3-directory/
 <% end -%>
 
 Put an environment variable:
+
 <% code(:lang => "bash") do -%>$ clis3 put --data $MY_DATA my-bucket/my-env-value
 <% end -%>
 
 Put stdin too!
+
 <% code(:lang => "bash") do -%>$ tar czfv /var/cache/mylvmbackup/backup | clis3 put - my-bucket/my-backup/backup-20080825-000000.tar.gz
 <% end -%>
 
