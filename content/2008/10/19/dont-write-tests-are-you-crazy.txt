@@ -1,0 +1,28 @@
+--- 
+title:      "Don't Write Tests?  Are You Crazy?"
+created_at: 2008-10-19 23:46:37
+id:         20081019234637
+tags: 
+  - railsrumble
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Reading up on RailsRumble, I found <a href="http://blog.rayvinly.com/">Raymond Law</a>'s "RailsRumble 2008":http://blog.rayvinly.com/articles/2008/10/19/railsrumble-2008 post-mortem.
+
+Raymond writes:
+
+<blockquote cite="http://blog.rayvinly.com/articles/2008/10/19/railsrumble-2008"><p>Forget about writing tests – Look, I am in support of agile and test-driven development, with one exception. That is, you are not participating in RailsRumble. There’s just no time for it. If you are a good enough programmer, you can build a small application with no tests. If you can’t, I don’t want to work with you. Writing tests for a new application starting from scratch in just 48 hours is simple not feasible. No bargain!</p></blockquote>
+<p style="text-align:right">Raymond Law in <a href="http://blog.rayvinly.com/articles/2008/10/19/railsrumble-2008">RailsRumble 2008</a></p>
+
+Sorry Raymond, but that is plain *crazy*.  We took the time to write tests, and it gave us confidence.  We even ended up with a 1:1.9 ratio of code to test.  I do believe in agile (like you do), and I was really happy for those tests.  Especially as we got more and more tired, the tests were a safety vest that kept us afloat while time was running out.
+
+<blockquote cite="http://blog.rayvinly.com/articles/2008/10/19/railsrumble-2008"><p>No ticketing system like Unfuddle and Lighthouse – One team member had tried to use Unfuddle to create tickets to get ourselves more organized. While it was a sincere attempt, it simply didn’t work. There’s no time to accept a ticket, create a new ticket, ... We pretty much abandoned it soon after we started.</p></blockquote>
+<p style="text-align:right">Raymond Law in <a href="http://blog.rayvinly.com/articles/2008/10/19/railsrumble-2008">RailsRumble 2008</a></p>
+
+We used "Pivotal Tracker":http://pivotaltracker.com/ to organize our stories.  As Raymond said, he didn't have a lot of time to plan ahead of the competition.  We got together 10 days prior to the competition and we used Pivotal Tracker to remember a lot of things for us.  Accepting a story was as simple as clicking _Start_.  I think having the stories spelled out gave us another safety vest by keeping us focused and on track.
+
+Before the rumble, I didn't know about Pivotal Tracker, but now that I do, I'll be sure to use it more and more.  It was a very low ceremony way to remember things.  Even while coding the tests for a story, if we uncovered a missing requirement, we just Apple-Tab'd to Pivotal Tracker, added the story, Apple-Tab'd back and went on.
+
+Hope you had a great weekend!
