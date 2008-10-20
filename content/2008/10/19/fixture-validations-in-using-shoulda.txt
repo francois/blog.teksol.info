@@ -1,0 +1,44 @@
+--- 
+title:      "Fixture Validations in Using Shoulda"
+created_at: 2008-10-19 22:08:47
+id:         20081019220847
+tags: 
+  - shoulda
+  - unit-testing
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I was working on my family budget application and wanted to validate existing fixtures.  I wrote the following:
+
+<% code("test/shoulda_macros/validation_macros.rb") do %>module ValidationMacros
+  def self.included(base)
+    base.send :extend, ClassMethods
+  end
+
+  module ClassMethods
+    def should_have_valid_fixtures(klass=self)
+      should "have all valid fixtures" do
+        klass.name.sub("Test", "").constantize.all.each do |object|
+          assert object.valid?, "Fixture #{object.inspect} is invalid"
+        end
+      end
+    end
+  end
+end
+
+Test::Unit::TestCase.send :include, ValidationMacros
+
+# Usage Example
+class AccountTest < Test::Unit::TestCase
+  should_have_valid_fixtures
+end
+
+class StrangeNameTest < Test::Unit::TestCase
+  # Pass the ActiveRecord (or anything that respond_to?(:valid?) and respond_to?(:all)) class to validate against
+  should_have_valid_fixtures Account
+end
+<% end %>
+
+This might be interesting if you use fixtures.
