@@ -10,6 +10,13 @@ filter:
   <title><%= @page.title.nil? ? "" : h(@page.title) + " &mdash; " %>A Single Programmer's Blog</title>
   <link rel="stylesheet" type="text/css" href="<%= absolute_url("stylesheets/default.css") %>"/>
   <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml"/>
+<% if @page.url == "/" then -%>
+  <link rel="openid.server" href="http://www.myopenid.com/server" />
+  <link rel="openid.delegate" href="http://francois.beausoleil.myopenid.com/" />
+  <link rel="openid2.local_id" href="http://francois.beausoleil.myopenid.com/" />
+  <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+  <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=francois.beausoleil.myopenid.com" />
+<% end -%>
   <script type="text/javascript" src="<%= absolute_url("javascripts/jquery.min.js") %>"></script>
   <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
 </head>
@@ -34,12 +41,12 @@ filter:
       <!--PAGES END-->
       <div id="primarycontent">
         <!-- primary content start -->
-<% if @page.blog_post then -%>
         <div class="header">
           <h3><%= link_to_page(@page.title) %></h3>
+<% if @page.blog_post then -%>
           <div class="date"><%= @page.created_at[0, 10]%></div>
-        </div>
 <% end -%>
+        </div>
         <%= @content %>
 <% if @page.blog_post then -%>
         <div class="comments">
