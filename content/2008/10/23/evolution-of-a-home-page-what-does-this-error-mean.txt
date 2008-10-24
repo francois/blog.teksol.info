@@ -1,0 +1,20 @@
+--- 
+title:      "Evolution of a Home Page: What Does This Error Mean?"
+created_at: 2008-10-23 19:58:19
+id:         20081023195819
+tags: 
+  - railsrumble
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+To celebrate the start of voting for the "RailsRumble 2008":http://railsrumble.com/ competition, I thought I'd make a new video.  Thank god for version control!  This allowed me to go back in time, all the way to the initial checkin, and take a snapshot of each evolution of our design.
+
+It was a very iterative process.  I did a couple of things in the bus from Sherbrooke to Montreal, then James picked up from there.  The ugly green and red is mine, the nice white, orange and greys are his.
+
+I hope you enjoy this show!
+
+<object width="400" height="300">	<param name="allowfullscreen" value="true" />	<param name="allowscriptaccess" value="always" />	<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=2051057&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" />	<embed src="http://vimeo.com/moogaloop.swf?clip_id=2051057&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="400" height="300"></embed></object><br /><a href="http://vimeo.com/2051057?pg=embed&amp;sec=2051057">Evolution of a home page: What Does this Error Mean?</a> from <a href="http://vimeo.com/user784889?pg=embed&amp;sec=2051057">François Beausoleil</a> on <a href="http://vimeo.com?pg=embed&amp;sec=2051057">Vimeo</a>.
+
+If you prefer the high-quality video: "evolution-of-a-home-page--what-does-this-error-mean.mov":http://s3.amazonaws.com/teksol/evolution-of-a-home-page--what-does-this-error-mean.mov (15 Mb, QuickTime 4)
