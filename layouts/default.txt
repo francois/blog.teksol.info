@@ -42,7 +42,9 @@ filter:
       <div id="primarycontent">
         <!-- primary content start -->
         <div class="header">
+<% if @page.blog_post || @page.content_page then -%>
           <h3><%= link_to_page(@page.title) %></h3>
+<% end -%>
 <% if @page.blog_post then -%>
           <div class="date"><%= @page.created_at[0, 10]%></div>
 <% end -%>

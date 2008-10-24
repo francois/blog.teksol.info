@@ -1,7 +1,7 @@
 --- 
 title:      "Author Biography"
 created_at: 2007-10-13 07:10:00
-blog_post:  false
+content_page: true
 id:         200
 filter:
   - erb
