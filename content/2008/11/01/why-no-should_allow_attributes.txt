@@ -1,0 +1,26 @@
+--- 
+title:      "Why no #should_allow_attributes?"
+created_at: 2008-11-01 22:33:19
+id:         20081101223319
+tags: 
+  - unit-tests
+  - shoulda
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Thoughtbot's "Shoulda":http://www.thoughtbot.com/projects/shoulda is a very nice piece of work.  Their "ActiveRecord":http://api.rubyonrails.org/classes/ActiveRecord/Base.html macros are also a god-send:
+
+<% code do %>should_protect_attributes :family_id, :debit_account_id, :credit_account_id, :created_at, :updated_at
+<% end %>
+
+This code will assert that ActiveRecord attributes are somehow protected (either though attr_accessible or attr_protected).  But what about the reverse?  There isn't a macro to do that.  I happened to need it, so I implemented it on my own "fork":http://github.com/francois/shoulda/tree/should_allow_attributes of Shoulda.
+
+This allows us to specify:
+
+<% code do %>should_protect_attributes :family_id, :debit_account_id, :credit_account_id, :created_at, :updated_at
+should_allow_attributes :family, :debit_account, :credit_account, :amount, :posted_on, :description
+<% end %>
+
+NOTE: Example taken from my "family budget":http://github.com/francois/family_budget application.
