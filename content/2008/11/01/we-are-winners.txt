@@ -1,0 +1,18 @@
+--- 
+title:      "We Are Winners!"
+created_at: 2008-11-01 21:50:32
+id:         20081101215032
+tags: 
+  - railsrumble
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+*WOW*  Initially, "What Does this Error Mean?":http://whatdoesthiserrormean.com/ had a pretty strong presence in the top leaderboard.  As the days went on, we slipped further and further down the scale.  We hovered between 10th and 15th on the general leaderboard.
+
+I knew we could sort by different criterias, and I occasionaly looked at the leaderboard by other criterias, but I can't remember at what ranks we were.
+
+In the end, we won *Most Useful*.  That is a very good thing for us.
+
+Again, congratulations to all teams that participated, and I'm hoping to see another repeat for 2009.
