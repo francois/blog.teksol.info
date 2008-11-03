@@ -1,0 +1,56 @@
+--- 
+title:      "FAIL: Can't Migrate Because Pending Migrations.."
+created_at: 2008-11-02 21:06:55
+id:         20081102210655
+tags: 
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+How's that for being helpful?
+
+<% code :lang => :shell do %>$ rake db:migrate --trace
+(in /Users/francois/Documents/work/family_budget)
+** Invoke db:test:prepare (first_time)
+** Invoke environment (first_time)
+** Execute environment
+** Invoke db:abort_if_pending_migrations (first_time)
+** Invoke environment 
+** Execute db:abort_if_pending_migrations
+You have 13 pending migrations:
+     1 CreateFamilies
+     2 CreatePeople
+     3 CreateAccounts
+     4 CreateTransfers
+     5 CreateTransferMembers
+     6 AddFamilyToPeople
+     7 DestroyTransferMember
+     8 AddDebitAccountIdCreditAccountIdAndAmountToTransfers
+     9 CreateBudgets
+    10 AddAdminFlagToPerson
+    11 DefaultBudgetAmountToZeroFromNull
+  20081103020010 CreateTransactions
+  20081103020142 CreateBankAccounts
+Run "rake db:migrate" to update your database then try again.
+<% end %>
+
+Hmm, I'm trying to run migrations, stupid&hellip;
+
+I finally traced the problem (using "git bisect":http://linux.die.net/man/1/git-bisect !) to this:
+
+<% code "lib/tasks/cucumber.rake" do %>$:.unshift(RAILS_ROOT + '/vendor/plugins/cucumber/lib')
+require 'cucumber/rake/task'
+
+namespace :test do
+  desc "Runs the Cucumber features tests (integration tests)"
+  Cucumber::Rake::Task.new(:features) do |t|
+    ENV["RAILS_ENV"] = RAILS_ENV = "test"
+    Rake::Task["db:test:prepare"].invoke
+    Rake::Task["db:fixtures:load"].invoke
+    t.cucumber_opts = "--format pretty"
+  end
+end
+<% end %>
+
+Can you spot the error?  The problem originates with setting RAILS_ENV in this code block.  But isn't the block supposed to be executed later?  When the block is #call'ed?  Very strange.  At the moment, I simply commented out the line, but that's going to bite me in a couple moments when I'm ready to test my features again&hellip;  Oh joy of debugging!
