@@ -3,6 +3,7 @@ title:      "FAIL: Can't Migrate Because Pending Migrations.."
 created_at: 2008-11-02 21:06:55
 id:         20081102210655
 tags: 
+  - funny
 blog_post:  true
 filter:
   - erb
