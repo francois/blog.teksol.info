@@ -1,0 +1,41 @@
+--- 
+title:      "A Simple LinkedList Implementation in Ruby"
+created_at: 2008-11-11 14:40:31
+id:         20081111144031
+tags: 
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Being bored out of my mind on Monday night, and not having anything interesting to watch on TV, I decided I'd try my hand at implementing a linked list in Ruby.  For the impatient:
+
+<% code :lang => "bash" do %>$ sudo gem install linked_list
+<% end %>
+
+Unfortunately, performance is very poor:
+
+<pre>Building a list of 1 million random strings
+Took 4.389 seconds
+Converting to an array
+Took 1.686 seconds
+                      user     system      total        real
+list#push/pop     0.350000   0.000000   0.350000 (  0.364001)
+array#push/pop    0.000000   0.000000   0.000000 (  0.009894)
+                      user     system      total        real
+list#last         0.000000   0.000000   0.000000 (  0.000027)
+array#last        0.000000   0.000000   0.000000 (  0.000012)
+                      user     system      total        real
+list#first        0.010000   0.000000   0.010000 (  0.001188)
+array#first       0.000000   0.000000   0.000000 (  0.000449)
+                      user     system      total        real
+list#reverse      7.540000   0.170000   7.710000 (  7.806306)
+array#reverse     0.010000   0.010000   0.020000 (  0.008443)
+                      user     system      total        real
+list#dup         23.080000   0.380000  23.460000 ( 24.039316)
+array#dup         0.000000   0.000000   0.000000 (  0.000017)
+</pre>
+
+NOTE:  <code>#dup</code> is implemented as <code>self.reverse.reverse</code>, which is pretty inefficient, I know.  Thanks for asking.
+
+I probably have implementation issues, but I expected <code>#push</code> and <code>#pop</code> to be as fast as the Array implementation.  Anyway, if anyone's interested, there's a "GitHub repository":http://github.com/francois/linked_list/tree/master.
