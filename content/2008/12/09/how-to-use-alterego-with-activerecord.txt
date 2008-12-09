@@ -1,0 +1,87 @@
+--- 
+title:      "How to Use AlterEgo With ActiveRecord"
+created_at: 2008-12-09 09:52:17
+id:         20081209095217
+tags: 
+  - active-record
+  - alter-ego
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I stumbled on "AlterEgo":http://alter-ego.rubyforge.org/ last week, after Avdi announced it.  This library implements the "state pattern":http://en.wikipedia.org/wiki/State_pattern for any object, not just ActiveRecord models, which "acts_as_state_machine":http://agilewebdevelopment.com/plugins/acts_as_state_machine (and it's successor, "aasm":http://github.com/rubyist/aasm) do.
+
+But, many people, myself included, want to use AlterEgo in the context of ActiveRecord models.  Fortunately, AlterEgo provides us with all the necessary plumbing to do that very easily.
+
+I will reuse Avdi's traffic light example from the specifications.  Avdi already points us to 90% of the solution in his example:
+
+<% code do %>class TrafficLightWithCustomStorage
+  def state
+    gyr = [
+      @hardware_controller.green,
+      @hardware_controller.yellow,
+      @hardware_controller.red
+    ]
+
+    case gyr
+    when [true, false, false] then :proceed
+    when [false, true, false] then :caution
+    when [false, false, true] then :stop
+    else raise "Invalid state!"
+    end
+  end
+
+  def state=(value)
+    gyr = case value
+          when :proceed  then [true, false, false]
+          when :caution  then [false, true, false]
+          when :stop     then [false, false, true]
+          end
+    @hardware_controller.green  = gyr[0]
+    @hardware_controller.yellow = gyr[1]
+    @hardware_controller.red    = gyr[2]
+  end
+end
+<% end %>
+
+When an object implements #state and #state=, AlterEgo will serialize it's state using these two methods.  Let's hook this to ActiveRecord (note, I changed the code for a quick example, so it's not exactly the same, but very similar):
+
+<% code "app/models/traffic_light.rb" do %>class TrafficLight < ActiveRecord::Base
+  def state
+    case read_attribute(:color)
+    when "green";   :proceed
+    when "yellow";  :caution
+    when "red";     :stop
+    else;           raise "Invalid color: #{read_attribute(:color).inspect}"
+    end
+  end
+
+  def state=(value)
+    color_value = case value
+    when :proceed;  "green"
+    when :caution;  "yellow"
+    when :stop;     "red"
+    else;           raise "Don't know how to convert #{value.inspect} to color value"
+    end
+    write_attribute(:color, color_value)
+  end
+end
+<% end %>
+
+The most important thing you should check is that your database model has a valid state on model instantiation.  Whether you do it using the :default key in your migration or some other way is irrelevant, but the value has to be provided, or the #state method will barf (or implement default processing there?)  In the example app, I opted to use a default value:
+
+<% code "db/migrate/20081209150159_create_traffic_lights.rb" do %>class CreateTrafficLights < ActiveRecord::Migration
+  def self.up
+    create_table :traffic_lights do |t|
+      t.string :color, :default => "red"
+    end
+  end
+
+  def self.down
+    drop_table :traffic_lights
+  end
+end
+<% end %>
+
+You may check the full code in action in the GitHub repository:  "alter_ego_plus_active_record":http://github.com/francois/alter_ego_plus_active_record
