@@ -1,0 +1,120 @@
+--- 
+title:      "MySQL's MEMORY Engine Barely Faster than InnoDB's?"
+created_at: 2008-12-12 08:04:23
+id:         20081212080423
+tags: 
+  - activerecord
+  - unit-testing
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Yesterday, I read <a href="http://cardarella.blogspot.com/2008/12/case-against-mocking-and-stubbing.html">Brian Cardarella</a>'s post entitled <a href="http://cardarella.blogspot.com/">Brian Cardarella</a>'s post entitled <a href="http://cardarella.blogspot.com/2008/12/case-against-mocking-and-stubbing.html">A case against Mocking and Stubbing</a>.  In the article, Brian says:
+
+<blockquote><p>SQLite3 can be an in-memory database. Problem solved, right? Not quite. SQLite3 is pretty limited. Most people are probably using MySQL and rely upon many of the SQL functions that are included.</p> 
+<p> What would be nice (and well beyond my ability) is to have a Gem that simulated the database you use, only it is in-memory. Optimized for small data sets. No need to go through a heavy hashing algorithm. Keep it light. Keep it fast.</p>
+<p class="signature">Brian Cardarella in "A case against Mocking and Stubbing":http://cardarella.blogspot.com/2008/12/case-against-mocking-and-stubbing.html</p>
+</blockquote>
+
+MySQL already has the "MEMORY":http://dev.mysql.com/doc/refman/5.0/en/memory-storage-engine.html storage engine, and I wanted to see if that would help for testing purposes.  Since we're staying in MySQL-land, this should have been a simple matter.
+
+First, the good news.  I had to change only a couple of lines:
+
+<% code :lang => "patch" do %>diff --git a/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb b/vendor/rails/activerecor
+index 1e452ae..c207080 100644
+--- a/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb
++++ b/vendor/rails/activerecord/lib/active_record/connection_adapters/mysql_adapter.rb
+@@ -442,7 +442,13 @@ module ActiveRecord
+       end
+ 
+       def create_table(table_name, options = {}) #:nodoc:
+-        super(table_name, options.reverse_merge(:options => "ENGINE=InnoDB"))
++        engine = case Rails.env
++        when "test"
++          "MEMORY"
++        else
++          "InnoDB"
++        end
++        super(table_name, options.reverse_merge(:options => "ENGINE=#{engine}"))
+       end
+ 
+       def rename_table(table_name, new_name)
+diff --git a/vendor/rails/railties/lib/tasks/databases.rake b/vendor/rails/railties/lib/tasks/databases.rake
+index 5cb27f1..c520d4a 100644
+--- a/vendor/rails/railties/lib/tasks/databases.rake
++++ b/vendor/rails/railties/lib/tasks/databases.rake
+@@ -368,9 +368,9 @@ namespace :db do
+ 
+     desc 'Check for pending migrations and load the test schema'
+     task :prepare => 'db:abort_if_pending_migrations' do
+-      if defined?(ActiveRecord) && !ActiveRecord::Base.configurations.blank?
+-        Rake::Task[{ :sql  => "db:test:clone_structure", :ruby => "db:test:load" }[ActiveRecord::Base.schema_format]].i
+-      end
++      # if defined?(ActiveRecord) && !ActiveRecord::Base.configurations.blank?
++      #   Rake::Task[{ :sql  => "db:test:clone_structure", :ruby => "db:test:load" }[ActiveRecord::Base.schema_format]]
++      # end
+     end
+   end
+ 
+<% end %>
+
+Great, but there's little benefit.  First, a regular run (InnoDB):
+
+<% code :lang => "shell" do %>$ time rake
+(in /Users/francois/Documents/work/fasttest)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb" "test/unit/password_reset_mailer_test.rb" "test/unit/person_test.rb" 
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader
+Started
+............................
+Finished in 0.520087 seconds.
+
+28 tests, 33 assertions, 0 failures, 0 errors
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb" "test/functional/accounts_controller_test.rb" "test/functional/password_resets_controller_test.rb" "test/functional/people_controller_test.rb" "test/functional/sessions_controller_test.rb" 
+[DEPRECATION] should_be_restful is deprecated.  Please see http://thoughtbot.lighthouseapp.com/projects/5807/tickets/78 for more information.
+[DEPRECATION] should_be_restful is deprecated.  Please see http://thoughtbot.lighthouseapp.com/projects/5807/tickets/78 for more information.
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader
+Started
+.....................................................
+Finished in 1.828175 seconds.
+
+53 tests, 72 assertions, 0 failures, 0 errors
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb"  
+
+real	0m10.365s
+user	0m6.582s
+sys	0m1.925s
+<% end %>
+
+Next, a run with the MEMORY engine:
+
+<% code :lang => "shell" do %>$ time rake
+(in /Users/francois/Documents/work/fasttest)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb" "test/unit/password_reset_mailer_test.rb" "test/unit/person_test.rb" 
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader
+Started
+............................
+Finished in 0.602607 seconds.
+
+28 tests, 33 assertions, 0 failures, 0 errors
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb" "test/functional/accounts_controller_test.rb" "test/functional/password_resets_controller_test.rb" "test/functional/people_controller_test.rb" "test/functional/sessions_controller_test.rb" 
+[DEPRECATION] should_be_restful is deprecated.  Please see http://thoughtbot.lighthouseapp.com/projects/5807/tickets/78 for more information.
+[DEPRECATION] should_be_restful is deprecated.  Please see http://thoughtbot.lighthouseapp.com/projects/5807/tickets/78 for more information.
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader
+Started
+.....................................................
+Finished in 1.132142 seconds.
+
+53 tests, 72 assertions, 0 failures, 0 errors
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb"  
+
+real	0m9.111s
+user	0m6.862s
+sys	0m1.870s
+<% end %>
+
+Note that in <code class="filename">test/test_helper.rb</code>, I had to disable transactional fixtures.  This would account for a lot the lost time difference.
+
+If you want to play with this further, the sample application's code is available at "http://github.com/francois/fasttest":http://github.com/francois/fasttest
+
+I would be interested in seeing other people's runs, to know if it's just my machine that runs at essentially the same speed.
