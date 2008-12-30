@@ -32,10 +32,7 @@ filter:    erb
     <updated><%= created_at.xmlschema %></updated>
     <content type="html"><%= h(render(article)) %></content>
     <% (article.tags || []).each do |tag| %>
-    <category>
-      <term><%=h tag %></term>
-      <label><%= h tag.humanize %></term>
-    </category>
+    <category term="<%=h tag %>" label="<%= h tag.humanize %>"/>
     <% end -%>
   </entry>
 <% end -%>
