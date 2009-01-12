@@ -1,1 +1,3 @@
 Options MultiViews
+
+RedirectMatch permanent /feed\.xml$  http://feeds.feedburner.com/teksol
