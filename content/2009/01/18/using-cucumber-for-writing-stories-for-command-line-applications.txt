@@ -1,0 +1,83 @@
+--- 
+title:      "Using Cucumber for Writing Stories for Command-Line Applications"
+created_at: 2009-01-18 13:19:56
+id:         20090118131956
+tags: 
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just started using "Cucumber":http://cukes.info/ to write acceptance tests for a new command-line application I'm writing.  I used the wonderful "newgem":http://newgem.rubyforge.org/ to generate the basics for me.
+
+Then I wrote my first stories:
+
+<% code "features/command_line_client.feature", :lang => "gherkin" do %>Feature: Command Line Client
+  In order to use Nestor
+  A developer
+  Wants an interface to the program
+  So that he can use it
+
+  Scenario: Getting Help
+    When I start nestor with "--help"
+    Then I should see "Usage: nestor [options]"
+
+  Scenario: Getting the version number
+    When I start nestor with "--version"
+    Then I should find "nestor \d+\.\d+\.\d+"
+<% end %>
+
+After writing those, I ran them:
+
+<% code :lang => "bash" do %>~/nestor (master) $ rake features
+(in /Users/francois/nestor)
+...F
+
+
+Failed:
+
+1)
+<"nestor: version unknown\n"> expected to be =~
+</nestor \d+\.\d+\.\d+/>.
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/test/unit/assertions.rb:48:in `assert_block'
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/test/unit/assertions.rb:500:in `_wrap_assertion'
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/test/unit/assertions.rb:46:in `assert_block'
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/test/unit/assertions.rb:229:in `assert_match'
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/test/unit/assertions.rb:495:in `_wrap_assertion'
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/test/unit/assertions.rb:221:in `assert_match'
+./features/step_definitions/assertions.rb:8:in `Then /^I should find "(.*)"$/'
+features/command_line_client.feature:13:in `Then I should find "nestor \d+\.\d+\.\d+"'
+rake aborted!
+Command failed with status (1): [/System/Library/Frameworks/Ruby.framework/...]
+
+(See full trace by running task with --trace)
+<% end %>
+
+Haha!  So, Cucumber caught the fact that newgem didn't set the new gem to return the version number immediately! Interesting.
+
+Anyway, here are my step definitions, for the curious:
+
+<% code "features/support/env.rb" do %>require "test/unit"
+
+World do
+  include Test::Unit::Assertions
+end
+<% end %>
+
+<% code "features/step_definitions/nestor.rb" do %>When /^I start nestor with "(.*)"$/ do |args|
+  %x"#{NESTOR_APP_ROOT}/bin/nestor #{args} > #{NESTOR_LOG_ROOT}/nestor.log 2>&1"
+end
+<% end %>
+
+<% code "features/step_definitions/assertions.rb" do %>Then /^I should see "(.*)"$/ do |data|
+  stdout = File.read(File.join(NESTOR_LOG_ROOT, "nestor.log"))
+  assert_match Regexp.new(Regexp.escape(data)), stdout
+end
+
+Then /^I should find "(.*)"$/ do |regexp|
+  stdout = File.read(File.join(NESTOR_LOG_ROOT, "nestor.log"))
+  assert_match Regexp.new(regexp), stdout
+end
+<% end %>
+
+Notice that I really run the nestor binary to assert against the gem's STDOUT.  Redirecting the output to a log file I can open and search in really makes things easier.  I had a bit of difficulty wrapping my head around this idea (of starting the binary from Cucumber), so I hope that helps other people too.
