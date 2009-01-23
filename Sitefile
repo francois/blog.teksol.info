@@ -101,3 +101,17 @@ EOF
     end
   end
 end
+
+namespace :twitter do
+  task :post do
+    require "rest_client"
+    require "builder"
+    require "tweet"
+    last = Dir["content/2*/**/*"].sort.last
+    page = YAML.load_file(last)
+    url  = "http://blog.teksol.info/" + last.sub(".txt", "")
+
+    response = RestClient.post("http://tinyurl.com/api-create.php", "url" => url)
+    Tweet.create_status "#{page["title"]}: #{response}"
+  end
+end
