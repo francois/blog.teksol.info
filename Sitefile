@@ -115,3 +115,5 @@ namespace :twitter do
     Tweet.create_status "#{page["title"]}: #{response}"
   end
 end
+
+task :deploy_and_twitter => %w(deploy twitter:post)
