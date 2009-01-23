@@ -1,0 +1,74 @@
+--- 
+title:      "Beware of the Habit Creature"
+created_at: 2009-01-23 10:12:03
+id:         20090123101203
+tags: 
+  - testing
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+You know, I write controller tests day in, day out.  I'm used to seeing this:
+
+<% code do %>should "be valid"
+  assert assigns(:user).valid?
+end
+<% end %>
+
+So, when I write a Rake task and I render some data, I need my assigns:
+
+<% code "lib/tasks/ssl.rake" do %>namespace :ssl do
+  task :build => :environment do
+    rm_rf "config/sites/"
+    mkdir "config/sites"
+
+    Dir["config/ssl/*"].each do |path|
+      site = File.basename(path)
+      parts = site.split(".")
+
+      puts "Processing #{site}"
+      assigns = {
+        :wildcard_domain           => parts[0] == "_",
+        :domain_name               => parts[-2..-1].join("."),
+        :ssl_key_file_path         => File.expand_path(File.join(Dir.pwd, path, "#{site}.key")),
+        :ssl_certificate_file_path => File.expand_path(File.join(Dir.pwd, path, "#{site}.crt"))}
+
+      next "Skipping #{site}: #{assigns(:ssl_key_file_path)} does not exist or is unreadable" unless File.file?(assigns(:ssl_key_file_path))
+      next "Skipping #{site}: #{assigns(:ssl_certificate_file_path)} does not exist or is unreadable" unless File.file?(assigns(:ssl_certificate_file_path))
+
+      view = ActionView::Base.new([File.dirname(__FILE__)], assigns)
+
+      File.open(File.join("config", "sites", "#{site}.ssl.conf"), "w") do |site_config|
+        puts "Writing config/sites/#{site}.ssl.conf"
+        site_config.write view.render("ssl.conf.erb")
+      end
+    end
+
+    view = ActionView::Base.new([File.dirname(__FILE__)], {})
+    File.open(File.join("config", "sites", "default.conf"), "w") do |site_config|
+      site_config.write view.render("default.conf.erb")
+    end
+  end
+end
+<% end %>
+
+Can you spot the error on lines 17 and 18?  Go on, I'll wait...
+
+You want some help?  Here's the backtrace:
+
+<% code :lang => "shell" do %>** Invoke ssl:build (first_time)
+** Invoke environment (first_time)
+** Execute environment
+** Execute ssl:build
+rm -rf config/sites/
+mkdir config/sites
+Processing _.xlsuite.com
+rake aborted!
+undefined method `assigns' for #<Object:0x389a0>
+/Users/francois/Documents/work/xlsuite-stable.svn/lib/tasks/ssl.rake:17
+<% end %>
+
+Yes, took me a while too.  I was calling a method named assigns, not using the Hash named assigns.
+
+Habit, when you take hold of me...
