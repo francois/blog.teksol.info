@@ -1,0 +1,51 @@
+--- 
+title:      "Rewriting S-Expressions in Ruby for Zebra"
+created_at: 2009-01-28 12:39:36
+id:         20090128123936
+tags: 
+  - testing
+blog_post:  false
+filter:
+  - erb
+  - textile
+--- 
+Yesterday, I was looking at <a href="http://jamesgolick.net/">James Golick</a>'s "Classy Resources":http://github.com/giraffesoft/classy_resources, and noticed that the tests didn't read as well as they could:
+
+<% code "test/sequel_test.rb" do %>class SequelTest < Test::Unit::TestCase
+  context "on GET to /users with xml" do
+    # ...
+
+    expect { assert_equal 200, @response.status }
+  end
+end
+<% end %>
+
+That's from "classy_resources/test/sequel_test.rb":http://github.com/giraffesoft/classy_resources/blob/7b1a71c218c145120fb0a0b667bd14f98b303286/test/sequel_test.rb
+
+So, I told James I wanted something more like this:
+
+<% code "test/sequel_test.rb" do %>class SequelTest < Test::Unit::TestCase
+  context "on GET to /users with xml" do
+    # ...
+
+    expect { @response.status == 200 }
+  end
+end
+<% end %>
+
+James' response?
+
+<p align="center"><img alt="Francois: If we look at the assertions, the vast majority are 2 parts: expected, actual, or the reverse.  So, take Ruby2Ruby and just #inspect both sides of the expression. James: patches accepted!!" src="<%= same_folder_url("campfire.png") %>"/></p>
+
+And, so I did:  "francois-zebra":http://github.com/francois/zebra/tree/rewrite
+
+<% code "test/expect_test.rb" do %>class ExpectWithSetupTest < Test::Unit::TestCase
+  def setup
+    # Post is a Struct.new
+    @post = Post.new("This thing rocks!", :Francois)
+  end
+
+  expect { ! @post.nil? }
+  expect {   @post.author == :Francois }
+end 
+<% end %>
