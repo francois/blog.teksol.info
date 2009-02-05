@@ -1,0 +1,18 @@
+--- 
+title:      "Another Productivity Tip: Use iTerm and Vim"
+created_at: 2009-02-05 11:29:41
+id:         20090205112941
+tags: 
+  - productivity
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I was pairing with "James Golick":http://jamesgolick.com/ the other day, and he told me he was using "iTerm":http://iterm.sourceforge.net/ in fullscreen mode.  I was pretty excited by that, and I immediately downloaded and installed it.
+
+I was already a "Vim":http://www.vim.org/ user, through the excellent "MacVim":http://code.google.com/p/macvim/, but I started using Vim from the console instead.  My main screen is an "Acer X243w":http://global.acer.com/products/monitor/X_series.htm, and with Vim in full screen, I have more than enough space to do all my coding.  Splitting vertically is now a real pleasure, and I can even have a 4 way split that's not too claustrophobic.
+
+The other benefit of using iTerm instead of the default "Mac OS X":http://www.apple.com/macosx/ Terminal is that iTerm can be used in 256 colors, enabling Vim to do even more syntax highlighting.  That wasn't a problem in MacVim though.
+
+Only caveat?  Scrolling is a bit slow.  Me and James both wonder about this...
