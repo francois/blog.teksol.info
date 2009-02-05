@@ -376,3 +376,5 @@ textarea { width: 100%; }
 #toptags li { display: inline; }
 #toptags li:after { content: ", "; }
 #toptags li.last:after { content: ""; }
+
+blockquote, blockquote p { margin: 1em; }
