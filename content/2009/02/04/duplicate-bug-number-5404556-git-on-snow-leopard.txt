@@ -1,0 +1,25 @@
+--- 
+title:      "Duplicate Bug #5404556: Git on Snow Leopard"
+created_at: 2009-02-04 20:32:02
+id:         20090204203202
+tags: 
+  - scm
+  - git
+  - apple
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Just received an email from Apple today:
+
+<blockquote>
+<p>From: devbugs@apple.com<br/>Subject: Re: Bug ID 6543251: Git is not available by default on Leopard</p>
+<p>Hello François,</p>
+<p>This is a follow up to Bug ID# 6543251.  After further investigation it has been determined that this is a known issue, which is currently being investigated by engineering.  This issue has been filed in our bug database under the original Bug ID# 5404556. The original bug number being used to track this duplicate issue can be found in the State column, in this format:  Duplicate/OrigBug#.</p>
+<p>Thank you for submitting this bug report. We truly appreciate your assistance in helping us discover and isolate bugs.</p>
+<p>Best Regards,</p>
+<p>Kit Cheung<br/>Apple Developer Connection<br/>Worldwide Developer Relations</p>
+</blockquote>
+
+This is a followup to "Want Git preinstalled on next Mac OS X?":http://github.com/blog/327-want-git-preinstalled-on-next-mac-os-x
