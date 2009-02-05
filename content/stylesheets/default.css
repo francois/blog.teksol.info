@@ -378,3 +378,4 @@ textarea { width: 100%; }
 #toptags li.last:after { content: ""; }
 
 blockquote, blockquote p { margin: 1em; }
+blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; }
