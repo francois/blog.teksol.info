@@ -2,3 +2,4 @@ Options MultiViews
 
 RedirectMatch permanent /feed\.xml$  http://feeds.feedburner.com/teksol
 RedirectMatch permanent (.*)/comments $1#disqus_thread
+RedirectMatch permanent /articles(.*) $1
