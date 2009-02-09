@@ -1,0 +1,40 @@
+--- 
+title:      "Setting Up Passenger on Mac OS X Using Passenger Prefs Pane"
+created_at: 2009-02-09 11:13:01
+id:         20090209111301
+tags: 
+  - passenger
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Before today, I was using Thin to host my development servers.  This was a bother because I had to remember to start/stop Thins as required when I switched tasks.  Well, not anymore...
+
+Reading my feeds today, I found "Passenger Preference Pane":http://www.fngtps.com/passenger-preference-pane, by "Fingertips":http://www.fngtps.com/.
+
+<ol>
+<li>Download the preference pane itself</li>
+<li>Untar</li>
+<li>Follow the directives in the README about RubyCocoa (either Leopard 10.5.2 or install RubyCocoa yourself from source)</li>
+<li>Double click the prefpane: this will install the preference pane</li>
+<li>Open Passenger in Other</li>
+<li>Drag and drop your Rails (or Rack-based) application folder into the list</li>
+<li>Click Apply</li>
+<li>Go back to System Preferences, and open Network</li>
+<li>Stop and start Apache using the checkbox for Web Sharing</li>
+<li>Visit http://your-apps-base-name.local/ and enjoy!</li>
+</ol>
+
+One caveat I found was that my home directory had to change permissions.  I had to grant <tt>a+rx</tt> before it would work:
+
+<% code :lang => "bash" do %> $ ls -ld ~
+drwxr-xr-x+ 78 francois  staff  2652  9 fév 11:13 /Users/francois
+<% end %>
+
+Of course, if you have a multi-user machine, that opens an interesting can of worms for security.  A quick fix would be:
+
+<% code :lang => "bash" do %>$ chmod a-rx * && chmod a+rx the-apps-base-name
+<% end %>
+
+Modify  as needed.
