@@ -1,0 +1,6 @@
+# robots.txt generated at http://www.mcanerin.com
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /stylesheets/
+Disallow: /javascripts/
+Disallow: /images/
