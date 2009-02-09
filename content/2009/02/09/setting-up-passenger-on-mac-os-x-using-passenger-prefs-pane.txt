@@ -18,7 +18,7 @@ Reading my feeds today, I found "Passenger Preference Pane":http://www.fngtps.co
 <li>Untar</li>
 <li>Follow the directives in the README about RubyCocoa (either Leopard 10.5.2 or install RubyCocoa yourself from source)</li>
 <li>Double click the prefpane: this will install the preference pane</li>
-<li>Open Passenger in Other</li>
+<li>Open System Preferences, then Passenger in Other</li>
 <li>Drag and drop your Rails (or Rack-based) application folder into the list</li>
 <li>Click Apply</li>
 <li>Go back to System Preferences, and open Network</li>
