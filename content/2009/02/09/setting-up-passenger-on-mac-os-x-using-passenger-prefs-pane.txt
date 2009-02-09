@@ -21,7 +21,7 @@ Reading my feeds today, I found "Passenger Preference Pane":http://www.fngtps.co
 <li>Open System Preferences, then Passenger in Other</li>
 <li>Drag and drop your Rails (or Rack-based) application folder into the list</li>
 <li>Click Apply</li>
-<li>Go back to System Preferences, and open Network</li>
+<li>Go back to System Preferences, and open Sharing</li>
 <li>Stop and start Apache using the checkbox for Web Sharing</li>
 <li>Visit http://your-apps-base-name.local/ and enjoy!</li>
 </ol>
