@@ -3,3 +3,33 @@ Options MultiViews
 RedirectMatch permanent /feed\.xml$  http://feeds.feedburner.com/teksol
 RedirectMatch permanent (.*)/comments $1#disqus_thread
 RedirectMatch permanent /articles(.*) $1
+
+RedirectMatch permanent /2006/1(.*) /2006/01$1
+RedirectMatch permanent /2006/2(.*) /2006/02$1
+RedirectMatch permanent /2006/3(.*) /2006/03$1
+RedirectMatch permanent /2006/4(.*) /2006/04$1
+RedirectMatch permanent /2006/5(.*) /2006/05$1
+RedirectMatch permanent /2006/6(.*) /2006/06$1
+RedirectMatch permanent /2006/7(.*) /2006/07$1
+RedirectMatch permanent /2006/8(.*) /2006/08$1
+RedirectMatch permanent /2006/9(.*) /2006/09$1
+
+RedirectMatch permanent /2007/1(.*) /2007/01$1
+RedirectMatch permanent /2007/2(.*) /2007/02$1
+RedirectMatch permanent /2007/3(.*) /2007/03$1
+RedirectMatch permanent /2007/4(.*) /2007/04$1
+RedirectMatch permanent /2007/5(.*) /2007/05$1
+RedirectMatch permanent /2007/6(.*) /2007/06$1
+RedirectMatch permanent /2007/7(.*) /2007/07$1
+RedirectMatch permanent /2007/8(.*) /2007/08$1
+RedirectMatch permanent /2007/9(.*) /2007/09$1
+
+RedirectMatch permanent /2008/1(.*) /2008/01$1
+RedirectMatch permanent /2008/2(.*) /2008/02$1
+RedirectMatch permanent /2008/3(.*) /2008/03$1
+RedirectMatch permanent /2008/4(.*) /2008/04$1
+RedirectMatch permanent /2008/5(.*) /2008/05$1
+RedirectMatch permanent /2008/6(.*) /2008/06$1
+RedirectMatch permanent /2008/7(.*) /2008/07$1
+RedirectMatch permanent /2008/8(.*) /2008/08$1
+RedirectMatch permanent /2008/9(.*) /2008/09$1
