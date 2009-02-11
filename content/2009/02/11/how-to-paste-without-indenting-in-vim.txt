@@ -24,3 +24,7 @@ i
 <% end %>
 
 Voilà, a correctly pasted, non-indented version of whatever was in the clipboard!
+
+UPDATE: 2 minutes after I "posted":http://twitter.com/fbeausoleil/status/1198970122 the link to this article on Twitter, "@jpalardy":http://twitter.com/jpalardy replied:
+
+<iframe width="500" height="200" frameborder="0" src="http://tweetpaste.net/script/?t=1198983486" style="overflow: hidden; display: block; width: 500px; height: 200px;"><p><a href="http://twitter.com/jpalardy/statuses/1198983486" target="_blank">View jpalardy&rsquo;s tweet</p></iframe>
