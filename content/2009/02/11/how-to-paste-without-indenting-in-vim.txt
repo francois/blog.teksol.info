@@ -1,0 +1,26 @@
+--- 
+title:      "How to Paste Without Indenting in Vim"
+created_at: 2009-02-11 08:40:32
+id:         20090211084032
+tags: 
+  - tips
+  - vim
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I wanted to paste some HTML into Vim, and I was having a hard time getting something that preserved existing indentation.
+
+After doing <tt>:help autoindent</tt>, I found out about smartindent.  So, I turned both smartindent and autoindent off before doing my paste.  That worked wonders!
+
+<% code :lang => :vim do %>:set nosmartindent
+:set noautoindent
+i
+<CMD>-V
+<ESC>
+:set smartindent
+:set autoindent
+<% end %>
+
+Voilà, a correctly pasted, non-indented version of whatever was in the clipboard!
