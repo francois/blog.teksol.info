@@ -17,6 +17,9 @@ filter:
   <link rel="openid2.provider" href="http://www.myopenid.com/server" />
   <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=francois.beausoleil.myopenid.com" />
 <% end -%>
+<% if @page.url != "/" then -%>
+  <link rel="canonical" href="<%= absolute_url(@page.url).sub('.html', '') %>" />
+<% end -%>
   <script type="text/javascript" src="<%= absolute_url("javascripts/jquery.min.js") %>"></script>
   <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
 </head>
