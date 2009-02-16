@@ -1,0 +1,16 @@
+--- 
+title:      "GiraffeSoft FLOSS Week: Begins Today!"
+created_at: 2009-02-16 16:33:03
+id:         20090216163303
+tags: 
+  - links
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"James Golick":http://jamesgolick.com/ just opened our company blog by adding "FLOSS week":http://giraffesoft.com/blog/2009/02/16/floss-week.html.  Over the next few days we'll release a couple of plugins that we've been working on/with for the past few projects.
+
+bq. Only problem is, we never get around to releasing this stuff. Starting a blog seemed like a good excuse to spend some time polishing up some code and, you know, writing READMEs.
+
+Go on over and enjoy the view!  Don't forget the RSS feed:  "GiraffeSoft: The Blog":http://feeds.giraffesoft.ca/giraffesoft-the-blog
