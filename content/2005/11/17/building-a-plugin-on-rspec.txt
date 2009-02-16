@@ -19,6 +19,7 @@ Since this article is about writing specifications rather than on how to write a
 h2. Installation and setup
 
 I started by installing the gem.  Then, I created a Rails-like hierarchy: <code class="folder">lib/</code>, <code class="folder">test/</code> and <code class="folder">vendor/</code>.  I then unpacked the gem into vendor:
+
 <% code(:lang => "shell") do -%>$ cd vendor
 $ gem unpack rspec
 Unpacked gem: 'rspec-0.2.0'
@@ -27,6 +28,7 @@ Unpacked gem: 'rspec-0.2.0'
 That gave me the library's full source code right next to mine, for easy inspection and analysis.
 
 Next, I needed a way to run my _expectations_ (we'd usually call these tests, but since we're trying to move away from the testing terminology...).  I wrote the following Rakefile:
+
 <% code("Rakefile") do -%>require 'rake'
 
 task :default => [:test_behaviors]
@@ -60,6 +62,7 @@ end
 h2. First behavioral expectation
 
 The first expectation I wanted to write was to convert an empty <code class="class">String</code> into an empty <code class="class">Array</code>.  That lets us handle the case where no items are selected.  I chose to write this expectation first because we're going to need it anyway, and it was a good introduction to the RSpec framework for me.
+
 <% code("test/specs/no_selected_entries.rb") do -%>require 'spec'
 require 'francois_beausoleil/habtm_helper_plugin/filter'
 
@@ -85,6 +88,7 @@ Then, we have the <code class="method">setup</code> method.  Notice I am executi
 The last item in the class is the actual specification.  We are asserting that when "No selected entries" we "should replace string with empty array".
 
 Let's write the minimum amount of code, just to get started:
+
 <% code("lib/francois_beausoleil/habtm_helper_plugin/filter.rb") do -%>module FrancoisBeausoleil
   module HabtmHelperPlugin
     module Filter
@@ -96,6 +100,7 @@ end
 <% end -%>
 
 Let's see that in action:
+
 <% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
@@ -119,6 +124,7 @@ What is this telling us ?  It's telling us that an empty string should have been
 h3. Naming conventions
 
 Reading further though, we see that <code class="class">Spec::TextRunner</code> has found *three* expectations to run, not just one.  Which ones are they ?  If we look at the <code class="class">Spec::Context</code> code, we'll find this:
+
 <% code("vendor/rspec-0.2.0/lib/spec/context.rb") do -%>module Spec
   class Context
     private
@@ -140,6 +146,7 @@ end
 <% end -%>
 
 Ah !  There are *no* naming convention as in the xUnit case, so all methods are expectations, except the ones coming from our superclasses. That only means we have to move our code elsewhere.  After refactoring, we now have:
+
 <% code("test/spec_helper.rb") do -%>require 'spec'
 require 'francois_beausoleil/habtm_helper_plugin/filter'
 
@@ -165,6 +172,7 @@ end
 <% end -%>
 
 Running that, we get:
+
 <% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
@@ -182,6 +190,7 @@ Finished in 0.015 seconds
 <% end -%>
 
 Beautiful !  Only one specification was executed - let's make it pass:
+
 <% code("lib/francois_beausoleil/habtm_helper_plugin/filter.rb") do -%>module FrancoisBeausoleil
   module HabtmHelperPlugin
     module Filter
@@ -194,6 +203,7 @@ end
 <% end -%>
 
 Running:
+
 <% code(:lang => "shell") do -%>
 $ rake
 (in D:/habtm)
@@ -210,6 +220,7 @@ Even more beautiful:  green bar !
 h2. More expectations
 
 Let's implement a second behavioral specification, but we'll need a new context - we need to have something for the filter to work against.  This means we have to create a new context for the expectations to execute in:
+
 <% code("test/specs/one_selected_entry.rb") do -%>require 'spec_helper'
 
 class OneSelectedEntry < Spec::Context
@@ -232,6 +243,7 @@ end
 <a style="display:block; float:left; margin-right: .5em;" href="http://www.refactoring.com/catalog/extractSuperclass.html" title="Extract Superclass refactoring on the refactoring.com website"><img src="<%= same_folder_url("refactoring-icon.gif") %>" alt="Refactoring.com website logo"/></a>The setup method is very similar - in fact, it's nearly identical, the only difference being the value we assign to the params <code class="class">Hash</code>.  Probably something we can "extract superclass":http://www.refactoring.com/catalog/extractSuperclass.html from.  Let's wait for the fabled "three strikes and you refactor":http://c2.com/cgi/wiki?ThreeStrikesAndYouRefactor before we do so, though.
 
 Next, we get our behavioral specifications.  The first one says when we have "One selected entry" we "should have one element in the array".  This is all very readable and reasonable.  Then, when we have "One selected entry" we "should have the id as the first element".  Let's see this in action:
+
 <% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 
@@ -255,6 +267,7 @@ Finished in 0.0 seconds
 <% end -%>
 
 We get our two expected failures.  Let's "do the simplest thing that could possibly work":http://c2.com/cgi/wiki?DoTheSimplestThingThatCouldPossiblyWork:
+
 <% code("lib/francois_beausoleil/habtm_helper_plugin/filter.rb") do -%>module FrancoisBeausoleil
   module HabtmHelperPlugin
     module Filter
@@ -271,6 +284,7 @@ end
 <% end -%>
 
 Seeing it in action:
+
 <% code(:lang => "shell") do -%>$ rake
 (in D:/habtm)
 

@@ -49,6 +49,7 @@ D:/staging.teksol.info/config/../vendor/plugins/plugin_assets/lib/plugin_assets.
 <% end -%>
 
 Whoa, this is even worse.  I have to apply a known "workaround" to get <code>plugin_assets</code> to load:
+
 <% code(:lang => "shell") do -%>$ mv vendor/plugins/plugin_dependencies \
      vendor/plugins/aaa_plugin_dependencies
 $ mv vendor/plugins/loaded_plugins \

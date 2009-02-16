@@ -20,6 +20,7 @@ What's changed ?
 * Renamed middle package from *flash_plugin_helper* to *flash_helper_plugin*.  This should not have any impact on your code.
 
 The interesting feature in this version are the new assertions.  For example, the following code:
+
 <% code do -%>def test_destroy
   post :destroy, :id => contacts(:bob).id
 
@@ -30,6 +31,7 @@ end
 <% end -%>
 
 can be expressed like this instead:
+
 <% code do -%>def test_destroy
   post :destroy, :id => contacts(:bob).id
 
@@ -40,6 +42,7 @@ end
 <% end -%>
 
 The reverse is also true:
+
 <% code do -%>def test_pre_authorization_granted
   get :index, {}, {:user_id => accounts(:bob).id}
 

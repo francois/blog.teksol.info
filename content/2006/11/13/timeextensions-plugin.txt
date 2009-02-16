@@ -42,6 +42,7 @@ end
 <% end -%>
 
 Installation:
+
 <% code(:lang => "shell") do -%>$ script/plugin install \
   svn://svn.teksol.info/svn/rails/plugins/time_extensions \
   vendor/plugins/time_extensions

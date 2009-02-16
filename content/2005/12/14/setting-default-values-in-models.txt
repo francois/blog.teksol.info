@@ -13,6 +13,7 @@ On the Rails mailing list, Larry White asked about "adding initialization to a m
 bq. How do add initialization to a model class that adds an attribute and sets its values?  I tried adding an initialize method but I get a runtime exception:NoMethodError in Sites#new.
 
 This is an easy thing if you use callbacks:
+
 <% code do -%>class Site < ActiveRecord::Base
   def after_initialize
     self.attribute = default_value unless self.attribute
@@ -21,6 +22,7 @@ end
 <% end -%>
 
 It is important to check if the value has already been assigned, or else the default value will overwrite any values set in the <code class="method constructor">initialize</code> call:
+
 <% code do -%>def test_does_not_overwrite_values_in_initialize_with_default_values
   s = Site.new(:attribute => another_value)
   assert_equal another_value, s.attribute,
@@ -35,6 +37,7 @@ The sequence of callbacks on initialization looks like this:
 # initialize - after super()
 
 "In block" is there because when calling <code class="method constructor">new</code> you can pass a block, and it will be called with the new instance:
+
 <% code do -%>Model.new do |m|
   m.attribute = default_value
 end

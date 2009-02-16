@@ -11,6 +11,7 @@ filter:
   - textile
 --- 
 Just got bitten by a bug.  In a model, I was doing:
+
 <% code do -%>self.unit_price = self.product.current_price(Date.today) \
   if self.unit_price.cents.blank?
 <% end -%>
@@ -18,6 +19,7 @@ Just got bitten by a bug.  In a model, I was doing:
 After upgrading to "Rails 0.14.3":http://weblog.rubyonrails.com/articles/2005/11/07/rails-1-0-rc4-0-14-3-its-the-final-countdown, I found some failures in my tests.  About 30 minutes of sleuthing around, and I found my bug to be with the "new object.blank? behavior":http://dev.rubyonrails.com/ticket/2705.
 
 Some console code to "prove" it:
+
 <% code(:lang => "shell") do -%>$ ruby script\console
 Loading development environment.
 >> 0.blank?
@@ -36,6 +38,7 @@ Loading development environment.
 <% end -%>
 
 So, I rewrote my code to now do:
+
 <% code do -%>self.unit_price = self.product.current_price(Date.today) \
   if 0 == self.unit_price.cents
 <% end -%>

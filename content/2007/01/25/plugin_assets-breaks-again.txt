@@ -9,12 +9,14 @@ filter:
   - textile
 --- 
 As I reported "earlier":http://blog.teksol.info/articles/2006/11/10/plugin_assets-nice-but-breaks, I now use "plugin_assets":http://wiki.pluginaweek.org/Plugin_assets in my applications.  Two days ago, I ran
+
 <% code(:lang => "shell") do -%>$ piston status --show-updates
 <% end -%>
 
 and noticed some changes in the "PluginAWeek.org":http://pluginaweek.org/ plugins.
 
 Naïvely, I ran:
+
 <% code(:lang => "shell") do -%>$ piston update vendor/plugins/*
 <% end -%>
 
@@ -30,10 +32,12 @@ Now, rake assets:update breaks silently.  It won't find any plugins, no matter w
 <% end -%>
 
 The full diff can be obtained as
+
 <% code(:lang => "shell") do -%>$ svn diff -r 310:311 http://svn.pluginaweek.org/trunk/plugins/rails/loaded_plugins/lib
 <% end -%>
 
 For the moment, I'm using this fix:
+
 <% code(:lang => "shell") do -%>$ svn diff
 Index: vendor/plugins/loaded_plugins/tasks/loaded_plugins_tasks.rake
 ===================================================================

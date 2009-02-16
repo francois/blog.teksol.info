@@ -32,6 +32,7 @@ Let's assume we are on <code class="branch">trunk/</code>.  The following migrat
     20061208111505_create_taggings.rb</pre>
 
 The migrations table I was talking about above would look something like this:
+
 <% code do -%>create_table :schema_migrations, :force => true do |t|
   t.column :migration, :string, :limit => 20, :null => false
   t.column :migrated_at, :datetime

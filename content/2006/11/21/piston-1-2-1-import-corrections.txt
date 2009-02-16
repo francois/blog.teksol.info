@@ -16,5 +16,6 @@ A minor correction to "Piston":http://piston.rubyforge.org/:
 * The import subcommand could import another revision than what was intended, if HEAD was updated while the import is in progress.
 
 Install using:
+
 <% code(:lang => "shell") do -%>$ gem install piston
 <% end -%>

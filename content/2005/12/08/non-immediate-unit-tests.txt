@@ -11,6 +11,7 @@ filter:
 Sometimes, I have an idea for a test, but I am testing something else and I don't want to break my thought flow.
 
 In those cases, I will write myself a time bomb:
+
 <% code do -%>def test_has_more_entries_after_update
   flunk if Time.now > Time.local(2005, 12, 9, 10, 0, 0)
 end

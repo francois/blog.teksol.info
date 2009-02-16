@@ -18,6 +18,7 @@ end
 <% end -%>
 
 The test case will fail with this:
+
 <% code(:lang => "shell") do -%>  1) Failure:
 test_substract_from_zero(MoneyTest) [./test/unit/money_test.rb:29]:
 <#<Money:0x3accb68 @cents=-1200, @currency="USD">> expected but was

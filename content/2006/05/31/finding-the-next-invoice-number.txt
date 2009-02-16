@@ -11,6 +11,7 @@ filter:
 Since 1.1.0, "Rails":http://www.rubyonrails.org/ includes grouping and calculation functions.  "maximum":http://api.rubyonrails.com/classes/ActiveRecord/Calculations/ClassMethods.html#M000826 is what we want to use here.
 
 The system I am building has many users, and each user has it's own invoice number sequence.  Here is the code in it's entirity:
+
 <% code("app/models/invoice.rb") do -%>class Invoice < ActiveRecord::Base
   belongs_to :user
 

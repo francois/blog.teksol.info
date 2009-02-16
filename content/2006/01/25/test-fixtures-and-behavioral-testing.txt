@@ -15,6 +15,7 @@ Yesterday, I was coding a new set of tests for a <code class="class">Picture</co
 I already had an existing <code class="filename">test/unit/picture_test.rb</code>, which I extended.
 
 The tests looked like this:
+
 <% code("test/unit/picture_test.rb") do -%>class PictureTest < Test::Unit::TestCase
   def test_picture_exists_on_disk
     pict = uploaded_file('large.jpg', 'image/jpeg', 'somepicture.jpg')

@@ -14,6 +14,7 @@ filter:
 In one of my projects, I wanted to prevent instances of particular classes to be deleted if they were in any way associated to another object.  In database terms, I wanted an <code class="sql">ON DELETE RESTRICT</code> constraint.
 
 Since I cannot rely on the database to enforce it for me (MySQL 4, MyISAM engine), I coded the following:
+
 <% code("test/unit/city_test.rb") do -%>require File.dirname(__FILE__) + '/../test_helper'
 
 class CityTest < Test::Unit::TestCase

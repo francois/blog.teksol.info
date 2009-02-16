@@ -13,6 +13,7 @@ Over on the "Rails mailing list":http://news.gmane.org/gmane.comp.lang.ruby.rail
 His problem is a form with four conditions.  Each may be applied, but any or all of them may be set to "All".
 
 The brute force way of doing this would be:
+
 <% code do -%>class SearchController < ApplicationController
   def search
     case
@@ -35,6 +36,7 @@ end
 Note that in this case, you have to pay attention to the order in which you evaluate your conditions.  If you put <code>params[:cond1]</code> before <code>params[:cond1] && params[:cond2]</code>, and <code>params[:cond1]</code> is <code>true</code>, "Ruby":http://www.ruby-lang.org/en/ will only evaluate the <code>params[:cond1]</code> branch.
 
 Instead, I prefer to do this:
+
 <% code do -%>class SearchController < ApplicationController
   def search
     conditions = ['1=1']
@@ -49,6 +51,7 @@ end
 <% end -%>
 
 Note how I initialize the <var>conditions</var> array: <code>['1=1']</code>.  This is to prevent a problem later on when "Rails":http://www.rubyonrails.com/ evaluates the conditions option to "find":http://api.rubyonrails.com/classes/ActiveRecord/Base.html#M000684 .  If we leave the array empty, "Rails":http://www.rubyonrails.com/ will append the WHERE empty condition, generating something like this:
+
 <% code(:lang => "sql") do -%>SELECT * FROM models WHERE 
 <% end -%>
 

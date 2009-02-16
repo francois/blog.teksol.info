@@ -9,18 +9,22 @@ filter:
   - textile
 --- 
 I learned a nice one today.  If you use "Rails Engines":http://rails-engines.rubyforge.org/ and you want to configure your environments differently, you can't do this:
+
 <% code("config/environments/development.rb") do -%>module LoginEngine
   config :salt => 'test'
 end
 <% end -%>
+
 <% code("config/environments/production.rb") do -%>module LoginEngine
   config :salt => 'a-long-and-complicated-salt'
 end
 <% end -%>
+
 <% code("config/environment.rb") do -%>Engines.start :login
 <% end -%>
 
 If you do that, you'll get the following backtrace:
+
 <% code(:lang => "shell") do -%>$ ruby script\server
 ./script/../config/../vendor/rails/railties/lib/initializer.rb:178:in
 `load_environment': undefined method `config' for
@@ -41,6 +45,7 @@ Rails::Initializer::LoginEngine:Module (NoMethodError)
 <% end -%>
 
 What is happening is that "Rails":http://www.rubyonrails.com/ loads the environment file *before* the Rails Engine plugin is initialized.  The solution ?  Do everything in <code class="filename">config/environment.rb</code>:
+
 <% code("config/environment.rb") do -%>module LoginEngine
   case RAILS_ENV
   when 'development', 'test'

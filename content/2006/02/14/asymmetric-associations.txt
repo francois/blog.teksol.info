@@ -15,6 +15,7 @@ In Rails, there are no requirements that both sides of an association be symmetr
 For example, I'm building a mass-mailer.  I have parties (people), emails and recipients.  Emails are <acronym title="has_and_belongs_to_many">habtm</acronym> with regards to parties.  Since my join table contains other fields besides the two foreign keys, I need a real model for it.
 
 Examine the following code:
+
 <% code do -%>class Email < ActiveRecord::Base
   has_many :recipients
 end
@@ -35,6 +36,7 @@ end
 <% end -%>
 
 The above models give rise to the following very natural code:
+
 <% code do -%>>> fbos = Party.find_by_login('fbos')
 => #<Party:0x3c019d0 ...>
 >> info = Email.create(:subject => 'Latest Schedule',
@@ -47,6 +49,7 @@ The above models give rise to the following very natural code:
 <% end -%>
 
 If access to read or unread E-Mail is needed, the habtm association can be declared more than once, with conditions that discriminate between the different states:
+
 <% code do -%>class Party < ActiveRecord::Base
   has_and_belongs_to_many :unread_emails,
       :join_table => 'recipients',

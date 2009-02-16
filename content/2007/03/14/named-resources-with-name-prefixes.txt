@@ -11,6 +11,7 @@ filter:
 Rails allows you to define routes with named prefixes.  I expected Rails to somehow _know_ that I wanted my prefix to separate the rest of the name with an underscore.
 
 Here was my original routes:
+
 <% code("config/routes.rb") do -%>ActionController::Routing::Routes.draw do |map|
   map.resources :parties, :path_prefix => "/admin" do |parties|
     parties.resources :addresses,
@@ -24,6 +25,7 @@ end
 <% end -%>
 
 Then, when I tried to use my route, I was getting a NoMethodError:
+
 <% code(:lang => "shell") do -%>  1) Error:
 test_can_show(AddressContactRoutesControllerTest::PartyWithAddressTest):
 ActionView::TemplateError: undefined method `party_address_path' for #<#<Class:0xb768f6ac>:0xb63ee41c>
@@ -51,6 +53,7 @@ end
 It was also interesting to see all those generated routes.  I discovered that the route with a format was named <code class="method ruby">formatted_whatever</code>.
 
 Here's a diff against the 1.2 branch of Rails that allows you to see all the generated routes as they are read:
+
 <% code(:lang => "shell") do -%>$ svn diff vendor/rails/actionpack/lib/action_controller
 Index: vendor/rails/actionpack/lib/action_controller/routing.rb
 ===================================================================
@@ -86,6 +89,7 @@ Index: vendor/rails/actionpack/lib/action_controller/routing.rb
 <% end -%>
 
 For reference, here are all the generated routes for this declaration:
+
 <% code("config/routes.rb") do -%>ActionController::Routing::Routes.draw do |map|
   map.resources :layouts, :path_prefix => "/admin"
 end

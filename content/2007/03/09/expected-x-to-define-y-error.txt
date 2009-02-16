@@ -21,6 +21,7 @@ I just got hit by this famous error again.  And I am not the only one:
 Now, I know I should put my patches where my mouth is.  And that's exactly what I'm trying to do here.  My application is on the 1.2 branch, and I get this error if I have the Response Logger plugin loaded.  Trying again with Edge Rails, I again get the error.  If I try with WEBrick or Mongrel, same error.  Loading the console produces the same error.  Using Windows or Linux changes nothing: same error.
 
 The exact backtrace is:
+
 <% code(:lang => "shell") do -%>$ ruby script\console
 Loading development environment.
 ./script/../config/../config/../vendor/rails/activerecord/lib/../../activesupport/lib/active_support/dependencies.rb:249:in `load_missing_constant': Expected ./script/../config/../config/../vendor/plugins/response_logger/lib/response_logger.rb to define ResponseLogger (LoadError)

@@ -12,6 +12,7 @@ filter:
   - textile
 --- 
 I have the following CRON entries for one of my sites:
+
 <% code(:lang => "cron") do -%>39 * * * * killall -9 dispatch.fcgi >/dev/null 2>&1
 0,4,8,12,16,20,24,28,32,36,40,44,48,52,56 * * * * \
 curl http://www.weputlightsup.com/ >/dev/null 2>&1

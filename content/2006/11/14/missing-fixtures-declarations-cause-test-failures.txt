@@ -53,6 +53,7 @@ end
 <% end -%>
 
 Run it like this:
+
 <% code(:lang => "shell") do -%>$ rake find_missing_fixtures
 (in D:/wwwroot/wpul.staging.teksol.info)
 test/unit/name_test.rb: NameTest

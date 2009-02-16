@@ -48,6 +48,7 @@ end
 <% end -%>
 
 The failure was:
+
 <% code(:lang => "shell") do -%>$ ruby test\functional\admin\blog_accounts_controller_test.rb -n test_create
 Loaded suite test/functional/admin/blog_accounts_controller_test
 Started
@@ -62,6 +63,7 @@ Expected response to be a <:redirect>, but was <200>
 <% end -%>
 
 Flipping the order of my <code class="method">respond_to</code> block did the trick:
+
 <% code do -%>respond_to do |wants|
   wants.html do
     redirect_to blog_accounts_url

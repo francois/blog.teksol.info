@@ -11,6 +11,7 @@ filter:
   - textile
 --- 
 Want to get an action with a dash in it's name and still do something useful ?  Try this:
+
 <% code do -%>class WelcomeController < ApplicationController
   define_method("sign-up".to_sym) do
     if request.post? then

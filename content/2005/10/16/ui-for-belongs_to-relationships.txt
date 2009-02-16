@@ -11,12 +11,14 @@ filter:
 Anyone has a good idea of how to do that ?  I already know about "AssociationHelper":http://wiki.rubyonrails.com/rails/show/AssociationHelper, but I want a real drop down.
 
 The solution I have come up with currently is to manually create a "select":http://www.w3.org/TR/html401/interact/forms.html#edef-SELECT using "collection_select":http://api.rubyonrails.com/classes/ActionView/Helpers/FormOptionsHelper.html#M000348, like so:
+
 <% code(:html) do -%><p><label for="event_provider">Provider</label><br/>
  <#%= collection_select 'event', 'provider',
      Provider.find_all(nil, 'name'), 'id', 'name' %>
 <% end -%>
 
 The problem is when the post is coming back.  My update method is horrible:
+
 <% code do -%># Event belongs_to Provider
 def update
   @event = Event.find(params['id'])

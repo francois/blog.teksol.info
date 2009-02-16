@@ -11,6 +11,7 @@ filter:
   - textile
 --- 
 After updating my externals to Rails 0.14.1, I ran into a few snags.  First one is a difference in the handling of boolean attributes between both versions.  I had the following assertion:
+
 <% code do -%>class EstimateTest < Test::Unit::TestCase
   def test_converts_base_information_to_quote
     # ...
@@ -20,6 +21,7 @@ end
 <% end -%>
 
 <var>q</var> is an instance of <var>Quote</var>, and <var>e</var> is an instance of <var>Estimate</var>.  In both cases, <var>pst_active</var> determines if the provincial tax is active.  It is a boolean attribute, but I had forgotten to use the <var>attr_name?</var> form.  In 0.13.1, this worked, but with 0.14.1, it failed with the following:
+
 <% code(:lang => "shell") do -%>  1) Failure:
 test_converts_base_information_to_quote(EstimateTest) [./test/unit/estimate_test.rb:493]:
 copied pst active.
@@ -30,6 +32,7 @@ copied pst active.
 When I switched both calls to <var>pst_active</var> to the boolean form, the assertion passed again.
 
 Next, I had *44* failures in my functionnal tests:
+
 <% code(:lang => "shell") do -%> 44) Error:
 test_destroyed_pictures_dont_appear_in_the_slideshow(WelcomeControllerTest):
 TypeError: cannot convert Symbol into String
@@ -38,6 +41,7 @@ TypeError: cannot convert Symbol into String
 <% end -%>
 
 This application makes use of the "Rails Product Generator":http://wiki.rubyonrails.com/rails/pages/RailsProductGenerator.  Notice the bug is in <code>lib/productize.rb</code>, and not my code per se.  Line 38 of <var>lib/productize.rb</var> looks like this:
+
 <% code do -%>site_specific_path = File.join(SITE_ROOT, 'app', 'views', template_path + '.' + extension)
 <% end -%>
 

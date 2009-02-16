@@ -11,6 +11,7 @@ filter:
   - textile
 --- 
 Seems there's a problem with the "Rails":http://www.rubyonrails.com/ generator.  I was receiving an odd (pun intended) error:
+
 <% code(:lang => "shell") do -%>$ ruby script\generate migration -tc AddGamesAndCategories1
 odd number of arguments for Hash
   ./script/../config/../vendor/rails/railties/lib/rails_generator/scripts/../options.rb:130:in `[]'
@@ -33,6 +34,7 @@ odd number of arguments for Hash
 <% end -%>
 
 After a bit of debugging, it turned out that there's a small problem with the <code class="method">Rails::Generator::Options::ClassMethods#add_general_options!</code> method.
+
 <% code do -%>opt.on('-c', '--svn',
   'Modify files with subversion. (Note: svn must be in path)') {
   options[:svn] =

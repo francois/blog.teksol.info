@@ -19,10 +19,12 @@ end
 <% end -%>
 
 His partial being:
+
 <% code("app/views/shared/_address.rhtml", :class => "html") do -%>><#%= text_area('address', 'street') %>
 <% end -%>
 
 Reading FileColumn helper's code, and the code in Rails own helpers, the following idiom is used to get a hold of the instance variable:
+
 <% code("file-column-0.3/lib/file_column_helper.rb") do -%>def url_for_file_column(object_name, method, suffix=nil)
   object = instance_variable_get("@#{object_name.to_s}")
   ...

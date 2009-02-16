@@ -28,6 +28,7 @@ anyone is welcome to suggest better ones):
 _(emphasis mine)_
 
 In the spirit of open source, I started coding a new "Rails plugin":http://wiki.rubyonrails.com/rails/pages/Plugins:  the "FlashHelperPlugin":https://opensvn.csie.org/traccgi/flash_helper_plugin/trac.cgi.  With it, you will be able to do:
+
 <% code("app/controllers/users_controller.rb") do -%>class UsersController < ApplicationController
   def authenticate
     if authenticated? then

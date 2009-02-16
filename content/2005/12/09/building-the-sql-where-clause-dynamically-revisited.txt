@@ -9,6 +9,7 @@ filter:
   - textile
 --- 
 In "Building the SQL WHERE clause dynamically in Rails":http://blog.teksol.info/articles/2005/10/31/building-the-sql-where-clause-dynamically-in-rails, I showed how to build the WHERE clause like this:
+
 <% code do -%>class SearchController < ApplicationController
   def search
     conditions = ['1=1']
@@ -22,8 +23,8 @@ In "Building the SQL WHERE clause dynamically in Rails":http://blog.teksol.info/
 end
 <% end -%>
 
-"Ezra Zygmuntowicz":http://brainspl.at/ of "brainsp.at":http://brainspl.at/ fame
-created a <code class="ruby module">Cond</code> module to make that even easier:
+"Ezra Zygmuntowicz":http://brainspl.at/ of "brainsp.at":http://brainspl.at/ fame created a <code class="ruby module">Cond</code> module to make that even easier:
+
 <% code do -%>class SearchController < ApplicationController
   def search
     conditions = Cond::create do

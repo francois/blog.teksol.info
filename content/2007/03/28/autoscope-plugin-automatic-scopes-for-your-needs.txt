@@ -39,6 +39,7 @@ end
 <% end -%>
 
 These declarations give you access to the following scoped methods:
+
 <% code do -%>Testimonial.approved.count
 Testimonial.unapproved.create!(params[:testimonial])
 @young_contacts = Contact.young

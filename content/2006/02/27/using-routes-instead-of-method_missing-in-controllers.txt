@@ -11,6 +11,7 @@ filter:
 Over on "Software Development Budoka":http://jroller.com/page/bloritsch, Berin Loritsch talks about "supporting The Rel-Tag Microformat in Rails":http://jroller.com/page/bloritsch?entry=supporting_the_rel_tag_microformat.  Unfortunately, he uses a very obscure approach.
 
 Here is his code:
+
 <% code do -%>class TagsController < ApplicationController
   layout 'site'
 
@@ -24,6 +25,7 @@ end
 <% end -%>
 
 Unfortunately, that is very unclear.  Much better to use routes to do the same thing:
+
 <% code("config/routes.rb") do -%>ActionController::Routing::Routes.draw do |map|
   map.connect 'tags/:tag_name',
     :controller => 'tags', :action => 'by_tag'

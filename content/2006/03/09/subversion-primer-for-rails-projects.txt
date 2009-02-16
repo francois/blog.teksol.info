@@ -25,6 +25,7 @@ $ svnadmin create --fs-type=fsfs ~/svn/pinkatio
 <% end -%>
 
 To ease our poor fingers, let us create an environment variable to refer tot he repository's root URL:
+
 <% code(:lang => "shell") do -%>$ REPOS=file://`pwd`/svn/pinkatio
 <% end -%>
 
@@ -57,6 +58,7 @@ Checked out revision 1.
 <% end -%>
 
 Next, let us add the whole tree to the working copy.  This is no different than if we had done an <code class="command">svn import</code> initially, except all changes are local, and we can selectively revert files and folders.
+
 <% code(:lang => "shell") do -%>$ svn add --force .
 A         app
 ...
@@ -64,6 +66,7 @@ A         README
 <% end -%>
 
 The Rails command helpfully creates most of the tree.  Since I use migrations in all of my Rails projects, I immediately create the <code class="folder">db/migrate/</code> folder.  Edge Rails and Rails 1.1 also include a <code class="folder">tmp/</code> folder.  For completeness' sake, I create it at the same time.
+
 <% code(:lang => "shell") do -%>$ svn mkdir db/migrate tmp 
 A         db/migrate
 A         tmp
@@ -191,6 +194,7 @@ If you went for Rails Edge, you should really rerun the <code class="command">ra
 <% end -%>
 
 Don't forget to commit your changes:
+
 <% code(:lang => "shell") do -%>$ svn commit --message="Living on the Edge - set svn:externals on vendor/ for Rails"
 Sending        vendor
 
@@ -242,6 +246,7 @@ $ cp -Rf money-1.7.1/README README-money
 <% end -%>
 
 Let us tell Subversion what files we now want to version control:
+
 <% code(:lang => "shell") do -%>$ svn add bank money support money.rb LICENSE-money README-money
 A         bank
 ..
@@ -249,15 +254,18 @@ A         README-money
 <% end -%>
 
 To help me remember which version I unpacked, I set a custom property on the main file of the library I just unpacked:
+
 <% code(:lang => "shell") do -%>$ svn propset version "1.7.1 (Gem)" money.rb
 property 'version' set on 'money.rb'
 <% end -%>
 
 Next, we cleanup after ourselves:
+
 <% code(:lang => "shell") do -%>$ rm -Rf money-1.7.1
 <% end -%>
 
 Finally, let us commit our changes back to the repository.
+
 <% code(:lang => "shell") do -%>$ cd ..
 $ svn commit --message="Unpacked Money 1.7.1 into vendor/"
 Adding         vendor/LICENSE-money
@@ -293,6 +301,7 @@ Updated to revision 4.
 <% end -%>
 
 Again, we must not forget to commit our changes to the repository:
+
 <% code(:lang => "shell") do -%>$ svn commit --message="Added FileColumn plugin"
 Sending        vendor/plugins
 
@@ -302,6 +311,7 @@ Committed revision 5.
 h2. Creating migrations, models and controllers
 
 The Rails <code class="command">generate</code> has a helpful option: <code class="option">--svn</code> (<code class="option">-c</code>):
+
 <% code(:lang => "shell") do -%>$ script/generate migration --svn InitialSchema
       exists  db/migrate
       create  db/migrate/001_initial_schema.rb
