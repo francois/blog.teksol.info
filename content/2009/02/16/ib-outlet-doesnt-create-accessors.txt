@@ -1,0 +1,56 @@
+--- 
+title:      "ib_outlet Doesn't Create Accessors"
+created_at: 2009-02-16 08:34:56
+id:         20090216083456
+tags: 
+  - rubycocoa
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Lately, I've been having fun with RubyCocoa while reading <a href="http://www.exampler.com/blog/">Brian Marick</a>'s "RubyCocoa":http://pragprog.com/titles/bmrc/rubycocoa.  It's an entertaining book, and I really like RubyCocoa itself.  But I hit a little gotcha.  Take the following code:
+
+<% code "PathController.rb" do %>require 'osx/cocoa'
+
+class PathController < OSX::NSObject
+  ib_outlet :path, :events
+  ib_action :choosePath
+  
+  def choosePath(sender)
+    panel = OSX::NSOpenPanel.openPanel
+    panel.canChooseFiles          = false
+    panel.canChooseDirectories    = true
+    panel.allowsMultipleSelection = false
+
+    result = panel.runModal
+    if result == OSX::NSFileHandlingPanelOKButton then
+      self.path.title = panel.filename
+    end
+  end
+end
+<% end %>
+
+What could be wrong with this?  Turns out <code class="method">#ib_oulet</code> does not define accessors for the instance variables it defines.  Look at the exception:
+
+<% code :lang => "none" do %>OSX::OCMessageSendException: Can't get Objective-C method signature for selector 'events' of receiver #<PathController:0x2297be class='PathController' id=0x534ec0>
+  /Library/Frameworks/RubyCocoa.framework/Resources/ruby/osx/objc/oc_wrapper.rb:50:in `ocm_send'
+  /Library/Frameworks/RubyCocoa.framework/Resources/ruby/osx/objc/oc_wrapper.rb:50:in `method_missing'
+  /Users/francois/Projects/fsevtest/build/Debug/fsevtest.app/Contents/Resources/PathController.rb:27:in `choosePath'
+  /Users/francois/Projects/fsevtest/build/Debug/fsevtest.app/Contents/Resources/rb_main.rb:22:in `NSApplicationMain'
+  /Users/francois/Projects/fsevtest/build/Debug/fsevtest.app/Contents/Resources/rb_main.rb:22
+/Library/Frameworks/RubyCocoa.framework/Resources/ruby/osx/objc/oc_wrapper.rb:50:in `ocm_send': Can't get Objective-C method signature for selector 'events' of receiver #<PathController:0x2297be class='PathController' id=0x534ec0> (OSX::OCMessageSendException)
+  from /Library/Frameworks/RubyCocoa.framework/Resources/ruby/osx/objc/oc_wrapper.rb:50:in `method_missing'
+  from /Users/francois/Projects/fsevtest/build/Debug/fsevtest.app/Contents/Resources/PathController.rb:27:in `choosePath'
+  from /Users/francois/Projects/fsevtest/build/Debug/fsevtest.app/Contents/Resources/rb_main.rb:22:in `NSApplicationMain'
+  from /Users/francois/Projects/fsevtest/build/Debug/fsevtest.app/Contents/Resources/rb_main.rb:22
+<% end %>
+
+From the obscure message, I gathered this was some kind of "NoMethodError":http://www.ruby-doc.org/core/classes/NoMethodError.html (why couldn't they use an exception with a good name?)  That was Sunday morning.  Sunday evening, I suddenly had a flash that ib_outlet wouldn't define an accessor.  Changed my code to use the instance variable instead:
+
+<% code "PathController.rb" do %>if result == OSX::NSFileHandlingPanelOKButton then
+  @path.title = panel.filename
+end
+<% end %>
+
+Lo and behold!  It worked beautifully.
