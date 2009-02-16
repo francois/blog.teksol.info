@@ -1,0 +1,16 @@
+--- 
+title:      "Productivity Tip: Read Your Blogs in the Afternoon"
+created_at: 2009-02-16 08:18:58
+id:         20090216081858
+tags: 
+  - productivity
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you're in any way, shape or form like me, you usually have more energy in the morning (if you don't, skip this post).  My regular schedule puts me in my office around 9 AM every weekday.  First thing I do is pop open "Google Reader":http://google.com/reader, and start reading blogs.  What an utter waste of time...  I waste perfectly good coding time to do an activity that's similar to watching television.  I can _waste_ my time in the afternoon, when I have less energy.  I say _waste_ but I really mean *relax*.  Don't take me wrong: reading blogs is a very important time, but I should just do it when it's OK to do, not when I have the most energy.
+
+Yesterday evening, I was pondering on the why of the above.  Turns out I can procrastinate just as well as anyone else...
+
+<p style="text-align:center"><a href="http://media.photobucket.com/image/procrastinate/darkjustice2600/procrastinate.jpg"><img src="http://i63.photobucket.com/albums/h133/darkjustice2600/procrastinate.jpg" width="400" height="320" alt="Procrastination is like masturbation&hellip; it's good in the beginning, but in the end, you realize you've just fucked yourself"/></a></p>
