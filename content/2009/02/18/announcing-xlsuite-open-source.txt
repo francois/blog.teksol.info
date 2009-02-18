@@ -1,0 +1,12 @@
+--- 
+title:      "Announcing XLsuite Open Source"
+created_at: 2009-02-18 02:29:34
+id:         20090218022934
+tags: 
+  - opensource
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Would you believe we just GPL'd nearly 40,000 lines of code?  "Yes we did":http://xlsuite.com/blogs/francois/2009/2/18/announcing-xlsuite-open-source/3311
