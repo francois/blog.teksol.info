@@ -1,0 +1,14 @@
+--- 
+title:      "Nonexistent When Using Phusion Passenger"
+created_at: 2009-02-18 02:11:59
+id:         20090218021159
+tags: 
+  - tips
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+This evening, I was fooling around with mod_passenger for XLsuite.  I ran into a little problem where Passenger was telling me "No such file or directory - /nonexistent".  A quick search on Google revealed <a href="http://blog.scopeport.org/ruby-on-rails/phusion-passenger-error-file-directory-nonexistent/">Phusion Passenger error “No such file or directory - /nonexistent”</a>.
+
+That post really made my day.
