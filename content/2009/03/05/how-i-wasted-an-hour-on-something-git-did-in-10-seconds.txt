@@ -1,0 +1,47 @@
+--- 
+title:      "How I Wasted an Hour on Something Git did in 10 seconds?"
+created_at: 2009-03-05 13:00:17
+id:         20090305130017
+tags:
+  - git
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+"Git":http://git-scm.com/ is a wonderful system.  It has all kinds of nooks and crannies that one forgets about.  Anyway, I was doing client work this morning, and my build server ("Integrity":http://github.com/foca/integrity, but this isn't about Integrity) didn't fail, although my local tests were failing.  I began investigating, and <code class="path">vendor/plugins</code> wasn't even on the build server.  Uh?  I began investigating, and found <code class="path">vendor/plugins</code> had turned into a "git submodule":http://www.kernel.org/pub/software/scm/git/docs/git-submodule.html a while back.  I even had the commit's SHA1 of when that happened.  I found myself in the unenvious position of having to find and install every plugin we had before that commit back into the application.
+
+<% code :lang => "bash" do %># 04f7e1 is the commit when the submodule was born
+# Checkout the commit before that error occured
+$ git checkout 04f7e1^
+$ ls vendor/plugins > plugins
+$ git checkout master
+$ cat plugins
+$ script/plugin install git://github.com/giraffesoft/timeline_fu.git
+# And so on, for the 9 other plugins
+<% end %>
+
+And then, there was this one plugin which we haven't released yet which I was missing.  It's called configurable_mailer, and allows us to configure "ActionMailer::Base":http://api.rubyonrails.org/classes/ActionMailer/Base.html from tests and from some environment variables.  Anyway, I again checked out the code from <code class="sha1">04f7e1^</code>, copied <code class="path">vendor/plugins/configurable_mailer</code> outside the repository, checked out master again, and moved the plugin back into place.  As you can imagine, this was painful.  And error-prone.  Then I ran my tests, and immediately had errors.  This application is based off of "Blank":http://github.com/giraffesoft/blank, and was using slightly modified versions of certain plugins.  So I added Blank as a remote, fetched and merged.  Ran my tests again.  Still had errors.  And lots of them:
+
+<% code :lang => "bash" do %>$ rake test:units
+(in /Users/francois/Projects/project)
+/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -Ilib:test "/Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb" "test/unit/account_activation_mailer_test.rb" "test/unit/company_test.rb" "test/unit/event_test.rb" "test/unit/fanship_test.rb" "test/unit/internal_message_test.rb" "test/unit/job_application_test.rb" "test/unit/job_creation_presenter_test.rb" "test/unit/job_suggestion_test.rb" "test/unit/job_test.rb" "test/unit/media_test.rb" "test/unit/message_mailer_test.rb" "test/unit/message_test.rb" "test/unit/password_reset_mailer_test.rb" "test/unit/person_test.rb" "test/unit/profile_url_test.rb" "test/unit/recommendation_mailer_test.rb" "test/unit/recommendation_presenter_test.rb" "test/unit/recommendation_test.rb" "test/unit/relationship_test.rb" "test/unit/timeline_event_test.rb" 
+Loaded suite /Library/Ruby/Gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader
+Started
+............FFF.........EEEEEEEEEEEEE........................FFFFFFFFFFFFFFFFFFFF.F....F.....EF..EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.................................................................................................................................................................................................................................................................................................................................................................................................
+Finished in 45.235105 seconds.
+
+542 tests, 762 assertions, 26 failures, 73 errors
+<% end %>
+
+Bad, I'm telling you.  Then I remembered something about "git checkout":http://www.kernel.org/pub/software/scm/git/docs/git-checkout.html being able to checkout certain paths.  I read about this somewhere but I can't find the source, anymore.  Sorry!  Without even reading the manual, I set out to work.
+
+<% code :lang => "bash" do %>$ get checkout -b fix
+$ git rm -r vendor/plugins
+$ git checkout -m "Removing submodule'd vendor/plugins (how did that happen?)"
+$ git checkout 04f7e1^ -- vendor/plugins
+<% end %>
+
+Wall clock time?  10 seconds.  I was ready to add and commit.
+
+This is a post to remind you to know your tools, and know them well.  Sorry I can't stay anymore.  I'm off to read <a href="http://www.zenspider.com/ZSS/Products/ZenTest/">autotest</a>'s source and documentation, again.
