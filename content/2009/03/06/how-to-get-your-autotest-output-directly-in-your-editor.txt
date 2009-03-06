@@ -1,0 +1,20 @@
+--- 
+title:      "How to Get Your Autotest Output Directly in Your Editor"
+created_at: 2009-03-06 16:26:27
+id:         20090306162627
+tags: 
+  - autotest
+  - tips
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+While discussing in <a href="http://campfirenow.com/">Campfire</a> with <a href="http://jamesgolick.com/">James Golick</a> today, James said he would prefer to have his output directly in <a href="http://www.vim.org/">Vim</a>, our editor of choice.  I initially said that since Vim isn't <a href="http://www.gnu.org/software/emacs/">Emacs</a> and can't support a live console, it wouldn't work.  James told me to think outside the box.
+
+<% code :lang => "bash" do %>$ autotest &>tmp/autotest.out &
+$ vim
+# :e tmp/autotest.out
+<% end %>
+
+Yes, thinking outside the box, and *knowing your tools* makes it much easier.  So far, I'm liking autotest output in Vim very much.  It's easy to navigate the output using Vim movement commands:  <tt>/Person</tt> finds the errors in person, <tt>gf</tt> opens the named file, etc.  All in all, this is a pretty good experience.
