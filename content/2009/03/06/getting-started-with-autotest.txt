@@ -1,0 +1,15 @@
+--- 
+title:      "Getting Started with Autotest"
+created_at: 2009-03-06 10:59:13
+id:         20090306105913
+tags: 
+  - autotest
+  - testing
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Since yesterday, I read a bit more about "autotest":http://www.zenspider.com/ZSS/Products/ZenTest/.  I stumbled on "Getting Started with Autotest":http://ph7spot.com/articles/getting_started_with_autotest which you should read immediately.  The article talks about setting up your plugins and doing all kinds of interesting things.
+
+Getting more proficient with my tools now!
