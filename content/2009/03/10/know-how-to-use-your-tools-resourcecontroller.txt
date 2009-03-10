@@ -1,0 +1,63 @@
+--- 
+title:      "Know How to Use Your Tools: ResourceController"
+created_at: 2009-03-10 15:12:08
+id:         20090310151208
+tags: 
+  - plugins
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Today, I was building a controller action that was polymorphically finding and associating an object.  I could have used a -simple- dumb solution, such as this:
+
+<% code "app/controllers/watches_controller.rb" do %>class WatchesController < ApplicationController
+  def create
+    @watch = Watch.build(:watcher => current_person)
+    @watch.subject = case
+                     when params[:person_id]
+                       Person.find(params[:person_id])
+                     when params[:event_id]
+                       Event.find(params[:event_id])
+                     else
+                       raise ArgumentError, "Don't know how to handle other keys... #{params.keys.inspect}"
+                     end
+    @watch.save!
+    flash[:notice] = "You're watching #{@watch.subject.name}"
+    redirect_to root_url
+  end
+end
+<% end %>
+
+That sucked.  Really bad.  Why did I have to have a <code class="keyword">case</code>/<code class="keyword">switch</code> statement in my controller?  Why not use a simpler alternative?  I could have gone the full polymorphic route too:
+
+<% code "app/controllers/watches_controller.rb" do %>class WatchesController < ApplicationController
+  def create
+    @watch = Watch.build(:watcher => current_person)
+
+    # For illustration purposes, this is fine, but INSECURE!!!
+    @watch.subject_type = params[:subject_type]
+    @watch.subject_id   = params[:subject_id]
+    @watch.save!
+
+    flash[:notice] = "You're watching #{@watch.subject.name}"
+    redirect_to root_url
+  end
+end
+<% end %>
+
+Then, I remembered that my controller was already a <a href="http://jamesgolick.com/resource_controller">ResourceController</a> implementation.  I opened up the code and used this instead:
+
+<% code "app/controllers/watches_controller.rb" do %>class WatchesController < ResourceController::Base
+  belongs_to :person, :event
+
+  create.before do
+    @watch.watcher = current_person
+    @watch.subject = parent_object
+  end
+end
+<% end %>
+
+I needed to add a bit of infrastructure (some routes and has_many declarations in my models), but those were benefits (I know I'll need them later anyway).  My controller code is simpler, and the intention is clearer, I think.  
+
+In the same vein, are you following <a href="http://search.twitter.com/search?q=%23standup">#standup</a> on Twitter?
