@@ -1,0 +1,31 @@
+--- 
+title:      "ArgumentError on #Sum When Using Classifier::Bayes"
+created_at: 2009-03-27 22:04:24
+id:         20090327220424
+tags: 
+  - tips
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you want to use the "Classifier":http://classifier.rubyforge.org/ gem within a "Rails":http://rubyonrails.org/ project, you're in for a surprise:
+
+<% code do %>/Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/attribute_methods.rb:102:in `sum': wrong number of arguments (1 for 0) (ArgumentError)
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/attribute_methods.rb:102:in `instance_method_already_implemented?'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/attribute_methods.rb:72:in `define_attribute_methods'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/attribute_methods.rb:71:in `each'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/attribute_methods.rb:71:in `define_attribute_methods'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/attribute_methods.rb:351:in `respond_to?'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/associations/association_proxy.rb:219:in `method_missing'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/associations/association_proxy.rb:219:in `each'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/associations/association_proxy.rb:219:in `send'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/associations/association_proxy.rb:219:in `method_missing'
+        from /Library/Ruby/Gems/1.8/gems/activerecord-2.3.2/lib/active_record/associations/association_collection.rb:364:in `method_missing_without_paginate'
+        from /Users/francois/Projects/family_budget/vendor/gems/mislav-will_paginate-2.3.5/lib/will_paginate/finder.rb:167:in `method_missing'
+        from script/classifier:8
+<% end %>
+
+This is because the Classifier gem implements <code>Array#sum</code>.  Unfortunately, Classifier is loaded after Rails, which means ActiveSupport's own <code>#sum</code> is replaced.  The solution?  Use either "Yury's fork":http://github.com/yury/classifier, or "my own":http://github.com/francois/classifier.  Both use ActiveSupport's #sum instead of a custom implementation.
+
+The only difference between my version and Yury's is I use "Jeweler":http://github.com/technicalpickles/jeweler to maintain and package the gem.
