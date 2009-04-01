@@ -18,7 +18,7 @@ h3. Get it
 
 (Allow a couple of hours for the gem to propagate)
 
-<% code :lang => "shell" %>$ sudo gem install piston
+<% code :lang => "shell" do %>$ sudo gem install piston
 <% end %>
 
 h3. The new website
