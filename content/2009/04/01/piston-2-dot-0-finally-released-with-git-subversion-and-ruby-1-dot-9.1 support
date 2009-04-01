@@ -1,0 +1,32 @@
+--- 
+title:      "Piston 2.0 Finally Released: With Git, Subversion and Ruby 1.9"
+created_at: 2009-04-01 18:27:58
+id:         20090401182758
+tags: 
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+It's been a long time coming, I know.  Believe me when I say so.  But the good news first:
+
+* Piston 2.0 supports Git repositories and working copies
+* Piston 2.0 supports Subversion repositories and working copies
+* Piston 2.0 is Ruby 1.9.1 compliant
+
+h3. Get it
+
+(Allow a couple of hours for the gem to propagate)
+
+<% code :lang => "shell" %>$ sudo gem install piston
+<% end %>
+
+h3. The new website
+
+Yes, I have a new look to go along with the website.  "http://piston.rubyforge.org/":http://piston.rubyforge.org/
+
+There is also an avenue for asking questions and getting help about Piston.  Register to the "piston-discussion Google Group":http://groups.google.com/group/piston-discussion
+
+Please have fun and enjoy yourselves.
+
+NOTE: This is not an April's Fool joke (although it would have been really cool to do it if I had thought so!)
