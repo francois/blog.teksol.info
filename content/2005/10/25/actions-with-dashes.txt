@@ -5,11 +5,15 @@ blog_post:  true
 tags: 
   - tips
   - hack
+  - obsolete
 id:         5
 filter:
   - erb
   - textile
 --- 
+
+<div class="obsolete">This article is obsolete.  You may find it's replacement at "Actions With Dashes - updated":http://blog.teksol.info/2009/04/02/actions-with-dashes-updated</div>
+
 Want to get an action with a dash in it's name and still do something useful ?  Try this:
 
 <% code do -%>class WelcomeController < ApplicationController

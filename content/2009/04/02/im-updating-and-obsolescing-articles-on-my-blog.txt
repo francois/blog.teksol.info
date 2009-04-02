@@ -1,0 +1,20 @@
+--- 
+title:      "I'm Updating and Obsolescing Articles on My Blog"
+created_at: 2009-04-02 08:00:00
+id:         20090402100836
+tags: 
+  - general
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A couple of days ago, "@jfcouture":http://twitter.com/jfcouture tweeted:
+
+bq. "@cmercier":http://twitter.com/cmercier People with stuff older than 6 months in the Rails world on their blog should do the same!
+
+<p style="text-align:right">"@jfcouture":http://twitter.com/jfcouture/status/1415694931 via "Twitter":http://twitter.com/</p>
+
+This was in response to Carl's rant that obsolete Merb tutorials should be removed / deprecated.
+
+I decided to follow their advice.  I'm revisiting all my old posts and saying they are either obsolete, or providing links to replacements.  Expect to see at least a post a day for the next couple of weeks as I revisit my old posts.  This is interesting!  I had forgotten about a lot of things I had written about.

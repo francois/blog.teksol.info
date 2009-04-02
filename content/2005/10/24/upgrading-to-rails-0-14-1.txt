@@ -5,11 +5,15 @@ blog_post:  true
 tags: 
   - unit-testing
   - upgrade
+  - obsolete
 id:         4
 filter:
   - erb
   - textile
 --- 
+
+<div class="obsolete">This article is obsolete.  It does not have a replacement.</div>
+
 After updating my externals to Rails 0.14.1, I ran into a few snags.  First one is a difference in the handling of boolean attributes between both versions.  I had the following assertion:
 
 <% code do -%>class EstimateTest < Test::Unit::TestCase

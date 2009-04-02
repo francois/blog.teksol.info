@@ -379,3 +379,16 @@ textarea { width: 100%; }
 
 blockquote, blockquote p { margin: 1em; }
 blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; }
+
+.post form {
+  background: #eee;
+  padding: 0 2em;
+}
+
+.obsolete {
+  background: #ffe;
+  border: 2px solid #f99;
+  margin: 1em 0;
+  padding: 1em;
+  font-weight: bold;
+}
