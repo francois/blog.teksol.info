@@ -21,6 +21,10 @@ h3. Get it
 <% code :lang => "shell" do %>$ sudo gem install piston
 <% end %>
 
+h3. What is Piston?
+
+Piston eases your vendor branch management worries.  It copies vendor/upstream code into your own repository, preserving local patches.
+
 h3. The new website
 
 Yes, I have a new look to go along with the website.  "http://piston.rubyforge.org/":http://piston.rubyforge.org/
