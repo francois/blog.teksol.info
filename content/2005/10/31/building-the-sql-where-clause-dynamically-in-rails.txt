@@ -8,6 +8,9 @@ filter:
   - erb
   - textile
 --- 
+
+<div class="obsolete">This article is obsolete.  You may find it's replacement at "Building the SQL WHERE Clause Dynamically - updated":http://blog.teksol.info/2009/04/02/building-the-sql-where-clause-dynamically-updated</div>
+
 Over on the "Rails mailing list":http://news.gmane.org/gmane.comp.lang.ruby.rails, RafaÅ‚ Komorowski asks "How to programatically build :contitions with elegance?":http://article.gmane.org/gmane.comp.lang.ruby.rails/27446
 
 His problem is a form with four conditions.  Each may be applied, but any or all of them may be set to "All".
