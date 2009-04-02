@@ -10,6 +10,9 @@ filter:
   - erb
   - textile
 --- 
+
+<div class="obsolete">This article and the plugin it describes are obsolete.  There are replacements for neighter.  The code is still available if you want to play around with it.</div>
+
 A new day, a new release !
 
 What's changed ?

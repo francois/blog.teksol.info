@@ -10,6 +10,9 @@ filter:
   - erb
   - textile
 --- 
+
+<div class="obsolete">This article is obsolete, as is the plugin.  The article does not have a replacement, and the plugin died a kind death.  It's code is still available if anybody wishes to take the reins and go with it.</div>
+
 Over on the "Rails mailing list":http://news.gmane.org/gmane.comp.lang.ruby.rails, Luke Randall is proposing  that Rails "applications and generators standardize":http://article.gmane.org/gmane.comp.lang.ruby.rails/28104 on some keys for the flash:
 
 This being a very good idea, here is an excerpt of his proposition:

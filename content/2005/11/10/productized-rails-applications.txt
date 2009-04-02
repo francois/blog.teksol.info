@@ -8,6 +8,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article and the plugin it describes are obsolete.  There are replacements for neither.</div>
+
 Is it me or do most Rails applications need the "Rails Product Generator":http://wiki.rubyonrails.com/rails/pages/RailsProductGenerator  ?
 
 For instance, I am building an application that has two faces - frontend and backend.  The backend has the administrative interfaces, and the frontend can only play around with the data - not change it.

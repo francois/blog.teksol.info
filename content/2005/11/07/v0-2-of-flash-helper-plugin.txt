@@ -10,6 +10,9 @@ filter:
   - erb
   - textile
 --- 
+
+<div class="obsolete">This article and the plugin it describes are obsolete.  There are replacements for neighter.  The code is still available if you want to play around with it.</div>
+
 Release 0.2 is now upon us.  Release 0.1, described in "Flash Helper Plugin - Flash Standardization":http://blog.teksol.info/articles/2005/11/05/flash-helper-plugin-flash-standardization was so broken as to be unusable.  From "bad requires, to invalid syntax and missing classes/modules":http://article.gmane.org/gmane.comp.lang.ruby.rails/28239, things looked pretty bleak.
 
 Fortunately, things are better.  Release 0.2 has no new features, but at least, it has the benefit of working.
