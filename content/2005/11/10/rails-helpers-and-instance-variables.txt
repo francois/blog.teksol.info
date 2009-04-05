@@ -8,12 +8,13 @@ filter:
   - erb
   - textile
 --- 
-<div class="obsolete">This article is obsolete.  The changes have been rolled into recent versions of Rails such that calling:
+<div class="obsolete">This article is obsolete.  The changes have been rolled into recent versions of Rails such that calling:</div>
 
- <% code %><%%= render :partial => "partial", :object => the_object %>
- <% end %>
+<% code do %><%%= render :partial => "partial", :object => the_object %>
+<% end %>
 
-works.</div>
+<div class="obsolete">works.</div>
+
 
 I was reading the code for the "FileColumn":http://www.kanthak.net/opensource/file_column/, helper and I had a thought.  What if we could obviate the need for requiring instance variables for helpers ?
 
