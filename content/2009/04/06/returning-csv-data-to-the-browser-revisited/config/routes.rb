@@ -35,7 +35,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
 
-  map.resource :timeline, :path_prefix => "reports/"
+  map.resource :timeline, :controller => "reports/timelines", :path_prefix => "reports", :only => :show
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
