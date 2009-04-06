@@ -1,0 +1,57 @@
+--- 
+title:      "Returning CSV data to the browser - revisited"
+created_at: 2009-04-06 10:23:30
+id:         20090406102330
+tags: 
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Back in 2006, I wrote "Returning CSV data to the browser":http://blog.teksol.info/2006/03/23/returning-csv-data-to-the-browser.  The method I was using back then is way obsolete.  Let's use the correct way to do it.  If you want to follow along, just browse over to "returning-csv-data-to-the-browser-revisited":http://github.com/francois/blog.teksol.info/tree/master/content/2009/04/06/returning-csv-data-to-the-browser-revisited and read on.
+
+First of all, the correct way to return non HTML data to the browser is to use "respond_to":http://api.rubyonrails.org/classes/ActionController/MimeResponds/InstanceMethods.html#M000368.  Let's do so here:
+
+<% code "app/controllers/reports/timelines_controller.rb" do %>class Reports::TimelinesController < ApplicationController
+  def show
+    @timelines = Timeline.all
+    respond_to do |format|
+      format.csv do
+        response.headers["Content-Type"]        = "text/csv; charset=UTF-8; header=present"
+        response.headers["Content-Disposition"] = "attachment; filename=timeline-report.csv"
+      end
+    end
+  end
+end
+<% end %>
+
+The rest is pretty easy.  Generating the data is easy enough:
+
+<% code "app/models/timeline.rb" do %>require "fastercsv"
+
+class Timeline < ActiveRecord::Base
+  default_scope :order => "started_at ASC"
+
+  def to_csv
+    FasterCSV.generate_line([
+          started_at.to_s(:db),
+          ended_at.to_s(:db),
+          project_id]).chomp
+  end
+end
+<% end %>
+
+And rendering the view?  Look how easy this gets:
+
+<% code "app/views/reports/timelines/show.csv.erb" do %>Started At,Ended At,Project ID
+<%%= render :partial => @timelines %>
+<% end %>
+
+Notice the file's name?  <code>show.csv.erb</code>?  The <code>csv</code> in the filename is what connects the respond_to call with the view.
+
+And the final piece, the timeline partial:
+
+<% code "app/views/reports/timelines/_timeline.csv.erb" do %><%%= timeline.to_csv %>
+<% end %>
+
+Now, on to the next obsolete article in the bunch...

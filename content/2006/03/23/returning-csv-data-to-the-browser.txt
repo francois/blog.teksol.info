@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">The way I'm doing it here is obsolete, and "Returning CSV data to the browser - updated":http://blog.teksol.info has a better version.</div>
+
 Over on the Rails mailing list, "Pete asks":http://thread.gmane.org/gmane.comp.lang.ruby.rails/56881:
 
 <blockquote>One of my apps has to export data for the backend system to process it. What's the best way to create a CSV file in Rails and then return it as 
