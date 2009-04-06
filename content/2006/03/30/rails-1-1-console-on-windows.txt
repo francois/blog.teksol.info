@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">Rails was patched to prevent that error.</div>
+
 If you are like me, you develop your applications on Windows and deploy to Linux/Unix/FreeBSD, whatever.
 
 On Rails 1.1, the console does not start anymore on Windows.  It reports the following error:

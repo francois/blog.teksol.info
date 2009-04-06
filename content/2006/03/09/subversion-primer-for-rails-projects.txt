@@ -5,11 +5,14 @@ blog_post:  true
 tags: 
   - scm
   - subversion
+  - obsolete
 id:         35
 filter:
   - erb
   - textile
 --- 
+<div class="obsolete">It hurts, but this article is now obsolete.  Rails 2.3 has templates, there are a variety of starter applications, and the text of this article was reformatted and put into "Deploying Rails Applications":http://www.pragprog.com/titles/fr_deploy/deploying-rails-applications.  Good bye, article.</div>
+
 h2. Pinkatio - our latest Rails application
 
 We just had a killer idea to get us thousands of dollars of revenue per month.  We will call it *pinkatio*, and we will put it on Rails.

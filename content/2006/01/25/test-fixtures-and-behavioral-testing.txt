@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">These days, I use "Thoughtbot's Shoulda":http://www.thoughtbot.com/projects/shoulda/ to do the same thing.  The nice thing about that is that we still only have one test case per file, allowing autotest to do it's automagical file resolution.</div>
+
 Yesterday, I was coding a new set of tests for a <code class="class">Picture</code> class.  I wanted to introduce an on-disk cache, when the picture is public.
 
 I already had an existing <code class="filename">test/unit/picture_test.rb</code>, which I extended.

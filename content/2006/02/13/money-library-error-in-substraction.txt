@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">Hongli Lai took the lead/moved "Money":http://github.com/FooBarWidget/money to GitHub.  And the bug didn't exist a couple of days after I wrote this entry originally.</div>
+
 The "Money":http://rubyforge.org/projects/money library is a useful.  Unfortunately, release 1.5.9 has an error.  One cannot substract an amount from the empty Money.
 
 <% code do -%>def test_substract_from_zero
