@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete because it uses features that were replaced many times over.  If you want an HABTM selector widget, look at "MultipleSelect":http://ruido-blanco.net/blog/rails-multiple-select-helper-plugin/ by Daniel Rodríguez Troitiño.</div>
+
 I just wrote another plugin: habtm_helper_plugin.  This plugin will generate HTML code to manage has_and_belongs_to_many relationships.
 
 What does it look like ?  See here:

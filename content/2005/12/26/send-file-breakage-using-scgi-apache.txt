@@ -8,6 +8,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">It is unknown if this breakage still exists.  I don't use SCGI anymore (I use Phusion's "Passenger":http://www.modrails.com/ instead), so this information may be competely irrelevant.</div>
+
 The project I'm working on currently must protect access to some files.  They are Flash applications which the user must be authenticated to use.
 
 The best way to do that in Rails is to hide the files in a non-public directory, and then use "send_file":http://api.rubyonrails.com/classes/ActionController/Streaming.html#M000045 to stream the file to the browser.

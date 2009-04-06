@@ -8,6 +8,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete now that Rails 2.3 has Engines in core.</div>
+
 I learned a nice one today.  If you use "Rails Engines":http://rails-engines.rubyforge.org/ and you want to configure your environments differently, you can't do this:
 
 <% code("config/environments/development.rb") do -%>module LoginEngine

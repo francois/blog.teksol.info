@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete now that Rails 2.3 has Engines in core.</div>
+
 Over on the "Rails mailing list":http://article.gmane.org/gmane.comp.lang.ruby.rails/27632, James Adams reports the initial release of "Rails Engines":http://rails-engines.rubyforge.org/.
 
 What are engines ?  They are "plugins":http://wiki.rubyonrails.com/rails/pages/Plugins, more or less, except they also bundle controllers, views, partials, models and everything else you'd usually need in a component.

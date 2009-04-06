@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete because it uses features that were replaced many times over.  If you want an HABTM selector widget, look at "MultipleSelect":http://ruido-blanco.net/blog/rails-multiple-select-helper-plugin/ by Daniel Rodríguez Troitiño.</div>
+
 I just uploaded a new version of the HABTM Helper Plugin.  No new features, except it now works...
 
 There was a bug which would cause an error when the selected elements were not updated by the end-user.  All the IDs were bunched together, instead of being separated by commas.

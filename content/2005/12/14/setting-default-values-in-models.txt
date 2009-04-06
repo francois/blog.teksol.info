@@ -8,6 +8,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">In 2009, Hongli Lai wrote wrote "default_value_for":http://github.com/FooBarWidget/default_value_for, a Rails plugin to do the same thing, but allowing you to declaratively do so.</div>
+
 On the Rails mailing list, Larry White asked about "adding initialization to a model class":http://thread.gmane.org/gmane.comp.lang.ruby.rails/31522:
 
 bq. How do add initialization to a model class that adds an attribute and sets its values?  I tried adding an initialize method but I get a runtime exception:NoMethodError in Sites#new.

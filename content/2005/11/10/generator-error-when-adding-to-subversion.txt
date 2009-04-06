@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete since the bug was corrected in core a long time ago.</div>
+
 Seems there's a problem with the "Rails":http://www.rubyonrails.com/ generator.  I was receiving an odd (pun intended) error:
 
 <% code(:lang => "shell") do -%>$ ruby script\generate migration -tc AddGamesAndCategories1

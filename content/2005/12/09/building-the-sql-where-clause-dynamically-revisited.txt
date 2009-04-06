@@ -8,6 +8,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete.  You may find it's replacement at "Building the SQL WHERE Clause Dynamically - updated":http://blog.teksol.info/2009/04/02/building-the-sql-where-clause-dynamically-updated</div>
+
 In "Building the SQL WHERE clause dynamically in Rails":http://blog.teksol.info/articles/2005/10/31/building-the-sql-where-clause-dynamically-in-rails, I showed how to build the WHERE clause like this:
 
 <% code do -%>class SearchController < ApplicationController

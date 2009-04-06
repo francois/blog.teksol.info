@@ -10,6 +10,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">This article is obsolete now that Rails 2.3 has Engines in core.</div>
+
 "Jon Lim":http://www.snowblink.co.uk/ on the Rails mailing list just "announced":http://thread.gmane.org/gmane.comp.lang.ruby.rails/36358 the release of "Engines Generator":http://rails-engines.rubyforge.org/wiki/wiki.pl?ExtractAnEngine.
 
 From the documentation:

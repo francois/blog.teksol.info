@@ -8,6 +8,8 @@ filter:
   - erb
   - textile
 --- 
+<div class="obsolete">Trevor blogged "Time Bomb Test":http://almosteffortless.com/2009/04/05/time-bomb-test/ in 2009, which made this article obsolete.  Then, the day after, Jeremy McAnally wrote "Deprecate":http://github.com/jeremymcanally/deprecate, a gem to automate some versions of time bombing your tests.</div>
+
 Sometimes, I have an idea for a test, but I am testing something else and I don't want to break my thought flow.
 
 In those cases, I will write myself a time bomb:
