@@ -1,0 +1,6 @@
+<% 20.times do |i| %>
+  timeline<%= i %>:
+    started_at: <%= 13.hours.ago - i.hours %>
+    ended_at:   <%= 12.hours.ago + i.minutes %>
+    project_id: <%= rand(i) %>
+<% end %>
