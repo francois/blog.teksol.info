@@ -1,0 +1,80 @@
+--- 
+title:      "What if You Didn't Have Access to If/Then/Else?"
+created_at: 2009-04-17 11:33:16
+id:         20090417113316
+tags: 
+  - language-design
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Image a Ruby where <code>if/then/else</code> isn't available:
+
+<% code do %>class Account
+  # This method returns the balance in words, negative or positive, ready for display in the UI
+  def balance_in_words
+    # Err...  How do I do that?
+  end
+end
+<% end %>
+
+If you were a strict Object-Oriented person, you'd do it this way:
+
+<% code do %>class PositiveBalanceAccount
+  def balance_in_words
+    "Positive"
+  end
+end
+
+class NegativeBalanceAccount
+  def balance_in_words
+    "Negative"
+  end
+end
+<% end %>
+
+But then, your objects would have to change class whily-nilly.  Pretty darn hard.  But multi-method dispatching gives us a nice solution:
+
+<% code do %>class Account
+  def initialize(balance)
+    @balance = balance
+  end
+
+  defmulti :balance_in_words,
+    lambda { @balance < 0 } => "Negative",
+    lambda { @balance > 0 } => "Positive"
+end
+
+Account.new(15).balance_in_words # => "Positive"
+Account.new(-5).balance_in_words # => "Negative"
+<% end %>
+
+For the observant amongst you, you might have noticed I forgot the nil balance case.  This is really a programming error, so it should be treated as such:
+
+<% code do %>Account.new(0).balance_in_words
+lib/defmulti.rb:46:in `balance_in_words': #<Account:0x197222c @balance=0> received balance_in_words but did not have a guard clause that matched and no else clause. (Defmulti::MissingGuardClause)
+        from test.rb:16
+<% end %>
+
+For the even more observant, yes, there exists an implementation that does exactly what I have described above.  It's called defmulti, it's a gem, and it's on GitHub:  http://github.com/francois/defmulti.
+
+h2. What is this useful for?
+
+This library is a thought experiment.  When you lose the familiar tools, what can you do?  Of course, this library works atop the existing Ruby implementation and to be truly useful, syntax would have to be provided to make this much less verbose.  It's interesting nonetheless to see what can be done without the syntax extensions.
+
+Anyway, what would you use this for?  Multi-method dispatching is a tool that helps writing code without conditionals.  The conditionals are specified outside the block of code that executes.  The examples above are pretty thin, but looking at "Java.next #3: Dispatch":http://blog.thinkrelevance.com/2008/8/26/java-next-3-dispatch-2, I can provide another solution to his Ruby example:
+
+<% code do %>defmulti :letter_grade,
+  lambda {|grade| (90..100).include?(grade) || grade == "A"} => "A",
+  lambda {|grade| (80...90).include?(grade) || grade == "B"} => "B",
+  lambda {|grade| (70...80).include?(grade) || grade == "C"} => "C",
+  lambda {|grade| (60...70).include?(grade) || grade == "D"} => "D",
+  lambda {|grade| ( 0...60).include?(grade) || grade == "F"} => "F"
+
+letter_grade 60  # => "D"
+letter_grade "A" # => "A"
+letter_grade nil # => Defmulti::MissingGuardClause
+<% end %>
+
+Again, I'm struck by the clunky syntax, but if we ignore that for a second, could this be even better than Stuart Halloway's example?  Ruby's case statement is very, very powerful and very easy to use.  Is this useful?  Not at the moment.  But it's a thought experiment I thought I'd throw out there.
