@@ -1,0 +1,32 @@
+--- 
+title:      "Beware of Git's Content Tracking"
+created_at: 2009-04-15 00:31:52
+id:         20090415003152
+tags: 
+  - git
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A while ago, I was wondering how rename tracking in Git worked.  I was told that renames didn't really exist in Git, as Git tracked content, not files themselves.  Fair enough.
+
+But, I just stumbled upon something:
+
+<% code :lang => :sheel do %>$ gdc vendor/plugins/acts_as_money/LICENSE 
+diff --git a/vendor/plugins/acts_as_money/LICENSE b/vendor/plugins/acts_as_money/LICENSE
+index e69de29..a273c73 100644
+--- a/vendor/plugins/acts_as_money/LICENSE
++++ b/vendor/plugins/acts_as_money/LICENSE
+@@ -0,0 +1,4 @@
++one:
++  user: active
++  name: name
++  description: description
+<% end %>
+
+Tell me, does that look right?  I'll manually fix that file, but that just decreased my confidence level in Git.
+
+The original LICENSE file was empty, and there apparently was another file (a fixture file) that was empty too, and the latter saw some content added.
+
+Why did this happen?  LICENSE was updated as part of a merge&mdash;from a branch in which the LICENSE file doesn't exist.
