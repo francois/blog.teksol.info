@@ -1,0 +1,95 @@
+--- 
+title:      "Keeping Yourself DRY in Shoulda Tests"
+created_at: 2009-04-29 22:02:42
+id:         20090429220242
+tags: 
+  - unit-testing
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+When I'm testing admin controllers, I often have tests that follow this form:
+
+<% code "test/functional/admin/orders_controller_test.rb" do %>class OrdersControllerTest < ActionController::TestCase
+  logged_in_as :active_user do
+    context "on GET to :index" do
+      setup do
+        get :index
+      end
+
+      should_deny_access
+    end
+  end
+
+  not_logged_in do
+    context "on GET to :index" do
+      setup do
+        get :index
+      end
+
+      should_deny_access
+    end
+  end
+end
+<% end %>
+
+Well, this is all Ruby, right?  And Ruby has wonderful blocks, and blocks can be passed around...
+
+<% code "test/functional/admin/orders_controller_test.rb" do %>class OrdersControllerTest < ActionController::TestCase
+  deny_access_tests = lambda do
+    context "on GET to :index" do
+      setup do
+        get :index
+      end
+
+      should_deny_access
+    end
+  end
+
+  logged_in_as :active_user, &deny_access_tests
+  not_logged_in, &deny_access_tests
+end
+<% end %>
+
+This is valid for any block of code that you want to test again and again:
+
+<% code "test/functional/admin/orders_controller_test.rb" do %>class OrdersControllerTest < ActionController::TestCase
+  successful_index_render = lambda do
+    should_respond_with :success
+    should_render_template "new"
+    should_assign_to :orders
+  end
+
+  logged_in_as :admin do
+    context "", &successful_index_render
+  end
+
+  logged_in_as :sub_admin do
+    context "", &successful_index_render
+  end
+end
+<% end %>
+
+Alternatively, and it might be easier in the end, you could use methods:
+
+<% code "test/functional/admin/orders_controller_test.rb" do %>class OrdersControllerTest < ActionController::TestCase
+  def self.should_render_successful_index_response
+    should_respond_with :success
+    should_render_template "new"
+    should_assign_to :orders
+  end
+    
+  logged_in_as :admin do
+    should_render_successful_index_response
+  end
+
+  logged_in_as :sub_admin do
+    should_render_successful_index_response
+  end
+end
+<% end %>
+
+Note thought that you must define your methods at the top of your test case.  Remember that Ruby executes a class definition, so when you suddenly call <code>should_render_successful_index_response</code>, the method definition has to be available, or else Ruby will complain with a <code>NoMethodError</code>.
+
+Ain't Ruby sweet?
