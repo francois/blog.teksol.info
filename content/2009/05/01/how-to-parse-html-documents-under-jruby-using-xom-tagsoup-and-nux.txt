@@ -1,0 +1,60 @@
+--- 
+title:      "How to Parse HTML Documents Under JRuby Using XOM, TagSoup and Nux"
+created_at: 2009-05-01 16:03:16
+id:         20090501160316
+tags: 
+  - jruby
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+It's not that hard, but it still took me 2 hours to do it.  I had a couple of false starts, and I pored over documentation for a while until I hit upon the excellent "Nux":http://acs.lbl.gov/nux/ library.
+
+I won't let you go through the same failures I had.  Here's the code:
+
+<% code do %># Demonstrates how to parse a local HTML document using XOM,
+# TagSoup and Nux, under JRuby.
+#
+# http://www.xom.nu/
+# http://home.ccil.org/~cowan/XML/tagsoup/
+# http://acs.lbl.gov/nux/
+
+include Java
+mydir = File.expand_path(File.dirname(__FILE__))
+
+# This is how you require libraries without touching your
+# CLASSPATH from JRuby. I put the required files in vendor/.
+# Nux includes it's dependencies (XOM and saxon), so I didn't
+# have any other libraries to add.
+require File.join(mydir, "vendor", "tagsoup.jar")
+%w(nux.jar saxon8.jar xom.jar).each do |filename|
+  require File.join(mydir, "vendor", "nux", "lib", filename)
+end
+
+import "org.ccil.cowan.tagsoup.Parser"
+import "nu.xom.Builder"
+
+builder = Builder.new(Parser.new)
+
+# XOM's Builder expects a full URL, so tell it where to find the
+# document.
+doc = builder.build("file://#{File.expand_path(File.join(mydir, ARGV[0]))}")
+puts doc.toXML
+<% end %>
+
+h3. Extra!  Add XPath querying
+
+Continuing from above, you can add XPath querying:
+
+<% code do %>import "nux.xom.xquery.XQueryUtil"
+
+# Must use '*:p'.  '*' stands for any/default namespace.
+results = XQueryUtil.xquery(doc, "//*:p")
+p results.size
+results.size.times do |index|
+  puts results.get(index).toXML
+end 
+<% end %>
+
+Why am I going through these motions?  Because I wanted to use my 20% for fun.  Besides, I need to process large quantities of HTML as quickly as possible for a cool project I'm working on, and JRuby seems to be the "fastest implementation":http://twitter.com/fbeausoleil/status/1670082272, according to my unscientific benchmark.
