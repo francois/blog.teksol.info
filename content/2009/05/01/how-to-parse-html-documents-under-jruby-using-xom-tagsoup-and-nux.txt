@@ -58,3 +58,41 @@ end
 <% end %>
 
 Why am I going through these motions?  Because I wanted to use my 20% for fun.  Besides, I need to process large quantities of HTML as quickly as possible for a cool project I'm working on, and JRuby seems to be the "fastest implementation":http://twitter.com/fbeausoleil/status/1670082272, according to my unscientific benchmark.
+
+But the real reason was that both "Nokogiri":http://nokogiri.rubyforge.org/nokogiri/ and "Hpricot":http://wiki.github.com/why/hpricot wouldn't load/run under JRuby 1.2.0.
+
+Actually, let me rephrase that:  Nokogiri did load, but crashed while requiring the library:
+
+<% code do %>$ jruby -w test.rb data.html 
+/Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/nokogiri-1.2.3-java/lib/nokogiri/xml/node.rb:180: undefined method `next_sibling' for class `Nokogiri::XML::Node' (NameError)
+        from /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/nokogiri-1.2.3-java/lib/nokogiri/xml/node.rb:31:in `require'
+        from /Users/francois/Library/Java/JRuby/current/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+        from /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/nokogiri-1.2.3-java/lib/nokogiri/xml.rb:3
+        from /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/nokogiri-1.2.3-java/lib/nokogiri/xml.rb:31:in `require'
+        from /Users/francois/Library/Java/JRuby/current/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+        from /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/nokogiri-1.2.3-java/lib/nokogiri.rb:10
+        from /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/nokogiri-1.2.3-java/lib/nokogiri.rb:36:in `require'
+        from /Users/francois/Library/Java/JRuby/current/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:36:in `require'
+        from test.rb:2
+<% end %>
+
+I have reported this "bug to the proper authorities":http://github.com/tenderlove/nokogiri/issues#issue/31.
+
+Hpricot is another matter entirely.  When I tried to use it earlier, I hit a roadblock because JRuby couldn't install the native extensions.  I tried again just now, and if you specify the version to be <code>~> 0.6.1</code>, it works.  Specify any other version, and you're a sitting duck:
+
+<% code do %>$ jruby -S gem install -v '~> 0.6' hpricot
+Building native extensions.  This could take a while...
+ERROR:  Error installing hpricot:
+        ERROR: Failed to build gem native extension.
+
+/Users/francois/Library/Java/JRuby/current/bin/jruby extconf.rb install -v ~> 0.6 hpricot
+
+
+Gem files will remain installed in /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/hpricot-0.8.1 for inspection.
+Results logged to /Users/francois/Library/Java/JRuby/jruby-1.2.0/lib/ruby/gems/1.8/gems/hpricot-0.8.1/ext/hpricot_scan/gem_make.out
+
+$ jruby -S gem install -v '~> 0.6.1' hpricot
+Successfully installed hpricot-0.6.164-java
+1 gem installed
+Installing ri documentation for hpricot-0.6.164-java...
+<% end %>
