@@ -1,0 +1,13 @@
+--- 
+title:      "Piston on Windows: Some Pointers"
+created_at: 2009-06-07 07:34:20
+id:         20090607073420
+tags: 
+  - piston
+  - windows
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you need to run Piston on Windows, "BoxCycle":http://boxcycle.com wrote some information about it at: "Rails Plugin Updates, SVN, and Piston 2.0.2 on Windows":http://blog.boxcycle.com/2009/05/plugin-updates-svn-piston-windows-git/
