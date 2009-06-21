@@ -1,0 +1,24 @@
+--- 
+title:      "We've Been Doing TDD for Centuries, You Know.."
+created_at: 2009-06-20 21:55:29
+id:         20090620215529
+tags: 
+  - tdd
+  - test-driven-design
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Today, I was working on my lawn.  Spreading new soil to sow new grass.  I was looking at the ground, and I was pretty sure drainage wasn't going to be good.  I decided to make a test: I got out the garden hose and let it flow.  Sure enough, water was pooling instead of draining.  Back to the drawing board (or at least, a couple more rakes to spread things around).
+
+As I was working the soil, a thought hit me:  I'd say nearly every profession has been doing test driven design (not development) since pretty much the dawn of time:
+
+* the toolsmith in the ancient tribes would hit the stone, see if it did work or not, and repeat as appropriate;
+* the chef tastes his food before letting other people eat it;
+* the plumber tests the pipes before letting the water flow in;
+* the soldier tests his equipment before setting off on the battlefield;
+* naval engineers are "simulation testing their latest aircraft carrier":http://www.foxnews.com/story/0,2933,526833,00.html in an effort to ensure nothing is out of place;
+* certain programmers write automated tests for their code, to ensure it works as designed.
+
+If nearly every profession has been doing it for thousands of years, why aren't you doing it today?
