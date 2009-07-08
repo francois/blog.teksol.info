@@ -11,14 +11,14 @@ filter:
 --- 
 Please grab cliaws from Rubyforge:
 
-<% code %>$ gem install cliaws
+<% code do %>$ gem install cliaws
 <% end %>
 
 <h2>What is Cliaws?</h2>
 
 Cliaws is a replacement for the Amazon EC2 API tools, but uses Ruby, and thus does not suffer from a long boot time.  Cliaws is also easier to setup:
 
-<% code %>$ AWS_ACCESS_KEY_ID=# Your Access ID
+<% code do %>$ AWS_ACCESS_KEY_ID=# Your Access ID
 $ AWS_SECRET_ACCESS_KEY=# Your secret ID
 $ # Setup is done, enjoy!
 $ clis3 list YOUR_BUCKET
