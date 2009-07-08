@@ -1,0 +1,28 @@
+--- 
+title:      "Cliaws 1.5.0: cliec2 commands implemented"
+created_at: 2009-07-07 20:48:44
+id:         20090707204844
+tags: 
+  - aws
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Please grab cliaws from Rubyforge:
+
+<% code %>$ gem install cliaws
+<% end %>
+
+<h2>What is Cliaws?</h2>
+
+Cliaws is a replacement for the Amazon EC2 API tools, but uses Ruby, and thus does not suffer from a long boot time.  Cliaws is also easier to setup:
+
+<% code %>$ AWS_ACCESS_KEY_ID=# Your Access ID
+$ AWS_SECRET_ACCESS_KEY=# Your secret ID
+$ # Setup is done, enjoy!
+$ clis3 list YOUR_BUCKET
+$ cliec2 launch AMI --keypair KEYNAME
+<% end %>
+
+Please view the "README":http://github.com/francois/cliaws for some details.  The implementation is still the best place to get information about the options you can pass.
