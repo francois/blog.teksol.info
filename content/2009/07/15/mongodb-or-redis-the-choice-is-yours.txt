@@ -1,0 +1,81 @@
+--- 
+title:      "MongoDB or Redis?  The Choice Is Yours"
+created_at: 2009-07-15 09:35:54
+id:         20090715093554
+tags: 
+  - redis
+  - mongodb
+  - key-value-store
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+In the past couple of weeks, I had the opportunity to look at "MongoDB":http://www.mongodb.org/ and "Redis":http://code.google.com/p/redis/ in more details.  Both are fast, but serve different needs.  Here's my take on them both.
+
+h2. MongoDB
+
+MongoDB is a "document oriented database":http://en.wikipedia.org/wiki/Document-oriented_database.  MongoDB stores structured data, as documents:
+
+<% code do %>{
+  'name': 'François Beausoleil',
+  'email': 'francois@teksol.info',
+  'year-of-birth': 1973,
+  'tags': ['friendly', 'ruby', 'coder', 'father']
+}
+<% end %>
+
+Since MongoDB stores structured data, it has a richer query language:
+
+<% code do %>// Find people that are fathers OR coders
+db.people.find( { "tags" : { $in : ['father', 'coder'] } } );
+
+// Find people that are fathers AND coders
+db.people.find( { "tags" : { $all : ['father', 'coder'] } } );
+
+// Index the email member of documents
+db.people.ensureIndex({email: 1});
+
+// Query using the index
+db.people.findOne({email: 'francois@teksol.info'})
+<% end %>
+
+h2. Redis
+
+Redis is a key-value store that is strongly typed.  Redis has three types of values: strings, sets and lists.  Out of the box, you cannot store structured data in Redis.  You have to build the index manually, storing yet other keys.
+
+Redis is conceptually simple.  All operations are either stores or fetches:
+
+<% code do %>PUT key value
+GET key
+<% end %>
+
+You can think of Redis as a persistent Hash or Dictionary.  The fact that Redis is strongly typed makes some operations very interesting.
+
+<% code do %># Store other data as serialized JSON object, but we won't be able to query the value itself
+SET "people:francois" "{'name': 'François Beausoleil', 'email': 'francois@teksol.info', 'year-of-birth': 1973, 'tags': ['friendly', 'ruby', 'coder', 'father']}"
+
+# Build ourselves an index on the email value
+SET "email:francois@teksol.info" "francois"
+
+# Build another index for tags
+SADD "tags:friendly" "francois"
+SADD "tags:ruby"     "francois"
+SADD "tags:coder"    "francois"
+SADD "tags:father"   "francois"
+
+# During authentication, we would find the person using the email address
+GET "email:francois@teksol.info"
+
+# Get the rest of the data
+GET "people:francois"
+
+# Find the keys that have both father AND coder as tags
+SINTER "tags:father" "tags:coder"
+<% end %>
+
+h2. Conclusion
+
+So, which one should you choose?  The short answer is "it depends".
+
+The longer answer is to use the best tool for the job.  Storing documents is different than storing simple key values.  Of course, both can be used for the same job, but Redis will be easier if you need a simple Hash/Dictionary.  Use MongoDB for storing structured data.
