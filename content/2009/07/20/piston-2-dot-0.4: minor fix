@@ -1,0 +1,29 @@
+--- 
+title:      "Piston 2.0.4: minor fixes"
+created_at: 2009-07-20 11:18:11
+id:         20090720111811
+tags: 
+  - piston
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just release Piston 2.0.4.  This is a minor fix to enable Piston to work with more Git versions.
+
+Git 1.6.0.1 accepts checking out a new branch without specifying the remote's name:
+
+<% code do %>$ git checkout -b my-2-3-stable 2-3-stable
+# implies origin/2-3-stable
+<% end %>
+
+Versions prior to that expect the full name of the remote branch:
+
+<% code do %>$ git checkout -b my-2-3-stable origin/2-3-stable
+<% end %>
+
+Installation is the usual incantation:  sudo gem install piston
+
+h2. What is Piston?
+
+Piston is a utility that eases vendor branch management. This is similar to <tt>svn:externals</tt>, except you have a local copy of the files, which you can modify at will.  As long as the changes are mergeable, you should have no problems.
