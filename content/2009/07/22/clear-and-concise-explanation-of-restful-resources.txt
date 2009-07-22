@@ -1,0 +1,20 @@
+--- 
+title:      "Clear and Concise Explanation of RESTful Resources"
+created_at: 2009-07-22 14:30:23
+id:         20090722143023
+tags: 
+  - rest
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just found "Your Web Service Might Not Be RESTful If&hellip;":http://www.theamazingrando.com/blog/?p=107 by "Paul Sadauskas":http://www.theamazingrando.com/blog/.  This article is a very clear and concise explanation of how to do real RESTful services.
+
+His arguments are:
+
+1. Present a single top-level resource;
+2. All resources should be accessible by followling links from the top-level resource;
+3. Don't put API tokens in the URL or headers (use representations instead).
+
+A very enjoyable read, and something we should all be following.
