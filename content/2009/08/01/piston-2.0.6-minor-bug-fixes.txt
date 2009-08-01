@@ -1,0 +1,21 @@
+--- 
+title:      "Piston 2.0.6: minor bug fixes"
+created_at: 2009-08-01 13:21:14
+id:         20090801132114
+tags: 
+  - piston
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just pulled in a couple of patches from outside contributors.  These are all minor bug fixes, but are important:
+
+* "Chris Gibson":http://github.com/chrisgibson: When forcing the repository type, Piston would break because it called #downcase on a Symbol. "1bcc16bf8":http://github.com/francois/piston/commit/1bcc16bf874afca88e061ea35cd049b7a1d38ab4
+* Terry Heath:  <a href="http://subversion.tigris.org/">Subversion</a>'s <tt>--non-interactive</tt> would prevent OS X's keychain from kicking in. "93d9a957":http://github.com/francois/piston/commit/93d9a9578f0947c62a70b52f86d8d4033cfb56ad
+* Florian Aßmann: In certain cases, the revision would be a String, and other times it would be an Integer.  Normalize before comparing. "40c0bc4e":http://github.com/francois/piston/commit/40c0bc4e3c63aa398d319ec08846538705950e3d
+
+All users are advised to upgrade:
+
+<% code do %>$ sudo gem install piston
+<% end %>
