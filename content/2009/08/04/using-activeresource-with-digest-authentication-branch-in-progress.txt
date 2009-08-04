@@ -1,0 +1,47 @@
+--- 
+title:      "Using ActiveResource With Digest Authentication: Branch in Progress"
+created_at: 2009-08-04 16:04:11
+id:         20090804160411
+tags: 
+  - active_resource
+  - activeresource
+  - active-resource
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I have a work-in-progress branch for using Digest authentication with ActiveResource.
+
+So, how did I do it?  It wasn't too hard actually.  When I spiked, I changed <a href="http://github.com/francois/rails/blob/ar_digest/activeresource/lib/active_resource/connection.rb#L109"><code>ActiveResource::Connection#request</code></a> to handle authentication itself.  I ended up with a big mess: a new rescue clause, 10 lines of code to calculate the digest and so on.  But I knew it would work.  So, I <code>git checkout .</code> and started with tests, as it should.
+
+The way ActiveResource is built, if a username / password is sent in, ActiveResource will send those automatically in an Authorization header, using the "Basic":http://en.wikipedia.org/wiki/Basic_access_authentication authentication method.  I need a way to turn this off.  Thus grew "#use_basic_authentication=":http://github.com/francois/rails/commit/c33a0a015af50aa3cbf7cc4071e24ec91cfbedb9 and <code>#use_digest_authentication=</code>.
+
+Next up, actually being able to calculate the Digest.  A quick search turned up code by "Eric Hodel":http://blog.segment7.net/ in the form of a Ruby module: "An implementation of HTTP Digest Authentication in Ruby":http://segment7.net/projects/ruby/snippets/digest_auth.rb
+
+After a bit of cleanup and rewriting, I have a branch of ActiveResource that's ready to be commented on. Please see "francois/ar_digest":http://github.com/francois/rails/tree/ar_digest and leave comments there.
+
+An example of using Digest would be:
+
+<% code do %>require "logger"
+require "activeresource"
+require "pp"
+
+ActiveResource::Base.logger = Logger.new(STDERR)
+
+ActiveResource::Base.site     = "http://adgear.local/api"
+ActiveResource::Base.user     = "francois"
+ActiveResource::Base.password = "my-funny-new-password-which-you've-never-seen-before"
+ActiveResource::Base.timeout  = 30
+
+# Don't attempt Basic authentication, but be sure to use Digest
+ActiveResource::Base.use_basic_authentication  = false
+ActiveResource::Base.use_digest_authentication = true
+
+class Site < ActiveResource::Base
+end
+
+pp sites = Site.find(:all)
+<% end %>
+
+This work was sponsored by "Bloom Digital Platforms":http://www.bloomdigital.com/, as part of my work on their AdGear API.
