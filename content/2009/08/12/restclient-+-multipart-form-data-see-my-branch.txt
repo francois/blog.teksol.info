@@ -1,0 +1,12 @@
+--- 
+title:      "RestClient + Multipart Form Data: See My Branch"
+created_at: 2009-08-12 11:05:38
+id:         20090812110538
+tags: 
+  - restclient
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just merged Rick Olson's ("technoweenie":http://techno-weenie.net/) rest-client "multipart_streaming":http://github.com/technoweenie/rest-client/tree/multipart_streaming branch with RestClient 1.0.4.  You can see the results at "francois/rest-client":http://github.com/francois/rest-client.  I sent a pull request to "Adam":http://adam.blog.heroku.com/, so if he pulls it in, everyone will benefit from this code.
