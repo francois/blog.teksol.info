@@ -1,0 +1,18 @@
+--- 
+title:      "Entering the Enterprise Space: Moving to Bloom Digital Platforms"
+created_at: 2009-09-29 10:31:31
+id:         20090929103131
+tags: 
+  - employment
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+After a few years as a consultant, I received an offer from "Bosko Milekic":http://twitter.com/bosko from "Bloom Digital Platforms Inc":http://bloomdigital.com/.  Starting on October 5th, I will be a permanent Bloom employee.  "Marc-André":http://macournoyer.com/blog/ and "Gary":http://garyharan.com/ are moving outside the enterprise, while I'm moving inside.
+
+At Bloom, I will be responsible for the "AdGear":http://www.adgear.com/ API, enabling applications to easily connect to their platform for ad serving and management.  We even have an open source Ruby client available on GitHub as "ad_gear_client":http://github.com/bloom/ad_gear_client.
+
+This will be a welcome change of pace for me.
+
+See you at the next "Montreal.rb":http://www.montrealonrails.com/, at my new office!
