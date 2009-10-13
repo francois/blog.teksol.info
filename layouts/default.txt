@@ -22,6 +22,20 @@ filter:
 <% end -%>
   <script type="text/javascript" src="<%= absolute_url("javascripts/jquery.min.js") %>"></script>
   <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
+  <script type="text/javascript" language="JavaScript">
+  (function() {
+    var proto = window.location.protocol;
+    document.writeln('<scr' + 'ipt type="text/ja' + 'vascr' + 'ipt" s' + 'rc="' +
+        proto + '//a.staging.adgear.com/adgear.js/current/adgear.js' +
+        '"></scr' + 'ipt>');
+  })();
+  </script>
+  <script type="text/javascript" language="JavaScript">
+    ADGEAR.lang.namespace("ADGEAR.site_callbacks");
+    ADGEAR.site_callbacks.variables = function() {
+      return { };
+    }
+  </script>
 </head>
 <body>
   <div id="outer">
@@ -84,6 +98,13 @@ filter:
           <% end -%>
           <li class="last"><a href="<%= absolute_url("tags/") %>">See all tags&hellip;</a></li>
         </ul>
+        </div>
+        <h3>I read</h3>
+        <div class="content">
+          <span class="adgear">
+            <script type="text/javascript" language="JavaScript">ADGEAR.delivery.impression("105", ADGEAR.site_callbacks.variables());</script>
+            <a href="#">Agile Web Development with Rails</a>
+          </span>
         </div>
         <h3>Links</h3>
         <div class="content">
