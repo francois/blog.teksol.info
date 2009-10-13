@@ -103,7 +103,6 @@ filter:
         <div class="content">
           <span class="adgear">
             <script type="text/javascript" language="JavaScript">ADGEAR.delivery.impression("105", ADGEAR.site_callbacks.variables());</script>
-            <a href="#">Agile Web Development with Rails</a>
           </span>
         </div>
         <h3>Links</h3>
