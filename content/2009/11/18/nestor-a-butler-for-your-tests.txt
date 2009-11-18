@@ -1,0 +1,40 @@
+--- 
+title:      "Nestor: A Butler for Your Tests"
+created_at: 2009-11-18 09:38:47
+id:         20091118093847
+tags: 
+  - testing
+  - autotest
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+At yesterday's "Montreal.rb":http://www.montrealonrails.com/ I presented "Nestor":http://github.com/francois/nestor, an autotest-like framework.  This is it's official release announcement.
+
+Nestor is different in that it uses an explicit state machine, namely <a href="http://www.aaronpfeifer.com/">Aaron Pfeifer</a>'s "StateMachine":http://github.com/pluginaweek/state_machine.  Nestor also uses <a href="http://mynyml.com/">Martin Aumont</a>'s "Watchr":http://github.com/mynyml/watchr to listen to filesystem events.  But the biggest difference is that the default Rails + Test::Unit is a forking test server.  Nestor will load the framework classes&mdash;ActiveRecord, ActionController, ActionView, plugins and gems&mdash;only once.  This saves a lot of time on the aggregate versus running <tt>rake</tt> everytime.
+
+<p style="text-align:center"><a href="<%= same_folder_url('nestor-state-diagram.png') %>"><img style="margin:1em auto;padding:2px;border:1px silver solid" src="<%= same_folder_url('nestor-state-diagram-extract.png') %>" alt="Nestor's state diagram with events denoting success or failure of a run, and states such as green, running_all or run_focused_pending."/></a><br/><a class="caption" href="<%= same_folder_url('nestor-state-diagram.png') %>">Click for larger version</a></p>
+
+This release of Nestor is 0.2 quality: it's not ready for large projects.  It only supports Rails + Test::Unit, probably doesn't run on 1.9 or JRuby, but it's a solid foundation for going further.  In the coming days, I will blog on the internals of Nestor and how StateMachine allowed me to add plugins with very little effort.
+
+h2. Installation
+
+<% code :lang => "shell" do %>$ gem install nestor
+$ cd railsapp
+$ # edit config/environments/test.rb to set cache_classes to false
+$ nestor
+<% end %>
+
+I already have a plugin that enables Growl notifications.  Install and use:
+
+<% code :lang => "shell" do %>$ gem install nestor_growl
+$ cd railsapp
+$ nestor start --require nestor/growl
+<% end %>
+
+The <tt>--require</tt> option is where plugins are loaded.  This is an Array of files Nestor will require on startup.
+
+h2. Notes
+
+You must set <tt>cache_classes</tt> to <tt>false</tt> in test mode for now.  This is a limitation of how Rails boots.  With <tt>cache_classes</tt> set to <tt>true</tt>, Rails will load the controllers and models when it boots.  Since this happens before forking, the code under test would never get reloaded.  Did I say it was 0.2 quality?
