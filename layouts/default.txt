@@ -99,7 +99,7 @@ filter:
           <li class="last"><a href="<%= absolute_url("tags/") %>">See all tags&hellip;</a></li>
         </ul>
         </div>
-        <h3>I read</h3>
+        <h3>Books I read and recommend</h3>
         <div class="content">
           <span class="adgear">
             <script type="text/javascript" language="JavaScript">ADGEAR.delivery.impression("105", ADGEAR.site_callbacks.variables());</script>
