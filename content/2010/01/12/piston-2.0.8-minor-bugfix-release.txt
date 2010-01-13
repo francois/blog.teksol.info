@@ -1,0 +1,23 @@
+--- 
+title:      "Piston 2.0.8: minor bugfix release"
+created_at: 2009-11-18 09:38:47
+id:         20091118093847
+tags: 
+  - piston
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Piston 2.0.8 is here.  This is a minor bugfix release:
+
+* piston status with no path would not check any status.  Thanks to "Michael Grosser":http://pragmatig.wordpress.com/ for the heads up;
+* The ActiveSupport gem deprecated require "activesupport" in favor of "active_support". Thanks for Michael for reporting this as well;
+* "Scott Johnson":http://github.com/scottj97 reported and fixed a problem where a git mv would fail because a parent directory was missing.
+
+Thanks to all contributors!
+
+h2. Installing
+
+<% code do %>$ gem install piston
+<% end %>
