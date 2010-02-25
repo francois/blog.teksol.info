@@ -18,19 +18,13 @@ $(function() {
   });
 
   function tagPiston() {
-    if (typeof(window.console) === "function") window.console.log("tagPiston()");
-    ADGEAR.env.add_load_listener(function() {
-      if (typeof(window.console) === "function") window.console.log("tagPiston() - for real");
-      ADGEAR.tags.data.embed({ "id": "13", "chip_key": "5b2ccf20dd0a012c13a40024e87a30c2" });
-    });
+    if (typeof(window.console) === "function") window.console.log("tagPiston() - for real");
+    ADGEAR.tags.data.embed({ "id": "13", "chip_key": "5b2ccf20dd0a012c13a40024e87a30c2" });
   }
 
   function tagRefactoring() {
-    if (typeof(window.console) === "function") window.console.log("tagRefactoring()");
-    ADGEAR.env.add_load_listener(function() {
-      if (typeof(window.console) === "function") window.console.log("tagRefactoring() - for real");
-      ADGEAR.tags.data.embed({ "id": "7", "chip_key": "5e1653d0ce47012c13900024e87a30c2" });
-    });
+    if (typeof(window.console) === "function") window.console.log("tagRefactoring() - for real");
+    ADGEAR.tags.data.embed({ "id": "7", "chip_key": "5e1653d0ce47012c13900024e87a30c2" });
   }
 
   ADGEAR.tags.data.init();
