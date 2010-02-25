@@ -1,0 +1,60 @@
+--- 
+title:      "Looking for Best Practice on Using Bundler With Multiple Ruby Implementations"
+created_at: 2010-02-24 18:56:34
+id:         20100224185634
+tags: 
+  - bundler
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+At "Bloom":http://bloomdigital.com/, we're looking into using "JRuby":http://jruby.org/ instead of "MRI":http://www.ruby-lang.org/. To support the two implementations, some gems are different. Case in point: RMagick and the JSON gems:
+
+<% code "config/environment.rb" do %># More config.gem declarations elided
+
+if defined?(JRUBY_VERSION) then
+  config.gem "activerecord-jdbc-adapter", :version => "0.9.2",  :lib => "jdbc_adapter"
+  config.gem "json-jruby",  :version => "1.2.0",  :lib => "json"
+  config.gem "rmagick4j",   :version => "0.3.6",  :lib => "RMagick"
+else
+  config.gem "json",        :version => "1.2.0"
+  config.gem "rmagick",     :version => "2.12.2", :lib => "RMagick"
+end
+<% end %>
+
+I created the following in Gemfile:
+
+<% code "Gemfile" do %>source :gemcutter
+
+gem "rails", "= 2.3.4"
+gem "pg", "~> 0.8.0" if !defined?(JRUBY_VERSION)
+
+if defined?(JRUBY_VERSION) then
+  gem "activerecord-jdbc-adapter", ">= 0.9.2",  :lib => "jdbc_adapter"
+  gem "json-jruby", ">= 1.2.0"
+  gem "rmagick4j", ">= 0.3.6"
+else
+  gem "json", ">= 1.2.0"
+  gem "rmagick", ">= 2.12.2"
+end
+
+# Ruby's 1.9 stdlib replaced CSV with the implementation of 1.8's FasterCSV, but
+# the upgrade path is problematic: we have to change how we're loading the library.
+gem "fastercsv" if RUBY_VERSION =~ /^1\.8/
+<% end %>
+
+Notice I target 3 versions of Ruby: MRI 1.8, MRI 1.9 and JRuby. If I <tt>bundle lock</tt> from one Ruby implementation, then the other ones won't be able to use the locked bundle:
+
+<% code :lang => "shell" do %>[jruby-1.4.0]$ bundle unlock && bundle lock
+The bundle is now unlocked. The dependencies may be changed.
+The bundle is now locked. Use `bundle show` to list the gems in the environment.
+
+[jruby-1.4.0]$ rvm use 1.8.7
+Now using ruby 1.8.7 p248
+
+[ruby-1.8.7-p248]$ bundle check
+Could not find gem 'rmagick4j (= 0.3.7, runtime)' in any of the sources.
+<% end %>
+
+I'm using Bundler in the context of a Rails 2.3.4 application, but we'll eventually move to Rails 3. Anybody has any experience using Bundler in this way?
