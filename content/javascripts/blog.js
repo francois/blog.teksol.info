@@ -29,8 +29,10 @@ $(function() {
     });
   }
 
-  var qmatch = document.referrer.match(/(?:\?|&)q=(.+)(?:&|$)/);
-  var query = qmatch[0].substring(3, qmatch[0].length - 1);
-  if (query.test(/refactoring/i)) tagRefactoring();
-  if (query.test(/piston/i)) tagPistong();
+  var qmatch = document.referrer.match(/(?:\?|&)q=(.+?)(?:&|$)/)
+  if (qmatch) {
+    var query = unescape(qmatch[0].substring(3, qmatch[0].length - 1));
+    if ((/refactoring/i).test(query)) tagRefactoring();
+    if ((/piston/i).test(query)) tagPiston();
+  }
 });
