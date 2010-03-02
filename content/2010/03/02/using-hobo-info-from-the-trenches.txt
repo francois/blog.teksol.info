@@ -1,0 +1,41 @@
+--- 
+title:      "Using Hobo: Info From the Trenches"
+created_at: 2010-03-02 11:41:47
+id:         20100302114147
+tags: 
+  - rails
+  - hobo
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Recently, a friend asked me to help him rewrite the Access database they use to track donations into something better. I offered to rewrite as a web app (surprise!), and chose to use "Hobo":http://hobocentral.net/.
+
+I'm not a designer, and it shows. My apps are horrible, and have bad choice of color. Red on blue? Check. Green on orange? Check. Wide margins and misaligned text base? Check. Name any design mistakes, and I can make it happen.
+
+I had seen Hobo used by another developer, and I was impressed with the ActiveRecord extensions. There was also the fact that Hobo has a pleasing design that could serve as an initial draft, until external help can be acquired.
+
+Hobo isn't really different from Rails: <code>hobo name_of_new_app</code>. Done.
+
+Things I liked immediately: Declarative declaration of fields and validations, automatic generation of migrations, permissions built-in. You know, stuff that covers the 80%
+
+The thing I didn't like: DRYML. Don't get me wrong: DRYML is a very nice tool, and I didn't have any problems understanding the implicit context. All I had was the age-old problem: learning a new API. After 2-3 weeks (very part time), I was more comfortable with the different tags, and how to use them.
+
+I really enjoy writing this:
+
+<% code(:lang => "xml") do %><table-plus fields="this, city.name, toll_free_number, main_number"/>
+<% end %>
+
+and receiving this in return:
+
+<p>
+  <a href="<%= same_folder_url('table-plus.png') %>">
+    <img src="<%= same_folder_url('table-plus.png') %>" alt="" width="460"/>
+  </a>
+  <a href="<%= same_folder_url('table-plus.png') %>">Click for larger view</a>
+</p>
+
+Right now, I've had a very positive experience with Hobo. Having good documentation helps a lot, and Hobo hasn't disappointed: "http://cookbook.hobocentral.net/":http://cookbook.hobocentral.net/
+
+Over the next few days, I'll discuss Hobo in more details. Hope you follow along!
