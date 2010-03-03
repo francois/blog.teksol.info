@@ -1,0 +1,159 @@
+--- 
+title:      "Hobo Fields: Lots of ActiveRecord Goodness"
+created_at: 2010-03-03 15:31:05
+id:         20100303153105
+tags: 
+  - hobo
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+What? You're still generating migrations manually? I don't anymore. I have tools which do it for me.
+
+Hobofields is a set of extensions to ActiveRecord that gives us lots of goodies, including the ability to generate migrations automatically.  The key to achieving this automatic property declaration is schema declaration in the model.
+
+<% code do %>class Post < ActiveRecord::Base
+  fields do
+    title :string
+    published_at :datetime
+    timestamps
+  end
+end
+<% end %>
+
+If you ever used DataMapper, the idea is similar. Where Hobofields shines though is in reading your model and inferring many, many conventions:
+
+<% code do %>class Comment < ActiveRecord::Base
+  belongs_to :post
+end
+<% end %>
+
+Running the hobo_migration generator results in:
+
+<% code :lang => "shell" do %>$ script/generate hobo_migration
+
+---------- Up Migration ----------
+add_column :comments, :post_id, :integer
+
+add_index :comments, [:post_id]
+----------------------------------
+
+---------- Down Migration --------
+remove_column :comments, :post_id
+
+remove_index :comments, :name => :index_comments_on_post_id rescue ActiveRecord::StatementInvalid
+----------------------------------
+<% end %>
+
+If you use acts_as_list, Hobofields also knows to add a <code>position</code> column (or whatever name is needed):
+
+<% code do %>class Comment < ActiveRecord::Base
+  acts_as_list
+end
+<% end %>
+
+Running the migration generator, you get:
+
+<% code :lang => "shell" do %>$ script/generate  hobo_migration
+
+---------- Up Migration ----------
+add_column :comments, :position, :integer
+----------------------------------
+
+---------- Down Migration --------
+remove_column :comments, :position
+----------------------------------
+What now: [g]enerate migration, generate and [m]igrate now or [c]ancel? 
+<% end %>
+
+Another thing I love about Hobofields is rich type support. Need Textile?
+
+<% code do %>class Post < ActiveRecord::Base
+  fields do
+    body :textile
+  end
+end
+<% end %>
+
+<% code do %>content = <<EOTEXTILE
+This is some Textile content
+
+h1. Automatically formatted
+
+To your:
+
+* specifications,
+* using standard tools
+EOTEXTILE
+
+Post.new(:body => content).body.to_html
+#=> "<p>This is some Textile content</p>\n<h1>Automatically formatted</h1>\n<p>To your:</p>\n<ul><li>specifications,</li>\n<li>using standard tools</li>\n</ul>\n"
+<% end %>
+
+Or maybe you need an enumeration?
+
+<% code do %>class Comment < ActiveRecord::Base
+  fields do
+    status enum_string(:spam, :ham), :default => :spam, :required => true
+  end
+end
+<% end %>
+
+<% code :lang => "shell" do %>$ script/generate hobo_migration
+
+---------- Up Migration ----------
+add_column :comments, :status, :string, :default => "ham", :required => true
+----------------------------------
+
+---------- Down Migration --------
+remove_column :comments, :status
+----------------------------------
+<% end %>
+
+<% code do %>>>Comment.new.status
+#=> "ham"
+>> Comment.create!(:status => "foo")
+#=> ActiveRecord::RecordInvalid: Validation failed: Status must be one of spam, ham
+<% end %>
+
+Admittedly, this last example could be better handled with Hobo's lifecycle (state machine) implementation, but still, it's nice that the validation already exists. Using <code>:null => false</code>, <code>:required => true</code> creates the appropriate validation as well:
+
+<% code do %>class Comment < ActiveRecord::Base
+  fields do
+    author :string, :required
+    email  :string, :required
+    status enum_string(:spam, :ham), :required => true, :default => "ham"
+    timestamps
+  end
+end
+<% end %>
+
+And Hobofields is smart enough to know when no changes are required:
+
+<% code do %>$ script/generate hobo_migration
+Database and models match -- nothing to change
+<% end %>
+
+But with this model definition, we now have new validation automatically:
+
+<% code do %>>> Comment.create!
+#=> ActiveRecord::RecordInvalid: Validation failed: Author can't be blank, Email can't be blank
+<% end %>
+
+Oh wait, just realized that the email address should be an email address:
+
+<% code do %>class Comment < ActiveRecord::Base
+  fields do
+    email :email_address, :required
+  end
+end
+<% end %>
+
+<% code do %>>> Comment.create!(:email => "a")
+#=> ActiveRecord::RecordInvalid: Validation failed: Author can't be blank, Email is invalid
+<% end %>
+
+I really enjoy Hobofields for all the goodies it brings to the table. I haven't even started on all the automatic scopes goodies, the lifecycle methods (which I haven't used yet), or scoped associations.
+
+Until we meet again tomorrow, I suggest you read "Hobofields Reference":http://cookbook.hobocentral.net/manual/hobofields, as well as "Hobofields rich types":http://cookbook.hobocentral.net/manual/hobofields/rich_types to get the full goods.
