@@ -1,0 +1,61 @@
+--- 
+title:      "Use Rdebug When Debugging Statements Don't Take Effect"
+created_at: 2010-03-15 12:00:51
+id:         20100315120051
+tags: 
+  - ruby
+  - debugging
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I was meta-meta-programming, and had an issue when an <code>#included</code> method was called:
+
+<% code do %>anon = Module.new
+anon.class_eval do
+  def self.included(base)
+    debugger
+    if some_method then
+      # code
+    else
+      # more code
+    end
+  end
+end
+<% end %>
+
+The code above resulted in:
+
+<% code do %>/Users/francois/Projects/project/lib/extensions.rb:214:in `included': undefined local variable or method `some_method' for #<Module:0x103305b20> (NameError)
+        from /Users/francois/Projects/project/lib/extensions.rb:245:in `include'
+        from /Users/francois/Projects/project/lib/extensions.rb:245:in `send'
+        ...
+<% end %>
+
+The debugger statement above just wouldn't take: Ruby ran right over it. I happened to look at ruby-debug's Rubygem spec file:
+
+<% code do %>--- !ruby/object:Gem::Specification 
+name: ruby-debug
+...
+executables: 
+- rdebug
+...
+<% end %>
+
+Oh, had never noticed the executables before... Sure enough, I managed to run under debugger control immediately:
+
+<% code do %>$ rdebug -I test test/functional/ad_spots_controller_test.rb [-4, 5] in /Users/francois/Projects/bloom/adgear-admin/test/functional/ad_spots_controller_test.rb
+=> 1  require "test_helper"
+   2  
+   3  class AdSpotsControllerTest < ActionController::TestCase
+   4  
+   5    def setup
+/Users/francois/Projects/bloom/adgear-admin/test/functional/ad_spots_controller_test.rb:1
+require "test_helper"
+(rdb:1) 
+<% end %>
+
+From there, I was able to use <code>(C)ontinue</code> to end up on my debugger statement.  Happy times ensued!
+
+For the curious, the <code>NoMethodError</code> is because <code>#some_method</code> is defined on <code>base</code>, not on <code>self</code>. <code>self</code> in this context is the included module, while base is the place where we're including it into.
