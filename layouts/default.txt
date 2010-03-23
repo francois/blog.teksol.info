@@ -72,6 +72,20 @@ filter:
           <%= comments_form(@page) %>
         </div>
 <% end -%>
+
+<% if @page.tags.present? %>
+        <span class="adgear">
+          <script type="text/javascript" language="JavaScript">
+            ADGEAR.tags.script.universal({
+              "chip_key":  "__TAG_CHIP__",
+              "container_id": "43",
+              "format_id": "3", /* IAB Banner */
+              "path":     <%= @page.tags.sort.to_json %>
+            });
+          </script>
+        </span>
+<% end %>
+
         <!-- primary content end -->
       </div>
       <div id="secondarycontent">
