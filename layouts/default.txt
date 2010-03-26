@@ -116,7 +116,9 @@ filter:
         <h3>Books I read and recommend</h3>
         <div class="content">
           <span class="adgear">
-            <script type="text/javascript" language="JavaScript">ADGEAR.delivery.impression("105", ADGEAR.site_callbacks.variables());</script>
+            <script type="text/javascript" language="JavaScript">
+              ADGEAR.tags.script.embed({ "id": "241", "chip_key": "299472901b38012d1cdd0024e87a30c2" });
+            </script>
           </span>
         </div>
         <h3>Links</h3>
