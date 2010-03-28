@@ -392,3 +392,10 @@ blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; }
   padding: 1em;
   font-weight: bold;
 }
+
+#primarycontent .adgear {
+  display: block;
+  border-top: 1px dotted #999;
+  border-bottom: 1px dotted #999;
+  margin: 1em 0;
+}
