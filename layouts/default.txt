@@ -67,11 +67,6 @@ filter:
 <% end -%>
         </div>
         <%= @content %>
-<% if @page.blog_post then -%>
-        <div class="comments">
-          <%= comments_form(@page) %>
-        </div>
-<% end -%>
 
 <% if @page.tags.present? %>
         <span class="adgear">
@@ -85,6 +80,12 @@ filter:
           </script>
         </span>
 <% end %>
+
+<% if @page.blog_post then -%>
+        <div class="comments">
+          <%= comments_form(@page) %>
+        </div>
+<% end -%>
 
         <!-- primary content end -->
       </div>
