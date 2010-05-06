@@ -13,6 +13,7 @@ SITE.blog_dir   = ""
 
 task :build_tags_indexes do
   require "rubygems"
+  gem "activesupport", "~> 2.3.5"
   require "active_support"
 
   Webby::Builder.new.load_files
