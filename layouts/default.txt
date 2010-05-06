@@ -36,6 +36,7 @@ filter:
       return { };
     }
   </script>
+  <meta name="google-site-verification" content="MtsT3-W0bRZ5BEqf1jGuk5Z9H2Zr5v-X7qJchRFd_Vs" />
 </head>
 <body>
   <div id="outer">
