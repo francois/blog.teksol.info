@@ -11,8 +11,7 @@ filter:
   - textile
 --- 
 
-I started using "Watchr":http://github.com/mynyml/watchr in a couple of projects. An interesting use of Watchr is to
-check on your tests. I have been using this script with great success so far:
+I started using "Watchr":http://github.com/mynyml/watchr in a couple of projects. An interesting use of Watchr is to check on your tests. I have been using this script with great success so far:
 
 <% code("test.watchr") do %>def failed
   system("growlnotify --name adgear-reporting-tests --image /Applications/Mail.app/Contents/Resources/Caution.tiff -m 'Oops, tests failed'")
@@ -30,7 +29,4 @@ watch('(lib|test)/.+\.(js|rb)') do |_|
 end
 <% end %>
 
-Notice I'm using Mac OS X application paths, but it works just fine for me. And the regular "pass" and "failed"
-messages keep me abreast of what's going on. But this style of continuous testing only works when your tests take
-a few seconds at most. When my tests take much longer than that, I start fiddling, opening Google Reader, checking
-news, whatever.
+Notice I'm using Mac OS X application paths, but it works just fine for me. And the regular "pass" and "failed" messages keep me abreast of what's going on. But this style of continuous testing only works when your tests take a few seconds at most. When my tests take much longer than that, I start fiddling, opening Google Reader, checking news, whatever.
