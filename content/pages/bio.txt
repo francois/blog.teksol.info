@@ -7,9 +7,7 @@ filter:
   - erb
   - textile
 --- 
-<div style="float:right">
-<img src="http://farm1.static.flickr.com/26/56229078_4b09373af3_s_d.jpg" alt="Myself"/>
-</div>
+<div style="float:right;margin:0 12px"><img width="75" height="75" src="http://farm1.static.flickr.com/26/56229078_4b09373af3_s_d.jpg" alt="Myself"/></div>
 
 My name is François Beausoleil, and I live in Sherbrooke, Québec, Canada.  I was born in 1973, and that makes me more than 30 years old !
 
