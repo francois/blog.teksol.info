@@ -13,10 +13,10 @@ filter:
 
 My name is François Beausoleil, and I live in Sherbrooke, Québec, Canada.  I was born in 1973, and that makes me more than 30 years old !
 
-I started coding in the early 80s on an "Adam":http://www.old-computers.com/museum/computer.asp?st=1&c=57, from Colecovision.  I then upgraded to the "Commodore 64":http://www.old-computers.com/museum/computer.asp?st=1&c=98, diverted through the "Amiga 2000HD":http://www.old-computers.com/museum/computer.asp?st=1&c=63 (with a 40 Mb HD, no less !), and then I started my way onto PCs.
+I started coding in the early 80s on an "Adam":http://www.old-computers.com/museum/computer.asp?st=1&c=57, from Colecovision.  I then upgraded to the "Commodore 64":http://www.old-computers.com/museum/computer.asp?st=1&c=98, diverted through the "Amiga 2000HD":http://www.old-computers.com/museum/computer.asp?st=1&c=63 (with a 40 MiB HD, no less !), and then I started my way onto PCs.
 
-In early 2005, I made the plunge, and started my own company:  "International Technological Solutions":http://www.teksol.info/.  Since then, I have worked numerous hours, for little pay, but isn't it interesting !
+In early 2005, I made the plunge, and started my own company:  "International Technological Solutions":http://www.teksol.info/.  In late 2009, I received an offer from "Bloom Digital Platforms Inc.":http://bloomdigital.com/, a former customer.
 
-Lately, I jumped on the "Rails":http://www.rubyonrails.com bandwagon, from "Java":http://java.sun.com/.
+I'm also the "head honcho" of the "Montreal.rb":http://montrealonrails.com/ user group. We meet every 3<sup>rd</sup> Tuesdays, except in the summer.
 
-If I'm on the #rubyonrails IRC, you'll find me as fbos.  If you want to send an E-Mail, feel free to use "francois@teksol.info":francois@teksol.info.
+If you meet <em>francois</em> on freenode, it's probably me.  If you want to send an E-Mail, feel free to use "francois@teksol.info":francois@teksol.info.

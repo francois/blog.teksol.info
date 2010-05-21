@@ -103,7 +103,7 @@ filter:
         <h3>Your Host</h3>
         <div class="content">
           <img src="<%= absolute_url("images/francois.jpg") %>" class="picB" alt="A picture of me" />
-          <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://xlsuite.com/">XLsuite</a>.  At night, I am interested many things.  Read my <a href="<%= absolute_url("pages/bio.html") %>">biography</a></p>
+          <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> coder.  During the day, I work on <a href="http://www.adgear.com/">AdGear</a>, an ad distribution platform for publishers.  At night, I am interested many things.  Read my <a href="<%= absolute_url("pages/bio.html") %>">biography</a>.</p>
         </div>
         <!--tags-->
         <h3>Top Tags</h3>
