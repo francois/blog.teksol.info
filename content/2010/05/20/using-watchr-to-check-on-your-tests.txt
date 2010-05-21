@@ -30,3 +30,5 @@ end
 <% end %>
 
 Notice I'm using Mac OS X application paths, but it works just fine for me. And the regular "pass" and "failed" messages keep me abreast of what's going on. But this style of continuous testing only works when your tests take a few seconds at most. When my tests take much longer than that, I start fiddling, opening Google Reader, checking news, whatever.
+
+Your mileage may vary.
