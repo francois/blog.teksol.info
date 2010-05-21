@@ -1,0 +1,26 @@
+--- 
+title:      "FAQs Reduce Support Requests"
+created_at: 2010-05-21 08:31:54
+id:         20100521083154
+tags: 
+  - tech-support
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I'm a happy "DreamHost":http://dreamhost.com/ customer, for many years. Recently, they moved my data to a new server. That in itself wasn't a problem, but this blog went down with their "bad_httpd_conf" error. DreamHost support has always been prompt to answer my questions. But more importantly, when a customer asks for support, they have answer *right where it matters*.
+
+As part of the support process, DreamHost asks what site you have a problem with. Then they run some diagnostics on the network and report those as warnings.
+
+<p style="text-align:center"><a href="<%= same_folder_url("dreamhost-panel-diagnostics.png") %>"><img src="<%= same_folder_url("dreamhost-panel-diagnostics-thumbnail.png") %>" width="360" height="90" alt="DreamHost Support gives you diagnostics when you ask for support on a site. In this case, DreamHost is telling me my DNS servers are non-DreamHost, which might cause problems." title="DreamHost Support telling me my DNS records for teksol.info are non-DreamHost"/></a>
+<a href="<%= same_folder_url("dreamhost-panel-diagnostics.png") %>">Click to view full size</a>
+</p>
+
+After they've done that, DreamHost asks for what type of problem you have. And the different categories have tips you can apply to try to correct the problem, before you have to wait for DreamHost support.
+
+<p style="text-align:center"><a href="<%= same_folder_url("dreamhost-faq.png") %>"><img src="<%= same_folder_url("dreamhost-faq-thumbnail.png") %>" width="360" height="207" alt="DreamHost Support offers tips on fixing your problems before waiting for them, in this case telling me that editing and saving the site might correct the &quot;bad_httpd_conf&quot; error" title="DreamHost Support s tips right where we need them: when you're asking for help"/></a>
+<a href="<%= same_folder_url("dreamhost-faq.png") %>">Click to view full size</a>
+</p>
+
+Another thing that's very nice: after logging in, one of the 8 main options is, you guessed it, Support. DreamHost doesn't hide their support. It's very visible. I'm very satisfied with the services I use.
