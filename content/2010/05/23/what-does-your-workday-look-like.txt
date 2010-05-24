@@ -1,0 +1,14 @@
+--- 
+title:      "What Does Your Workday Look Like?"
+created_at: 2010-05-23 10:51:23
+id:         20100523105123
+tags: 
+  - miscellaneous
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I spend 70% to 90% of my day in a full-screen "iTerm":http://iterm.sourceforge.net/, in Vim. I find it ironic that I use a 3kCAD machine to do what "green screen terminals":http://en.wikipedia.org/wiki/Green_screen_display did 30 years ago... My iTerm's color scheme is green text on a black background. I read somewhere that this color combination was the easiest on eyes, but can't find the reference right now.
+
+When I'm not in Vim, I'm usually in Safari or Firefox. What does *your* day look like?
