@@ -1,0 +1,22 @@
+--- 
+title:      "Bookmarks Are King, Even on Applications"
+created_at: 2010-05-24 09:54:46
+id:         20100524095446
+tags: 
+  - miscellaneous
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I built an application for a non-profit in my region. It allows them to track donations and statistics about their work. One thing that's very important for them is to know if / when they called a previous donor, to see if they will give again this year. They also need to emit receipts for those people that donated. And they must not emit the same receipt twice, etc. You know the drill. I have a page in the application where they can build such a query:
+
+<p style="text-align:center"><img src="<%= same_folder_url("query-screen.png") %>" width="251" height="230" alt="" title=""/></p>
+
+On this page, they can choose which campaign they're working on, and different event types that occur during a campaign. They can also choose how to present the result: the date at which the event occured, or the sum of money or quantity they acquired. It's a large form, since there are almost 15 event types that can occur in a single campaign.
+
+René, my customer, asked me if they could save queries between sessions, so they can go home in the evening, and come back the next day. I said "Sure, I'll just need a Search model here, and &hellip; Hold on a minute: I have a much simpler solution: bookmark the result page."
+
+You see, I built this application on "REST":http://c2.com/cgi/wiki?RepresentationalStateTransfer principles. The query itself is idempotent: it either shows events, or not. And since this is idempotent, a <tt>GET</tt> query is just what the doctor ordered. And browsers are nice enough to allow bookmarking <tt>GET</tt> requests. Yup: 10 hours of work just disappeared because I used what's already available. My customer was happy: he didn't have to wait a minute to get the functionality he needed. I was happy because I had 10 hours of work NOT to do, and I don't have to maintain that code: it's in somebody else's hands. "TSTTCPW":http://c2.com/cgi/wiki?DoTheSimplestThingThatCouldPossiblyWork
+
+This was a real "win-win":http://en.wikipedia.org/wiki/Win-win_game situation.
