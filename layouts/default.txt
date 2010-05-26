@@ -128,13 +128,18 @@ filter:
           <ul>
             <li><a href="<%= absolute_url("pages/bio.html") %>">Author Biography</a></li>
             <li><a href="<%= absolute_url("pages/privacy.html") %>">Privacy Policy</a></li>
-            <li><script type="text/javascript" src="http://embed.technorati.com/embed/m24hq7g983.js"></script></li>
-            <li><a href="http://chineseprogrammer.blogspot.com/"> About Chinese software programmer &amp; Developer</a></li>
           </ul>
         </div>
         <h3>Projects I work on</h3>
         <div class="content">
           <ul>
+            <li><a href="http://adgear.com/">AdGear &mdash; Display advertising made easy and effective</a></li>
+          </ul>
+        </div>
+        <h3>Projects I worked on</h3>
+        <div class="content">
+          <ul>
+            <li><a href="http://francois.github.com/piston">Piston</a></li>
             <li><a href="http://xlsuite.org/">XLSuite.org : CRM and CMS</a></li>
             <li><a href="http://weputuplights.com">We Put Up Lights.com: Specialty Lighting Installation for all Occasions</a></li>
             <li><a href="http://smrty.com/">SMRTY.com: issue tracking, time management, billing</a></li>
