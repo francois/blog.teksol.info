@@ -399,3 +399,24 @@ blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; }
   border-bottom: 1px dotted #999;
   margin: 1em 0;
 }
+
+#secondarycontent .adgear {
+  display: block;
+  text-align: center;
+  background: #F9F9F7;
+  padding: 6px 2px;
+  border: 1px solid silver;
+}
+
+#secondarycontent .adgear img {
+  margin: 0 auto;
+  -webkit-box-shadow: 0 0 6px 4px #f3f3f3;
+  -moz-box-shadow: 0 0 6px 4px #f3f3f3;
+  box-shadow: 0 0 6px 4px #f3f3f3;
+}
+
+#secondarycontent .adgear p {
+  text-align: center;
+  margin: 4px 0 0 0;
+  font-size: 90%;
+}
