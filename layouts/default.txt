@@ -31,6 +31,7 @@ filter:
   })();
   </script>
   <script type="text/javascript" language="JavaScript">
+    ADGEAR.tags.script.init();
     ADGEAR.lang.namespace("ADGEAR.site_callbacks");
     ADGEAR.site_callbacks.variables = function() {
       return { };
