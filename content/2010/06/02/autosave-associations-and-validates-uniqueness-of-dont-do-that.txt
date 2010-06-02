@@ -18,7 +18,7 @@ INSERT INTO "placement_rules" ("kind", "created_at", "placement_id", "bookable_t
 
 This manifested itself when a customer called and told us he'd found our "500 error page":http://admin.adgear.com/500.html. Ooops.
 
-Our problem turned out to be a misunderstanding of autosave association validations.
+Our problem turned out to be a misunderstanding of "autosave":http://api.rubyonrails.org/classes/ActiveRecord/AutosaveAssociation.html association validations.
 
 Autosave associations are a wonderful beast: with a single <code>#save</code> call, the nested entities are saved within the same transaction, without any intervention on the developer's part. Unfortunately, validations behave differently than what we expected.
 
