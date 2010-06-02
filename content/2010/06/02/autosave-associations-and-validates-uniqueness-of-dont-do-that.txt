@@ -1,0 +1,121 @@
+--- 
+title:      "Autosave Associations and validates_uniqueness_of: Don't Do That"
+created_at: 2010-06-02 15:08:20
+id:         20100602150820
+tags: 
+  - active-record
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+We received a nasty "Hoptoad":http://hoptoadapp.com/ notification today at "AdGear":http://adgear.com/ :
+
+<% code do %>ActiveRecord::StatementInvalid: PGError: ERROR:
+duplicate key value violates unique constraint "index_placement_rules_on_type_and_placement_id_and_bookable_typ" :
+INSERT INTO "placement_rules" ("kind", "created_at", "placement_id", "bookable_type", "bookable_id", "updated_at") VALUES(E'PlacementInclusion', '2010-06-02 19:29:24.479983', 2320, E'Site', 162, '2010-06-02 19:29:24.479983') RETURNING "id"
+<% end %>
+
+This manifested itself when a customer called and told us he'd found our "500 error page":http://admin.adgear.com/500.html. Ooops.
+
+Our problem turned out to be a misunderstanding of autosave association validations.
+
+Autosave associations are a wonderful beast: with a single <code>#save</code> call, the nested entities are saved within the same transaction, without any intervention on the developer's part. Unfortunately, validations behave differently than what we expected.
+
+For the sake of argument, let's use these models:
+
+<% code do %>class Order < ActiveRecord::Base
+  has_many :items
+end
+
+class OrderItem < ActiveRecord::Base
+  belongs_to :order
+
+  validates_presence_of :product_number
+  validates_uniqueness_of :product_number, :scope => :order
+end
+<% end %>
+
+If you build an Order and add two items, you'll have troubles, unless you wrap your save in a transaction block:
+
+<% code do %>> o = Order.new
+> 2.times { o.items << Item.new(:product_number => "A-113") }
+> o.save
+  # Validates entities
+  Item Load (0.2ms)   SELECT "items".id FROM "items" WHERE ("items"."product_number" = 'A-113' AND "items".order_id IS NULL) LIMIT 1
+  Item Load (0.1ms)   SELECT "items".id FROM "items" WHERE ("items"."product_number" = 'A-113' AND "items".order_id IS NULL) LIMIT 1
+  Order Create (0.7ms)   INSERT INTO "orders" ("customer_number", "created_at", "updated_at") VALUES(NULL, '2010-06-02 19:15:57', '2010-06-02 19:15:57')
+  # Validate 1st entity again
+  Item Load (0.1ms)   SELECT "items".id FROM "items" WHERE ("items"."product_number" = 'A-113' AND "items".order_id = 1) LIMIT 1
+  Item Create (0.1ms)   INSERT INTO "items" ("created_at", "order_id", "updated_at", "product_number") VALUES('2010-06-02 19:15:57', 1, '2010-06-02 19:15:57', 'A-113')
+  # Validate 2nd entity again, but fails this time around
+  Item Load (0.1ms)   SELECT "items".id FROM "items" WHERE ("items"."product_number" = 'A-113' AND "items".order_id = 1) LIMIT 1
+ => [false, true] 
+> o.items.map(&:errors).flatten.map(&:full_messages)
+ => [[], ["Product number has already been taken"]] 
+<% end %>
+
+A partially saved order is rarely what you're looking for. Adding the <code>:autosave => true</code> option&hellip;
+
+<% code do %>class Order < ActiveRecord::Base
+  has_many :items, :autosave => true
+end
+<% end %>
+
+Generates a very different SQL trace:
+
+<% code do %>> o = Order.new
+> 2.times { o.items << Item.new(:product_number => "A-113") }
+> o.save
+  # Validate associated entities...
+  Item Load (0.2ms)   SELECT "items".id FROM "items" WHERE ("items"."product_number" = 'A-113' AND "items".order_id IS NULL) LIMIT 1
+  Item Load (0.1ms)   SELECT "items".id FROM "items" WHERE ("items"."product_number" = 'A-113' AND "items".order_id IS NULL) LIMIT 1
+  Order Create (0.4ms)   INSERT INTO "orders" ("customer_number", "created_at", "updated_at") VALUES(NULL, '2010-06-02 20:03:12', '2010-06-02 20:03:12')
+  # Then save them, even though they're invalid.
+  Item Create (0.1ms)   INSERT INTO "items" ("created_at", "order_id", "updated_at", "product_number") VALUES('2010-06-02 20:03:12', 2, '2010-06-02 20:03:12', 'A-113')
+  Item Create (0.1ms)   INSERT INTO "items" ("created_at", "order_id", "updated_at", "product_number") VALUES('2010-06-02 20:03:12', 2, '2010-06-02 20:03:12', 'A-113')
+ => true 
+<% end %>
+
+This is even worse: instead of a partial save, ActiveRecord told us that everything was good. This is how ActiveRecord behaves:
+
+<% code do %>if order.save then
+  order.items.each(&:save) if order.items.all?(&:valid?)
+end
+<% end %>
+  
+What we need instead is to hook into the autosave callback chain:
+
+<% code do %>class Order < ActiveRecord::Base
+  has_many :items, :autosave => true
+
+  private
+
+  # items is the has_many name. If you had posts, it would be
+  # validate_associated_records_for_posts. If you have multiple
+  # autosave associations, each can have a method such as this
+  # one to handle it's validation needs.
+  def validate_associated_records_for_items
+    product_number_errors = false
+    items.group_by(&:product_number).reject {|_, group| group.length <= 1}.each do |product_number, group|
+      product_number_errors = true
+      errors.add_to_base "Product #{product_number} used #{group.length} times on the order"
+    end
+
+    errors.add_to_base("Each product number can be used at most once per order") if product_number_errors
+  end
+end
+<% end %>
+
+With this validation in place, validations will run on the full collection in a single pass, rather than piecemeal.
+
+<% code do %>> o = Order.new
+> 2.times { o.items << Item.new(:product_number => "A-113") }
+> o.save # Will run in-memory validations
+ => false 
+> pp o.errors.full_messages
+["Product A-113 used 2 times on the order",
+ "Each product number can be used at most once per order"]
+<% end %>
+
+Notice I didn't say anything about the <code>validates_uniqueness_of</code> validation in <code>Item</code>. I left it in place. It doesn't harm anything, and if you ever create items without going through the parent model, your code is ready to take care of itself.
