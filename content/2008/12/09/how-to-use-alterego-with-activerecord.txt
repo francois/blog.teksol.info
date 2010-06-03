@@ -3,7 +3,7 @@ title:      "How to Use AlterEgo With ActiveRecord"
 created_at: 2008-12-09 09:52:17
 id:         20081209095217
 tags: 
-  - active-record
+  - activerecord
   - alter-ego
 blog_post:  true
 filter:
