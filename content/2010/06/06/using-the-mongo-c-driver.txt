@@ -1,0 +1,39 @@
+--- 
+title:      "Using the Mongo C Driver"
+created_at: 2010-06-06 15:30:58
+id:         20100606153058
+tags: 
+  - mongo
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I'm writing a "Cocoa":http://developer.apple.com/technologies/mac/cocoa.html application to browse and administer a "Mongo DB":http://www.mongodb.org/. This is a fun side-project. I'm using the Mongo driver from Objective-C, hence there might be differences for you.
+
+First off, we need to connect to Mongo, and to do that, we need to tell Mongo about the connection information, namely the host and port:
+
+<% code(:lang => "c") do %>mongo_connection_options opts;
+strcpy(opts.host,
+       [[self.connectionInfo objectForKey:MEHost] cString]);
+opts.port = [[self.connectionInfo objectForKey:MEPort] intValue];
+/* mongo doesn't have a default port constant or define */
+if (0 == opts.port) opts.port = 27017;
+<% end %>
+
+<code>connectionInfo</code> above is an instance of <a href="http://developer.apple.com/mac/library/documentation/Cocoa/Reference/Foundation/Classes/NSDictionary_Class/Reference/Reference.html"><code>NSDictionary</code></a>. The available keys are declared in <a href="http://github.com/francois/mongo_explorer/blob/b19664b0303ceabff0a55add044fd4d4e494fd41/NewConnectionController.h#L11-14"><code>NewConnectionController</code></a>.
+
+After we've prepared the connection options, it's time to connect:
+
+<% code(:lang => "c") do %>connection = (mongo_connection *)malloc(sizeof(mongo_connection));
+if (!connection) return;
+
+mongo_conn_return result = mongo_connect(connection, &opts);
+if (mongo_conn_success == result) return;
+<% end %>
+
+<code>connection</code> above was declared as a pointer to a <code>mongo_connection</code> structure in <a href="http://github.com/francois/mongo_explorer/blob/b19664b0303ceabff0a55add044fd4d4e494fd41/DatabaseController.h#L13"><code>DatabaseController</code></a>. If the connection succeeds, I simply continue. If the connection fails, I fall-through and inform the user using an "NSAlert":http://developer.apple.com/mac/library/documentation/cocoa/reference/ApplicationKit/Classes/NSAlert_Class/Reference/Reference.html, shown as a sheet.
+
+I haven't yet needed to authenticate to Mongo, but it seems simple to call <a href="http://github.com/mongodb/mongo-c-driver/blob/e62001c51fec4b0f3d0b5626e0b3f0b515367a30/src/mongo.h#L169"><code>mongo_cmd_authenticate()</code></a>.
+
+Don't forget the "tests":http://github.com/mongodb/mongo-c-driver/tree/master/test available in the mongo driver itself.
