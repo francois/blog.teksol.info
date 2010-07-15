@@ -30,4 +30,6 @@ The flat view was my biggest impetus to write Mongo Explorer.
 
 What's broken? First, this needs some kind of icon. Also, don't expect to browse multi-million document collections just yet. Cocoa wants to fully materialize the NSTableView rows, and I don't know how to handle that yet. I do have an MEArray class that helps somewhat, but it's not perfect yet. Learning exercise, remember? I've successfully viewed collections with slightly less than 20,000 document with no issues.
 
-If you're interested in following, you can play around on "GitHub":http://github.com/francois/mongo_explorer, or even download the first official release: "Mongo Explorer, v1.0.0":https://s3.amazonaws.com/teksol/mongo-explorer-v1.0.0.zip
+If you're interested in following, you can play around on "GitHub":http://github.com/francois/mongo_explorer, or even download the first official release: "Mongo Explorer, v1.0.1":https://s3.amazonaws.com/teksol/mongo-explorer-v1.0.1.zip
+
+UPDATE: Pushed 1.0.1, as 1.0.0 didn't include it's frameworks, and was 10.6 only.
