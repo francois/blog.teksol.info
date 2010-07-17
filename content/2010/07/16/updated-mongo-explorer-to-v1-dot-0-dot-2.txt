@@ -12,6 +12,6 @@ filter:
 --- 
 "Damien Caselli":https://twitter.com/damiencaselli, one of the first brave souls to use Mongo Explorer, reported an issue with time travelling in "Mongo Explorer":http://github.com/francois/mongo_explorer. Luckily, it wasn't anything serious: just a misunderstanding between "me, Cocoa and JavaScript":http://github.com/francois/mongo_explorer/commit/74b645c77ac7086be0fdafb8de349a49e64365a3.
 
-To celebrate the <em>No Time Travelling Issues</em>, I've released version 1.0.2 of Mongo Explorer. Get yours: "mongo-explorer-v1.0.2.zip":https://teksol.s3.amazonaws.com:443/mongo_explorer-v1.0.2.zip
+To celebrate the <em>No Time Travelling Issues</em>, I've released version 1.0.2 of Mongo Explorer. Get yours: "mongo-explorer-v1.0.2.zip":https://teksol.s3.amazonaws.com:443/mongo-explorer-v1.0.2.zip
 
 Yes, I'm aware of "Sparkle":http://github.com/andymatuschak/Sparkle, and yes, it will eventually make it into Mongo Explorer. That, and a million other little things.
