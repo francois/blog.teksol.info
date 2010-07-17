@@ -33,3 +33,5 @@ What's broken? First, this needs some kind of icon. Also, don't expect to browse
 If you're interested in following, you can play around on "GitHub":http://github.com/francois/mongo_explorer, or even download the first official release: "Mongo Explorer, v1.0.1":https://s3.amazonaws.com/teksol/mongo-explorer-v1.0.1.zip
 
 UPDATE: Pushed 1.0.1, as 1.0.0 didn't include it's frameworks, and was 10.6 only.
+
+<img src="http://d.staging.adgear.com/data/dp=34/chip=0e6ff78073d8012d291b0024e87a30c2.gif" width="1" height="1" alt=""/>

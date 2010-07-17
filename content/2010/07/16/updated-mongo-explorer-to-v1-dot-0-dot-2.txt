@@ -15,3 +15,5 @@ filter:
 To celebrate the <em>No Time Travelling Issues</em>, I've released version 1.0.2 of Mongo Explorer. Get yours: "mongo-explorer-v1.0.2.zip":https://teksol.s3.amazonaws.com:443/mongo-explorer-v1.0.2.zip
 
 Yes, I'm aware of "Sparkle":http://github.com/andymatuschak/Sparkle, and yes, it will eventually make it into Mongo Explorer. That, and a million other little things.
+
+<img src="http://d.staging.adgear.com/data/dp=34/chip=0e6ff78073d8012d291b0024e87a30c2.gif" width="1" height="1" alt=""/>
