@@ -378,7 +378,8 @@ textarea { width: 100%; }
 #toptags li.last:after { content: ""; }
 
 blockquote, blockquote p { margin: 1em; }
-blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; }
+blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; padding: 4px; }
+blockquote h1, blockquote h2, blockquote h3, blockquote h4, blockquote h5, blockquote h6 { margin-top: 0; }
 
 .post form {
   background: #eee;
