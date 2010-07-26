@@ -420,3 +420,7 @@ blockquote { border: 1px dotted #999; background: #ffe5ce; color: #333; }
   margin: 4px 0 0 0;
   font-size: 90%;
 }
+
+acronym[title], abbr[title] {
+  border-bottom: 1px dotted #ccc;
+}

@@ -27,7 +27,7 @@ class Employee < ActiveRecord::Base
 end
 <% end %>
 
-To an STI-enabled class hierarchy:
+To an <acronym title="single-table inheritance">STI</acronym>-enabled class hierarchy:
 
 <% code do %>class Addressee < ActiveRecord::Base
   self.abstract_class = true
