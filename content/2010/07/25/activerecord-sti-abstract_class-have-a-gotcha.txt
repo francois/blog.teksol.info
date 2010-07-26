@@ -1,0 +1,89 @@
+--- 
+title:      "ActiveRecord STI + abstract_class? have a gotcha"
+created_at: 2010-07-25 22:44:25
+id:         20100725224425
+tags: 
+  - activerecord
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+To try and ease my pain, I am refactoring a Rails 2.3.5 application using Hobo from multiple tables to a single table. I'm talking about models which are essentially the same: companies, people and employees. I went from this:
+
+<% code do %>class Company < ActiveRecord::Base
+  has_many :employees
+  has_many :people, :through => :employees
+end
+
+class Person < ActiveRecord::Base
+  has_many :employees
+  has_many :companies, :through => :employees
+end
+
+class Employee < ActiveRecord::Base
+  belongs_to :company
+  belongs_to :person
+end
+<% end %>
+
+To an STI-enabled class hierarchy:
+
+<% code do %>class Addressee < ActiveRecord::Base
+  self.abstract_class = true
+end
+
+class Company < Addressee
+  has_many :employees
+  has_many :people, :through => :employees
+end
+
+class Person < Addressee
+  has_many :employees
+  has_many :companies, :through => :employees
+end
+
+class Employee < Addressee
+  belongs_to :company
+  belongs_to :person
+end
+<% end %>
+
+Can you spot the mistake? Here's where it breaks down:
+
+<% code do %>$ script/console
+> PersonAddressee.count
+SQL (9.9ms)   SELECT count(*) AS count_all FROM "addressees"
+=> 10231
+<% end %>
+
+When the classes are defined with abstract_class? set to true, calling <code>Company#count</code> executes the following:
+
+# ActiveRecord <code>Company#superclass</code>, which answers <code>Addressee</code>
+# ActiveRecord calls <code>Addressee#abstract_class?</code>, which answers <code>true</code>
+# Because <code>Company#base_class == Company#superclass</code>, no STI is involved, and ActiveRecord queries the <code>addressees</code> table with no STI hints (type column).
+
+When removing the abstract class declaration, here's how it works:
+
+# ActiveRecord <code>Company#superclass</code>, which answers <code>Addressee</code>
+# ActiveRecord calls <code>Addressee#abstract_class?</code>, which answers <code>false</code>
+# ActiveRecord <code>Addressee#superclass</code>, which answers <code>ActiveRecord::Base</code>
+# Because <code>Company#base_class != Company#superclass</code>, STI is involved and ActiveRecord adds the type hint to the <code>addressees</code> table query.
+
+The "documentation":http://api.rubyonrails.org/classes/ActiveRecord/Base.html#M001822 is quite clear though:
+
+<blockquote cite="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#M001822"><h4>abstract_class?()</h4>
+<p>Returns whether this class is a base AR class. If A is a base class and B descends from A, then B.base_class will return B.</p></blockquote>
+
+The documentation on <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#M001821"><code>#base_class</code></a> is much better though:
+
+<blockquote cite="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#M001821"><h4>base_class()</h4>
+<p>Returns the base AR subclass that this class descends from. If A extends AR::Base, A.base_class will return A. If B descends from A through some arbitrarily deep hierarchy, B.base_class will return A.</p></blockquote>
+
+And "current HEAD documentation":http://github.com/rails/rails/blob/13df581ec77cc7e5351570c5035a563b946532d5/activerecord/lib/active_record/base.rb#L773 is the best of them all:
+
+<blockquote cite="http://github.com/rails/rails/blob/13df581ec77cc7e5351570c5035a563b946532d5/activerecord/lib/active_record/base.rb#L773"><h4>base_class()</h4>
+<p>Returns the base AR subclass that this class descends from. If A extends AR::Base, A.base_class will return A. If B descends from A through some arbitrarily deep hierarchy, B.base_class will return A.</p>
+<p>If B < A and C < B and if A is an abstract_class then both B.base_class and C.base_class would return B as the answer since A is an abstract_class.</p></blockquote>
+
+Luckily, I found this before users got a chance to report bugs. And no, I would never have thought to add a test for this: I'm not in the habit of testing base ActiveRecord functionality.
