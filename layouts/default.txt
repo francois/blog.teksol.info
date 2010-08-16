@@ -20,7 +20,7 @@ filter:
 <% if @page.url != "/" then -%>
   <link rel="canonical" href="<%= absolute_url(@page.url).sub('.html', '') %>" />
 <% end -%>
-  <script type="text/javascript" src="<%= absolute_url("javascripts/jquery.min.js") %>"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
   <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
   <script type="text/javascript" language="JavaScript">
   (function() {
