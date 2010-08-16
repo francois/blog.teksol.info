@@ -19,13 +19,7 @@ $(function() {
 
   function log(data) {
     if (typeof(window.console) !== "undefined") {
-      var arr = new Array();
-      arr.push(data);
-      for(var i = 0; i < arguments.length; i++) {
-        arr.push(arguments[i]);
-      }
-
-      window.console.log.apply(this, arr);
+      window.console.log.apply(this, arguments);
     }
   }
 
