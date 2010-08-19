@@ -1,0 +1,79 @@
+--- 
+title:      "Bundler & Continuous Testing Scenarios: Usage Tips"
+created_at: 2010-08-19 10:30:24
+id:         20100819103024
+tags: 
+  - bundler
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just pushed a change for my teammates: we're now using Bundler on our Rails 2.3.5 application. Things went rather well, but our continuous testing server choked a bit on that.
+
+First, I had forgotten to run <code>bundle install</code> after pulling changes. Then I had to ignore our cucumber environment, because it depends on <code>rb-appscript</code> which is a native gem on Mac OS X. Our <acronym title="continuous testing">CT</acronym> machine is a Linux box, hence the change. Then, <code>bundle install</code> would fail installation because it didn't have sudo access:
+
+<% code do %>Fetching git://github.com/bloom/rails.git
+Fetching git://github.com/francois/active_url
+Fetching git://github.com/francois/safariwatir.git
+Fetching source index for http://rubygems.org/
+sudo: no tty present and no askpass program specified
+sudo: no tty present and no askpass program specified
+Using rake (0.8.7) 
+sudo: no tty present and no askpass program specified
+sudo: no tty present and no askpass program specified
+/usr/lib64/ruby/site_ruby/1.8/rubygems/format.rb:38:in `from_file_by_path': Cannot load gem at [/usr/lib64/ruby/gems/1.8/cache/SystemTimer-1.2.gem] in /home/francois/adgear-admin (Gem::Exception)
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/source.rb:77:in `fetch'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/installer.rb:45:in `run'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/spec_set.rb:12:in `each'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/spec_set.rb:12:in `each'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/installer.rb:44:in `run'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/installer.rb:8:in `install'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/cli.rb:185:in `install'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/vendor/thor/task.rb:22:in `send'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/vendor/thor/task.rb:22:in `run'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/vendor/thor/invocation.rb:118:in `invoke_task'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/vendor/thor.rb:246:in `dispatch'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/lib/bundler/vendor/thor/base.rb:389:in `start'
+  from /usr/lib64/ruby/gems/1.8/gems/bundler-1.0.0.rc.5/bin/bundle:13
+  from /usr/bin/bundle:19:in `load'
+  from /usr/bin/bundle:19
+<% end %>
+
+I was busy writing a message to the <a href="http://groups.google.com/group/ruby-bundler">Ruby Bundler Google Group</a> when I remembered <code>bundle install</code> has an <a href="http://gembundler.com/man/bundle-install.1.html">optional parameter</a> which specifies where the bundle should be installed. I changed my <acronym title="continuous testing">CT</acronym> script to run <code>bundle install --without=cucumber vendor/gems</code> and bundle did it's magic, and my <acronym title="continuous testing">CT</acronym> box started running tests.
+
+Much rejoicing ensued.
+
+For the record, here's our testing script:
+
+<% code :lang => "bash" do %>#!/bin/bash
+cd /home/francois/adgear-admin
+
+if [ -z $1 ] ; then
+        echo "Can't proceed if I don't know which branch to test"
+        exit 1
+fi
+
+TSTAMP=`date +%Y-%m-%d-%H:%M`
+BRANCH=$1
+LOG=/home/francois/build-logs/$BRANCH-$TSTAMP.log
+
+(
+        git fetch origin                                           && \
+        git reset --hard origin/$BRANCH                            && \
+        echo =======================                               && \
+        git show                                                   && \
+        ( bundle install --without=cucumber vendor/cache || true ) && \
+        nice rake db:adgear:production:update parallel:prepare parallel:test
+) > $LOG 2>&1
+
+if [ "$?" = "0" ] ; then
+        /usr/bin/curl -s -o /dev/null -d "{\"message\":{\"body\":\"Test Suite Passed -- $BRANCH -- http://ct.local:9001/logs/$BRANCH/$TSTAMP\"}}" -HContent-Type:application/json -u 12345:X http://oursite.campfirenow.com/room/12345/speak.json
+else
+        /usr/bin/curl -s -o /dev/null -d "{\"message\":{\"body\":\"Test Suite FAILED -- $BRANCH -- http://ct.local:9001/logs/$BRANCH/$TSTAMP\"}}" -HContent-Type:application/json -u 12345:X http://oursite.campfirenow.com/room/12345/speak.json
+fi
+
+# vi: sw=8 ts=8 expandtab
+<% end %>
+
+This script is run from cron.
