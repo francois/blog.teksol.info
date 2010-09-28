@@ -14,7 +14,7 @@ module Code
     options = args.extract_options!
     options.reverse_merge!(DEFAULT_CODERAY_OPTIONS)
     language = (options.delete(:lang) || args.shift).to_s
-    the_code = returning([]) do |buffer|
+    the_code = [].tap do |buffer|
       buffer << %Q(<div class="code">)
       buffer << %Q(<h5>#{h(args.first)}</h5>) unless args.empty?
       buffer << %Q(<div class="CodeRay"><pre>)
