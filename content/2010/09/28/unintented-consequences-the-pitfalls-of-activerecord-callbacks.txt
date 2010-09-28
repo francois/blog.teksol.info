@@ -1,0 +1,103 @@
+--- 
+title:      "Unintented Consequences: The Pitfalls of ActiveRecord Callbacks"
+created_at: 2010-09-28 08:42:17
+id:         20100928084217
+tags: 
+  - active-record
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+At "Bloom":http://bloomdigital.com/, we have a largish "Rails":http://rubyonrails.org/ application: 12&nbsp;000 lines of model code, alone. Yesterday, we found a major problem, and the cause was very non-obvious.
+
+Bloom Digital Platforms has a product called "AdGear":http://adgear.com/. AdGear is an ad distribution platform. The obvious models are Ad and Campaign: a Campaign has many ads. From a UI perspective, it's nice to show how many active ads are in the campaign. In the campaign's index view, we have something like this:
+
+<% code do %><#%# app/views/campaigns/_campaign.html.erb %>
+<tr>
+  <td><#%= link_to(h(campaign.name), campaign) %></td>
+  <td><#%= pluralize(campaign.active_ad_units_count, "active ads") %></td>
+</tr>
+<% end %>
+
+Notice how we're using an attribute named <code>active_ad_units_count</code>. This is a cached value. We keep this value updated by doing the following:
+
+<% code do %>class Ad < ActiveRecord::Base
+  belongs_to :campaign
+  after_save :update_campaign_cached_values
+
+  private
+
+  def update_campaign_cached_values
+    campaign.update_cached_values
+  end
+end
+
+class Campaign < ActiveRecord::Base
+  def update_cached_values
+    update_attribute(:active_ad_units_count, ad_units.active.count)
+  end
+end
+<% end %>
+
+Pretty reasonable, you'll say. And I agree: good names explain the intent, without needing to read all the details.
+
+Let's throw a monkey wrench in there:
+
+<% code do %>class Campaign < ActiveRecord::Base
+  before_save :ensure_consistency
+
+  attr_accessor :conditions
+
+  def conditions
+    return @conditions if @conditions
+    @conditions =|| serialized_conditions ? YAML.load(serialized_conditions) : nil
+  end
+
+  private
+
+  # Method renamed to protect the innocent
+  def ensure_consistency
+    if some_condition then
+      self.serialized_conditions = conditions ? conditions.to_yaml : nil
+      return true
+    end
+
+    false
+  end
+end
+<% end %>
+
+Can you spot the issue? Note this code is in <code>Campaign</code>, not <code>Ad</code>. It's pretty obvious when boiled down to 20 lines of code. When you're wading through 12&nbsp;000, it's pretty tough.
+
+If you read the documentation for <code>#before_save</code>, you'll notice this gem:
+
+<% code do %># == Canceling callbacks
+#
+# If a <tt>before_*</tt> callback returns +false+, all the later callbacks and the associated action are cancelled. If an <tt>after_*</tt> callback returns
+# +false+, all the later callbacks are cancelled. Callbacks are generally run in the order they are defined, with the exception of callbacks
+# defined as methods on the model, which are called last.
+<% end %>
+
+Excerpt from "activerecord/lib/active_record/callbacks.rb":http://github.com/rails/rails/blob/2-3-stable/activerecord/lib/active_record/callbacks.rb#L196
+
+In the example above, <code>some_condition</code> might return <code>false</code>, which would cancel the save, but let's unwind the stack:
+
+* AdsController#update
+* Ad#update_campaign_cached_values
+* Campaign#update_cached_values
+* ActiveRecord::Base#update_attribute
+* Campaign#ensure_consistency - returns false
+
+Because we were calling <code>#update_attribute</code>, which returns <code>false</code> when it fails to update the object, we ended up not updating the Campaign's cached values. And we ended up with a stale cache. And ads which didn't get updated. A careful tower of convoluted code tumbled down upon us.
+
+Why did this happen? It's obvious the developer who wrote the <code>#ensure_consistency</code> method didn't know about ActiveRecord's <code>#serialize</code>, which did exactly what he wanted to. He also didn't know about the dangers of returning <code>false</code> from a callback. These two point to relative inexperience / lack of knowledge about Rails & ActiveRecord.
+
+We're obviously not the first ones to hit this kind of problem:
+
+* "before_save gotcha":http://lists.rubyonrails.org/pipermail/rails/2006-February/017197.html
+* "Rails before_save and validations":http://siddharthdawara.blogspot.com/2008/09/rails-beforesave-and-validations.html
+
+"James Golick":http://jamesgolick.com/ also ranted off about something similar a while back: "Crazy, Heretical, and Awesome: The Way I Write Rails Apps":http://jamesgolick.com/2010/3/14/crazy-heretical-and-awesome-the-way-i-write-rails-apps.html
+
+This points to a misfeature of ActiveRecord: a seemingly innocuous change had unintended consequences in a very unrelated portion of the code. Rails has a lot of magic / implicits. You have to be very careful. Ignorance is no excuse. The more I think about it, the more I like the service / command oriented way James offers, and it boils down to the discussion we had at the last Montreal.rb: implicit (Rails/Ruby) vs explicit (Django/Python).
