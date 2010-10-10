@@ -1,0 +1,77 @@
+--- 
+title:      "Presenter or Command?"
+created_at: 2010-10-09 22:54:25
+id:         20101009225425
+tags: 
+  - pattern
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+The more I think about it, the more I believe Commands and Presenters are intertwined. If you don't know what a Presenter is, I suggest reading these articles:
+
+* "Skinny Controller, Fat Model":http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model
+* "Moving associated creations to the model":http://weblog.jamisbuck.org/2007/1/11/moving-associated-creations-to-the-model
+* "Rails: Presenter Pattern":http://blog.jayfields.com/2007/03/rails-presenter-pattern.html
+* "Rails: Rise, Fall, and Potential Rebirth of the Presenter Pattern":http://blog.jayfields.com/2007/10/rails-rise-fall-and-potential-rebirth.html
+* "Simplifying your Ruby on Rails code: Presenter pattern, cells plugin":http://kpumuk.info/ruby-on-rails/simplifying-your-ruby-on-rails-code/
+
+I'm building a gem to abstract the Command pattern in your applications. It's not Rails-specific, but does know about ActiveRecord. Anyway, as I was writing my sample application, I noticed some duplication:
+
+<% code "app/controllers/invitations_controller.rb" do %>class InvitationsController < ApplicationController
+  def show
+    @user = User.invited.with_token(params[:id]).first
+    raise ActiveRecord::RecordNotFound unless @user
+    render :action => :confirm
+  end
+end
+<% end %>
+
+<% code "app/commands/confirm_invitation_request_command.rb" do %>class ConfirmInvitationRequestCommand
+  Komando.make_command self
+
+  mandatory_steps do
+    @user = User.invited.with_token(params[:id]).first
+    raise ActiveRecord::RecordNotFound unless @user
+
+    @user.activate!(@attributes)
+  end
+end
+<% end %>
+
+Notice the first two lines of <code>InvitationsController#show</code> and <code>ConfirmInvitationRequestCommand#mandatory_steps</code>: identical. Then I thought, what if the Command was also a Presenter? Then, I could refactor appropriately:
+
+<% code "app/commands/confirm_invitation_request_command.rb" do %>class ConfirmInvitationRequestCommand
+  Komando.make_command self
+
+  def user
+    @user ||= begin
+      User.invited.with_token(params[:id]).first.tap do |user|
+        raise ActiveRecord::RecordNotFound unless user
+      end
+    end
+  end
+
+  mandatory_steps do
+    @user = User.invited.with_token(params[:id]).first
+    raise ActiveRecord::RecordNotFound unless @user
+
+    @user.activate!(@attributes)
+  end
+end
+<% end %>
+
+<% code "app/controllers/invitations_controller.rb" do %>class InvitationsController < ApplicationController
+  def show
+    @user = ConfirmInvitationRequestCommand.new(:token => params[:id]).user
+    render :action => :confirm
+  end
+end
+<% end %>
+
+Notice how the business logic of finding a user by token is nicely tucked away.
+
+Of course, while writing this post, I realized that finding a User by token should live in my model, not in the controller or the command, but still: bear with me.
+
+The Presenter pattern makes some decisions for the view: how to get at the objects to be shown, how to arrange them, how to save them as a group. Turns out my Command does essentially the same thing. Maybe we can think of Presenter as a special-case of Command? Such that Presenter is a Command to view an object? That seems logical to me.
