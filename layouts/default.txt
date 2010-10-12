@@ -21,22 +21,50 @@ filter:
   <link rel="canonical" href="<%= absolute_url(@page.url).sub('.html', '') %>" />
 <% end -%>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<!--
+   Copy and paste this embed code in the HEAD section of every HTML page
+   you would like to have include one or more AdGear Ad Spots:
+-->
+<script type="text/javascript" language="JavaScript">
+/*
+<![CDATA[
+*/
+(function() {
+  var proto = "http:";
+  var host = "cdn.adgear.com";
+  var bucket = "a.staging";
+  if (window.location.protocol == "https:") {
+    proto = "https:";
+    host = "astaging.adgear.com";
+    bucket = "";
+  }
+  document.writeln('<scr' + 'ipt type="text/ja' + 'vascr' + 'ipt" s' + 'rc="' +
+      proto + '//' + host + '/' + bucket + '/adgear.js/current/adgear.js' +
+      '"></scr' + 'ipt>');
+})();
+/*
+]]>
+*/
+</script>
+<script type="text/javascript" language="JavaScript">
+/*
+<![CDATA[
+*/
+  ADGEAR.tags.script.init();
+  ADGEAR.lang.namespace("ADGEAR.site_callbacks");
+
+  /*
+   * Make this return a hash of key/value pairs you would like to have automatically
+   * sent through to AdGear via the querystring in every impression:
+   */
+  ADGEAR.site_callbacks.variables = function() {
+    return { };
+  }
+/*
+]]>
+*/
+</script>
   <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
-  <script type="text/javascript" language="JavaScript">
-  (function() {
-    var proto = window.location.protocol;
-    document.writeln('<scr' + 'ipt type="text/ja' + 'vascr' + 'ipt" s' + 'rc="' +
-        proto + '//a.staging.adgear.com/adgear.js/current/adgear.js' +
-        '"></scr' + 'ipt>');
-  })();
-  </script>
-  <script type="text/javascript" language="JavaScript">
-    ADGEAR.tags.script.init();
-    ADGEAR.lang.namespace("ADGEAR.site_callbacks");
-    ADGEAR.site_callbacks.variables = function() {
-      return { };
-    }
-  </script>
   <meta name="google-site-verification" content="MtsT3-W0bRZ5BEqf1jGuk5Z9H2Zr5v-X7qJchRFd_Vs" />
 </head>
 <body>
@@ -71,16 +99,22 @@ filter:
         <%= @content %>
 
 <% if @page.tags.present? %>
-        <span class="adgear">
-          <script type="text/javascript" language="JavaScript">
-            ADGEAR.tags.script.universal({
-              "chip_key":  "__TAG_CHIP__",
-              "container_id": "43",
-              "format_id": "3", /* IAB Banner */
-              "path":     <%= @page.tags.sort.to_json %>
-            });
-          </script>
-        </span>
+<span class="adgear">
+<script type="text/javascript" language="JavaScript">
+/*
+<![CDATA[
+*/
+  ADGEAR.tags.script.universal({
+      "chip_key":  "5540a9803b7e012d20860024e87a30c2",
+      "container_id": "43",
+      "format_id": "3", /* IAB Banner (468x60) */
+      "path":     <%= @page.tags.sort.to_json %>
+    });
+/*
+]]>
+*/
+</script>
+</span>
 <% end %>
 
 <% if @page.blog_post then -%>
