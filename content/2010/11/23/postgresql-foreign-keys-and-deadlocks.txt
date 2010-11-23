@@ -1,0 +1,32 @@
+--- 
+title:      "PostgreSQL, Foreign Keys and Deadlocks"
+created_at: 2010-11-23 08:36:40
+id:         20101123083640
+tags: 
+  - postgresql
+  - activerecord
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+What happens when you mix "foreign key constraints":http://en.wikipedia.org/wiki/Foreign_key, "PostgreSQL":http://www.postgresql.org/, "ActiveRecord":http://rubyonrails.com/ and <a href="http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-belongs_to">cached counters</a> (search for <q>:counter_cache</q>)? "Deadlocks":http://en.wikipedia.org/wiki/Deadlock.
+
+My colleague, "Mina Naguib":http://ca.linkedin.com/in/minaguib, spent some time while away from the office to dig and diagnose some problems. The underlying issue is probably not related to PostgreSQL itself, but cached counters, which Rails makes very easy to do, sometimes result in deadlocks. We've seen those backtraces in Hoptoad, but had never really investigated them: they were <q>rare</q>, meaning nobody complained about them. They were just a thorn in our side.
+
+<blockquote>
+<p>In a nutshell, this flow is problematic:</p>
+
+<ol>
+<li> Adding or modifying a record in a table, when: </li>
+<li> That table is a child (using a foreign key contraint) of another table  </li>
+<li> and then modifying the parent record in the parent table </li>
+<li> Using transactions </li>
+<li> Concurrently </li>
+<li> Sometimes (race condition) </li>
+</ol>
+</blockquote>
+
+From Mina's "PostgreSQL transactions wrapping child+parent modifications, deadlocks, and ActiveRecord":http://mina.naguib.ca/blog/2010/11/22/postgresql-foreign-key-deadlocks.html
+
+Read the full text: it's well worth it. Unfortunately, Mina doesn't have a resolution, but he wants more people to be aware of the issue, in the hopes that somebody will find a clean solution.
