@@ -5,6 +5,8 @@ id:         20091118093847
 tags: 
   - testing
   - autotest
+ad_tags:
+  - continuous-testing
 blog_post:  true
 filter:
   - erb

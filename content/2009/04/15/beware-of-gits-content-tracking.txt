@@ -4,6 +4,8 @@ created_at: 2009-04-15 00:31:52
 id:         20090415003152
 tags: 
   - git
+ad_tags:
+  - version-control
 blog_post:  true
 filter:
   - erb

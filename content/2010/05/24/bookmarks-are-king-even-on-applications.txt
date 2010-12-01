@@ -4,6 +4,8 @@ created_at: 2010-05-24 09:54:46
 id:         20100524095446
 tags: 
   - miscellaneous
+ad_tags:
+  - webdev
 blog_post:  true
 filter:
   - erb

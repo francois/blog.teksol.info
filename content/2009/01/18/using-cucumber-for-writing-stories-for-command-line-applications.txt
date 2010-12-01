@@ -3,6 +3,8 @@ title:      "Using Cucumber for Writing Stories for Command-Line Applications"
 created_at: 2009-01-18 13:19:56
 id:         20090118131956
 tags: 
+ad_tags:
+  - continuous-testing
 blog_post:  true
 filter:
   - erb

@@ -5,6 +5,9 @@ id:         20100716235204
 tags: 
   - cocoa
   - mongo
+ad_tags:
+  - database
+  - mongo
 blog_post:  true
 filter:
   - erb

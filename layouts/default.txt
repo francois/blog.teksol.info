@@ -21,10 +21,6 @@ filter:
   <link rel="canonical" href="<%= absolute_url(@page.url).sub('.html', '') %>" />
 <% end -%>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-<!--
-   Copy and paste this embed code in the HEAD section of every HTML page
-   you would like to have include one or more AdGear Ad Spots:
--->
 <script type="text/javascript" language="JavaScript">
 /*
 <![CDATA[
@@ -32,10 +28,10 @@ filter:
 (function() {
   var proto = "http:";
   var host = "cdn.adgear.com";
-  var bucket = "a.staging";
+  var bucket = "a";
   if (window.location.protocol == "https:") {
     proto = "https:";
-    host = "astaging.adgear.com";
+    host = "a.adgear.com";
     bucket = "";
   }
   document.writeln('<scr' + 'ipt type="text/ja' + 'vascr' + 'ipt" s' + 'rc="' +
@@ -53,17 +49,16 @@ filter:
   ADGEAR.tags.script.init();
   ADGEAR.lang.namespace("ADGEAR.site_callbacks");
 
-  /*
-   * Make this return a hash of key/value pairs you would like to have automatically
-   * sent through to AdGear via the querystring in every impression:
-   */
   ADGEAR.site_callbacks.variables = function() {
-    return { };
+    return {
+      tags: <%= (@page.tags || []).map {|o| o.to_s}.inspect %>
+    };
   }
 /*
 ]]>
 */
 </script>
+
   <script type="text/javascript" src="<%= absolute_url("javascripts/blog.js") %>"></script>
   <meta name="google-site-verification" content="MtsT3-W0bRZ5BEqf1jGuk5Z9H2Zr5v-X7qJchRFd_Vs" />
 </head>
@@ -80,9 +75,10 @@ filter:
       <div id="menu">
         <ul>
           <li>Projects I work on:</li>
-          <li><a title="Easy vendor branch management" href="http://piston.rubyforge.org/">Piston</a></li>
-          <li><a title="Hosted CRM | CMS | ERP" href="http://xlsuite.com/">XLsuite.com</a></li>
-          <li><a title="Open Source full stack CRM | CMS | ERP" href="http://xlsuite.org/">XLsuite.org</a></li>
+          <li><a title="Display advertising made easy and effective" href="http://www.adgear.com/">AdGear</a></li>
+          <li><a title="Montreal's Ruby Community" href="http://www.montrealonrails.com/">montrealonrails.com</a></li>
+          <li><a title="Montreal's Ruby Community" href="http://www.montrealrb.org/">montrealrb.org</a></li>
+          <li><a title="Jaccard library for Ruby enthusiasts" href="http://www.github.com/francois/jaccard/">Jaccard</a></li>
         </ul>
       </div>
       <!--PAGES END-->
@@ -98,24 +94,18 @@ filter:
         </div>
         <%= @content %>
 
-<% if @page.tags.present? %>
+<% if @page.blog_post then -%>
 <span class="adgear">
 <script type="text/javascript" language="JavaScript">
-/*
-<![CDATA[
-*/
   ADGEAR.tags.script.universal({
-      "chip_key":  "5540a9803b7e012d20860024e87a30c2",
-      "container_id": "43",
-      "format_id": "3", /* IAB Banner (468x60) */
-      "path":     <%= @page.tags.sort.to_json %>
+      "chip_key":  "f3e50680df1b012d2fb60024e87a30c2",
+      "container_id": "875",
+      "format_id": "1",
+      "path": <%= adgear_page_tags(@page).inspect %>
     });
-/*
-]]>
-*/
 </script>
 </span>
-<% end %>
+<% end -%>
 
 <% if @page.blog_post then -%>
         <div class="comments">
@@ -154,7 +144,12 @@ filter:
         <div class="content">
           <span class="adgear">
             <script type="text/javascript" language="JavaScript">
-              ADGEAR.tags.script.embed({ "id": "241", "chip_key": "299472901b38012d1cdd0024e87a30c2" });
+              ADGEAR.tags.script.universal({
+                  "chip_key":  "f3e50680df1b012d2fb60024e87a30c2",
+                  "container_id": "875",
+                  "format_id": "9",
+                  "path": <%= adgear_page_tags(@page).inspect %>
+              });
             </script>
           </span>
         </div>

@@ -4,6 +4,8 @@ created_at: 2009-04-02 09:00:00
 id:         20090402092259
 tags: 
   - tips
+ad_tags:
+  - rails
 blog_post:  true
 filter:
   - erb

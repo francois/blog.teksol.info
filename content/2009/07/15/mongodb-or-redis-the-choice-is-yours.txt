@@ -6,6 +6,8 @@ tags:
   - redis
   - mongodb
   - key-value-store
+ad_tags:
+  - database
 blog_post:  true
 filter:
   - erb

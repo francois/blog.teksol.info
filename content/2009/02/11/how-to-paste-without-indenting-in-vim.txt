@@ -5,6 +5,8 @@ id:         20090211084032
 tags: 
   - tips
   - vim
+ad_tags:
+  - editing
 blog_post:  true
 filter:
   - erb

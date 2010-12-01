@@ -5,6 +5,8 @@ id:         20100520215251
 tags: 
   - watchr
   - testing
+ad_tags:
+  - continuous-testing
 blog_post:  true
 filter:
   - erb

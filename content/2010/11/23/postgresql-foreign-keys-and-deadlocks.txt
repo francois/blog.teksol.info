@@ -5,6 +5,9 @@ id:         20101123083640
 tags: 
   - postgresql
   - activerecord
+ad_tags:
+  - database
+  - postgresql
 blog_post:  true
 filter:
   - erb

@@ -1,5 +1,6 @@
 ---
 dirty: true
+home: true
 filter:
   - erb
 ---

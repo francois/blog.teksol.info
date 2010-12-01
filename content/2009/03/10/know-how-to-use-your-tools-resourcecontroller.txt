@@ -4,6 +4,8 @@ created_at: 2009-03-10 15:12:08
 id:         20090310151208
 tags: 
   - plugins
+ad_tags:
+  - rails
 blog_post:  true
 filter:
   - erb

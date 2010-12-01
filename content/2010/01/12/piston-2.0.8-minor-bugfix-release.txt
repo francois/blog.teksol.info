@@ -4,6 +4,8 @@ created_at: 2009-11-18 09:38:47
 id:         20091118093847
 tags: 
   - piston
+ad_tags:
+  - piston
 blog_post:  true
 filter:
   - erb

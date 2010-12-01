@@ -4,6 +4,8 @@ created_at: 2010-07-25 22:44:25
 id:         20100725224425
 tags: 
   - activerecord
+ad_tags:
+  - rails
 blog_post:  true
 filter:
   - erb

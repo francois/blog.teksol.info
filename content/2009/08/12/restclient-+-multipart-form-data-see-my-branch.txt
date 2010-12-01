@@ -4,6 +4,8 @@ created_at: 2009-08-12 11:05:38
 id:         20090812110538
 tags: 
   - restclient
+ad_tags:
+  - misc
 blog_post:  true
 filter:
   - erb

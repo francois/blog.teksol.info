@@ -7,6 +7,8 @@ tags:
   - activeresource
   - active-resource
 blog_post:  true
+ad_tags:
+  - rails
 filter:
   - erb
   - textile

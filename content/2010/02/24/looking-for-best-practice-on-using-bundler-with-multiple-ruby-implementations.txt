@@ -4,6 +4,8 @@ created_at: 2010-02-24 18:56:34
 id:         20100224185634
 tags: 
   - bundler
+ad_tags:
+  - rails
 blog_post:  true
 filter:
   - erb

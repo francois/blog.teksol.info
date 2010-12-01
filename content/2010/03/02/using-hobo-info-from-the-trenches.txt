@@ -5,6 +5,8 @@ id:         20100302114147
 tags: 
   - rails
   - hobo
+ad_tags:
+  - rails
 blog_post:  true
 filter:
   - erb

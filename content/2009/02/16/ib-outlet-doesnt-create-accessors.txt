@@ -4,6 +4,8 @@ created_at: 2009-02-16 08:34:56
 id:         20090216083456
 tags: 
   - rubycocoa
+ad_tags:
+  - cocoa
 blog_post:  true
 filter:
   - erb

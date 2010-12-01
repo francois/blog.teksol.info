@@ -5,6 +5,8 @@ id:         20100315120051
 tags: 
   - ruby
   - debugging
+ad_tags:
+  - debugging
 blog_post:  true
 filter:
   - erb
