@@ -17,20 +17,19 @@ $(function() {
     $("#q").val($("#q").val() + " +site:blog.teksol.info");
   });
 
-  function tagPiston() {
-    ADGEAR.tags.data.embed({ "id": "13", "chip_key": "5b2ccf20dd0a012c13a40024e87a30c2" });
+  function tagDatabase() {
+    ADGEAR.tags.data.embed({ "id": "70", "chip_key": "25a790a0df3e012d2fb80024e87a30c2" });
   }
 
-  function tagRefactoring() {
-    ADGEAR.tags.data.embed({ "id": "7", "chip_key": "5e1653d0ce47012c13900024e87a30c2" });
+  function tagRails() {
+    ADGEAR.tags.data.embed({ "id": "73", "chip_key": "8a4beaa0df43012d2fba0024e87a30c2" });
   }
-
-  ADGEAR.tags.data.init();
 
   var qmatch = document.referrer.match(/(?:\?|&)q=(.+?)(?:&|$)/)
   if (qmatch) {
+    ADGEAR.tags.data.init();
     var query = unescape(qmatch[0].substring(3, qmatch[0].length - 1));
-    if ((/refactoring/i).test(query)) tagRefactoring();
-    if ((/piston/i).test(query)) tagPiston();
+    if ((/rails|activerecord|active|record|active|support|activesupport|action|controller|actionpack|actioncontroller|activeresource|resource/i).test(query)) tagRails();
+    if ((/mysql|postgresql|database|db|mongo|cassandra|redis/i).test(query)) tagDatabase();
   }
 });
