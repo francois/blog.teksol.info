@@ -5,6 +5,8 @@ id:         20110317110501
 tags: 
   - postgresql
   - tips
+ad_tags:
+  - database
 blog_post:  true
 filter:
   - erb
