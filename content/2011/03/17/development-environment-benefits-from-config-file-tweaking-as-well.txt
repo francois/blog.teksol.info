@@ -1,0 +1,56 @@
+--- 
+title:      "Development Environment Benefits From Config File Tweaking as Well"
+created_at: 2011-03-17 11:05:01
+id:         20110317110501
+tags: 
+  - postgresql
+  - tips
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+If you're like me, you installed PostgreSQL (or MySQL or whatever) locally for development purposes. Then you copied data into your instance, and along you went.
+
+Eventually, you wrote a migration that touched nearly all rows in your database, and you waited, and waited, and waited some more (grab some coffee!) for the migration to finish.
+
+In my case, I had a migration using pure Ruby which took 30 minutes. The migration ran along the lines of:
+
+<% code do %>def self.up
+  add_column :segments, :pathname, :string
+
+  # There are 200,000 segments in the DB
+  Segment.find_each do |segment|
+    segment.pathname = segment.full_pathname
+  end
+
+  change_column :segments, :pathname, :string, :null => false
+end
+
+class Segment < ActiveRecord::Base
+  belongs_to :parent, :class_name => "Segment"
+
+  def full_pathname
+    full_name = []
+    m = self
+    while m
+      full_name << m.name
+      m = m.parent
+    end
+
+    full_name.reverse.join(" / ")
+  end
+end
+<% end %>
+
+The intent being that we'd cache the segment's pathname in each record (think a directory tree). Since we had 200,000 segments, and each of those would walk up the chain, it took around 30 minutes to run that migration. I rewrote the migration to use <abbr title="Common Table Expressions">CTE</abbr>, which PostgreSQL supports out-of-the-box. My migration now ran in 17 minutes or so. I warned my teammates about this migration, and let it be. Eventually, a colleague took my branch and ran the migration. When he reported the migration took 30 seconds for him, at first I thought his <abbr title="Solid State Drive">SSD</abbr> was the major difference between our machines. It turns out it wasn't&hellip;
+
+<% code do %># PostgreSQL installed through Homebrew
+# /usr/local/var/postgres/postgresql.conf
+# Your file location will vary
+# ...
+shared_buffers = 2400kB
+# ...
+<% end %>
+
+Changing that single line from <code>2400kB</code> to <code>96MB</code> let me run the migration in 30 seconds as well&hellip; I was very impressed at my stupidity. Let it be a lesson learned!
