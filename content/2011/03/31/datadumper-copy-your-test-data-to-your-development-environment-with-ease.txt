@@ -1,0 +1,59 @@
+--- 
+title:      "DataDumper: Copy Your Test Data to Your Development Environment With Ease"
+created_at: 2011-03-31 22:08:13
+id:         20110331220813
+tags:
+  - activerecord
+ad_tags:
+  - rails
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+The "README":https://github.com/francois/data_dumper#readme says it all:
+
+<hr/>
+
+You're knee deep in a debugger session, and you can't understand why something's wrong. You wish you could fire up your application against the test database, but sadly, the process which is running the tests is within a transaction, and thus the actual data is opaque. What can you do?
+
+<% code do %># Somewhere deep in your tests
+test "the frobble touches the widget" do
+  assert_equal 42, frobble.widget_id
+end
+<% end %>
+
+You've been on this <code>assert_equal</code> call for the past hour wondering. Frustration's been mounting, because you don't understand why the frobble doesn't touch the widget. Clearly, there's something wrong with the fixtures, but you can't understand what it is. Time to fire up the debugger and dump the data:
+
+<% code do %>[814, 823] in test/unit/widget_test.rb
+   814          frobble.save!
+   815        end
+   816
+   817        test "the frobble touches the widget" do
+   818          debugger
+=> 819          assert_equal 42, frobble.widget_id
+   820        end
+   821
+   822        test "the widget touched the frobble in turn" do
+   823          assert widget.touched_by_frobble?
+test/unit/widget_test.rb:819
+=> 819          assert_equal 42, frobble.widget_id
+(rdb:112)
+<% end %>
+
+Since the <code>data_dumper</code> gem is already declared in your Gemfile (if not, declare it, <code>bundle install</code>, then run your tests again), type:
+
+<% code do %>(rdb:112) File.mkdir(Rails.root + "dump")
+(rdb:113) DataDumper.dump(Rails.root + "dump")
+<% end %>
+
+Then, quit your failing tests, and from the trusty command line:
+
+<% code do %>$ rails console
+> DataDumper.load(Rails.root + "dump")
+> exit
+
+$ rails server
+<% end %>
+
+Any and all data from your test database will be loaded in your development environment. You can now explore your model with your trusty application, to find out what's really going on.
