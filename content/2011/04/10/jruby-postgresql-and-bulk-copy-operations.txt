@@ -1,0 +1,83 @@
+--- 
+title:      "JRuby, PostgreSQL and Bulk Copy Operations"
+created_at: 2011-04-10 21:09:00
+id:         20110410210900
+tags: 
+  - postgresql
+  - jruby
+ad_tags:
+  - database
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+<% code do %># JRuby 1.6.0 required
+require "sequel"
+require "jdbc/postgresql"
+
+DB = Sequel.connect "jdbc:postgresql://127.0.0.1:5432/mydb"
+
+table = DB[:mytable]
+time = Benchmark.measure do
+  (1..10000).each do |n|
+    table.insert(:a => n, :b => 2*n)
+  end
+end
+
+puts time
+<% end %>
+
+How much time do you think this is going to take? This is the most inefficient way to insert many rows to a database. Remember each call to <code>#insert</code> will do a round trip to the database. Even if your round trip time is 1ms, you'll still pay for 10 seconds of round trip time, time which your program could be doing something much more useful, such as generating revenue (somehow).
+
+Instead, you should use the bulk copy feature of your database engine. In my case, that's "PostgreSQL":http://www.postgresql.org/. Since I'm using "JRuby":http://www.jruby.org/, I have to turn to the "JDBC":http://en.wikipedia.org/wiki/Java_Database_Connectivity world, but that's all right: everything has been implemented already, by someone, somewhere. I'll refer you to the relevant pages:
+
+* PostgreSQL's "COPY FROM STDIN":http://www.postgresql.org/docs/8.4/static/sql-copy.html
+* "org.postgresql.copy.CopyManager":http://jdbc.postgresql.org/development/privateapi/org/postgresql/copy/CopyManager.html
+* "org.postgresql.copy.CopyIn":http://jdbc.postgresql.org/development/privateapi/org/postgresql/copy/CopyIn.html
+
+And the relevant code would be:
+
+<% code do %># JRuby 1.6.0 required
+require "sequel"
+require "jdbc/postgresql"
+require "java"
+
+DB = Sequel.connect "jdbc:postgresql://127.0.0.1:5432/mydb"
+
+time = Benchmark.measure do
+  DB.synchronize do |connection|
+    copy_manager = org.postgresql.copy.CopyManager.new(connection)
+    stream = copy_manager.copy_in("COPY mytable(a, b) FROM STDIN WITH CSV")
+
+    begin
+      (1..10000).each do |n|
+        # Don't forget we're streaming CSV data, thus each row/line MUST be terminated with a newline
+        row = "#{n},#{2*n}\n".to_java_bytes
+        stream.write_to(row, 0, row.length)
+      end
+    rescue
+      stream.cancel_copy
+      raise
+    else
+      stream.end_copy
+    end
+  end
+end
+
+puts time
+<% end %>
+
+This will execute a single round trip to the database server: you'll pay the latence cost only once.
+
+On an unrelated note, this is the first time ever I use an <code>else</code> clause on a <code>begin</code>/<code>rescue</code>. If an exception is raised, we want to cancel the copy (the <code>rescue</code> clause), but on the other hand, if nothing is raised, we want to end the copy (the <code>else</code> clause). One or the other must happen, but not both.
+
+If you're curious what difference bulk copying makes, here are the benchmark results:
+
+<pre><code>10000 INSERT statements
+  7.012000   0.000000   7.012000 (  7.012000)
+
+1 COPY FROM STDIN statement
+  0.848000   0.000000   0.848000 (  0.848000)</code></pre>
+
+The numbers speak for themselves: 8&times; faster. Not too shabby, and remember this ratio will simply increase as the number of rows increases.
