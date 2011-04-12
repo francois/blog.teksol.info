@@ -54,7 +54,7 @@ time = Benchmark.measure do
       (1..10000).each do |n|
         # Don't forget we're streaming CSV data, thus each row/line MUST be terminated with a newline
         row = "#{n},#{2*n}\n".to_java_bytes
-        stream.write_to(row, 0, row.length)
+        stream.write_to_copy(row, 0, row.length)
       end
     rescue
       stream.cancel_copy
