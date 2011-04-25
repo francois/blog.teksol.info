@@ -1,0 +1,44 @@
+--- 
+title:      "Counters: An Easy Way to Gather Metrics From Your Ruby Code"
+created_at: 2011-04-24 23:07:35
+id:         20110424230735
+tags: 
+  - metrics
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+Sometimes, you need to know what your program's doing, or how long it's taking to do something. You could always log to a file, then use a combination of "grep":http://en.wikipedia.org/wiki/Grep, "awk":http://en.wikipedia.org/wiki/Awk and/or "wc":http://en.wikipedia.org/wiki/Wc_(Unix) to gather the statistics yourself, but why bother? There are many tools out there which will do exactly what you want, just use them: "Cacti":http://www.cacti.net/, "Graphite":http://graphite.wikidot.com/start or plain-old "RRD":http://www.mrtg.org/rrdtool/.
+
+For instance, at "Yatter":http://yatter.com/, we need to know how fast our ranking algorithms are running, and we must know how long the ranking takes compared to the number of users and pages we have on hand. Graphing is the perfect solution for that, and Graphite fit the bill just fine for us. But Graphite alone won't do all that we need: we also needed a way to instrument our code, hence the Counters library:
+
+<% code do %>require "counters"
+require "sequel"
+
+DB = Sequel.connect "jdbc:postgres://127.0.0.1:5432/db"
+Counter = Counters::StatsD.new(:url => "udp://127.0.0.1:8125", :namespace => "ranker")
+
+users = Counter.latency "fetch.users" do
+  DB[:users].all
+end
+
+pages = Counter.latency "fetch.pages" do
+  DB[:pages].all
+end
+
+Counter.magnitude "count.users", users.length
+Counter.magnitude "count.pages", pages.length
+
+Counter.latency "ranking" do
+  entropy = 1.0
+  while entropy > MIN_ENTROPY
+    Counter.hit "iteration"
+    # Reduce entropy
+  end
+end
+<% end %>
+
+At the end of the day, we'll have hierarchical counters in Graphite which will give us all kinds of statistics. From the API above, you can gather that values are stored under hierarchical keys separated by fullstops. If you're interested in the code, make yourself at home with the "Counters GitHub repository":https://github.com/francois/counters.
+
+Counters is certified to run on JRuby 1.6.0 in 1.8 mode, and MRI 1.9.2.
