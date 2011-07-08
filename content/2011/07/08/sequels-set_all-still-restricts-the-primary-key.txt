@@ -1,0 +1,90 @@
+--- 
+title:      "Sequel's #set_all still restricts the primary key"
+created_at: 2011-07-04 10:57:00
+id:         20110708105700
+tags: 
+  - sequel
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I ran into a little gotcha today, using "Sequel":http://sequel.rubyforge.org/. I'm writing an importer, you know the kind: read record from database A, apply some transformations, write to database B. No rocket science required. *But*, Sequel has a little gotcha that stumped me for a bit. My script looked like this:
+
+<% code do %>DBa = Sequel.connect "..."
+DBb = Sequel.connect "..."
+
+class APerson < Sequel::Model(DBa[:people])
+end
+
+class BContact < Sequel::Model(DBb[:contacts])
+end
+
+contacts = Hash.new
+APerson.all.each do |person|
+  contact = BContact.create(
+    :name        => person.last_name + ", " + person.first_name,
+    :tenant_code => ENV["TENANT_CODE"],
+    :updated_by  => "import",
+    :updated_at  => Time.now)
+  contacts[ person.id ] = contact.contact_id
+end
+
+# Now I can map A's IDs to the correct value in database B, such as
+# for attaching email addresses, phone numbers, etc.
+<% end %>
+
+The <code>Contact</code> model in the B database is declared like this:
+
+<% code do %>create_table :contacts do
+  column :tenant_code, :integer,       :null => false
+  column :contact_id,  :serial,        :null => false
+  column :name,        "varchar(240)", :null => false
+
+  primary_key [:tenant_code, :contact_id]
+  foreign_key [:tenant_code], :tenants
+end
+<% end %>
+
+Notice <code>tenant_code</code> and <code>contact_id</code> are part of the primary key. I don't write to <code>contact_id</code> because I want the sequence's value to be returned to me. But I must write my own value to the <code>tenant_code</code> column. I was receiving an exception on the <code>#create</code> call:
+
+<% code do %>/Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:1491:in `block in set_restricted': method tenant_code= doesn't exist or access is restricted to it (Sequel::Error)
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:1486:in `each'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:1486:in `set_restricted'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:1077:in `set'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:1456:in `initialize_set'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:764:in `initialize'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:134:in `new'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:134:in `create'
+  from /Users/francois/.rvm/gems/ruby-1.9.2-p180/gems/sequel-3.25.0/lib/sequel/model/base.rb:248:in `find_or_create'
+  from script/import:65:in `block (2 levels) in <top (required)>'
+<% end %>
+
+I was very much stumped, and turned to the excellent documentation. I eventually found my way to <code>#set_all</code>, and changed my code accordingly:
+
+<% code do %>APerson.all.each do |person|
+  contact = BContact.new.set_all(
+    :name            => person.last_name + ", " + person.first_name,
+    :tenant_code     => ENV["TENANT_CODE"],
+    :last_updated_by => "import",
+    :last_updated_at => Time.now)
+  contacts[ person.id ] = contact.contact_id
+end
+<% end %>
+
+Even though the "Sequel RDoc":http://sequel.rubyforge.org/rdoc/classes/Sequel/Model/InstanceMethods.html#M000309 says <code>#set_all</code> ignores restricted columns, I was still receiving the same exception. I was now doubly stumped, until I found a reference to <a href="http://sequel.rubyforge.org/rdoc/classes/Sequel/Model/ClassMethods.html#M000275"><code>#unrestrict_primary_key</code></a>. I added the declaration to <code>BContact</code> and was able to proceed:
+
+<% code do %>class BContact < Sequel::Model(DBb[:contacts])
+  unrestrict_primary_key
+end
+<% end %>
+
+You know the drill though: where you import one model, you'll have more to import shortly. Ruby to the rescue!
+
+<% code do %>class Sequel::Model
+  # Open classes win every time!
+  unrestrict_primary_key
+end
+<% end %>
+
+Problem solved!
