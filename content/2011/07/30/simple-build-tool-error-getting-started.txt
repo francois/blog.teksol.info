@@ -1,0 +1,47 @@
+--- 
+title:      "Simple-Build-Tool: Error Getting Started"
+created_at: 2011-07-30 22:50:09
+id:         20110730225009
+tags:
+  - scala
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I'm starting in Scala, because <a href="http://www.seevibes.com/">Seevibes</a>' code is in Scala. Scala has a tool named "simple-build-tool":https://github.com/harrah/xsbt for managing your projects. <abbr title="simple-build-tool">sbt</abbr> is similar to Ruby's Bundler and Clojure's Leiningen in that it manages dependencies and helps build a project for you.
+
+Unfortunately, I had problems getting started. After following the "Setup":https://github.com/harrah/xsbt/wiki/Setup instructions, I was consistently getting this error:
+
+<% code do %>Getting org.scala-tools.sbt sbt_2.8.1 0.10.1 ...
+
+:: problems summary ::
+:::: WARNINGS
+    [NOT FOUND  ] commons-logging#commons-logging;1.0.4!commons-logging.jar (5ms)
+
+  ==== Maven2 Local: tried
+
+    file:///Users/francois/.m2/repository/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar
+
+    ::::::::::::::::::::::::::::::::::::::::::::::
+
+    ::              FAILED DOWNLOADS            ::
+
+    :: ^ see resolution messages for details  ^ ::
+
+    ::::::::::::::::::::::::::::::::::::::::::::::
+
+    :: commons-logging#commons-logging;1.0.4!commons-logging.jar
+
+    ::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+:: USE VERBOSE OR DEBUG MESSAGE LEVEL FOR MORE DETAILS
+download failed: commons-logging#commons-logging;1.0.4!commons-logging.jar
+Error during sbt execution: Error retrieving required libraries
+  (see /Users/francois/Projects/project/boot/update.log for complete log)
+Error: Could not retrieve sbt 0.10.1
+<% end %>
+
+I hit <a href="irc://irc.freenode.net/scala">#scala</a> and RSchulz pointed me to <code>~/.ivy2</code>. After I <code>rm -rf</code>'d <code>~/.ivy2</code> and <code>~/.m2</code>, sbt ran to completion. I was unable to find any mentions of the errors above, so hopefully this may help someone else.
