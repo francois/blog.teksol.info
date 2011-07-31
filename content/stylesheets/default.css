@@ -44,9 +44,9 @@ img.picB
 {
 position: relative;
 top: -2px;
+left: 20px;
 background: url('a26.gif') no-repeat;
-width: 146px;
-height: 75px;
+width: 100px;
 padding: 7px;
 }
 
