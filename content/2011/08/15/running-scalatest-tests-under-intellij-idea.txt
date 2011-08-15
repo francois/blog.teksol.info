@@ -1,0 +1,53 @@
+--- 
+title:      "Running ScalaTest Tests Under IntelliJ IDEA"
+created_at: 2011-08-15 14:09:54
+id:         20110815140954
+tags: 
+  - scala
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I had lots of difficulties running my tests under IDEA. The exact error message was:
+
+<blockquote><p>Error running All Tests:<br/>Not found suite class.</p></blockquote>
+
+Where <q>All Tests</q> was the name of my Run configuration.
+
+I finally ended up with the right incantations. In my "POM":http://maven.apache.org/pom.html, I have the following:
+
+<% code(:lang => :xml) do %><dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest_2.9.0-1</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.8.1</version>
+      <scope>test</scope>
+    </dependency>
+</dependencies>
+<% end %>
+
+Then, I had to extend <code>org.scalatest.Suite</code> for my test classes, like this:
+
+<% code(:lang => "scala") do %>import org.scalatest.Suite
+import org.junit.Test
+
+class GivenAnEmptyQueue extends Suite {
+  @Test def thenItShouldNotHaveAnyElements() {
+    assert(new Queue.empty)
+  }
+}
+<% end %>
+
+Finally, I had to verify that both the JUnit and Scala plugins were enabled and at their latest versions in the IDE itself. After that, I was able to run my tests from within the IDE.
