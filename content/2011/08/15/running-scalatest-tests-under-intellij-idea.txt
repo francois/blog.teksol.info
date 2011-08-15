@@ -38,12 +38,12 @@ I finally ended up with the right incantations. In my "POM":http://maven.apache.
 </dependencies>
 <% end %>
 
-Then, I had to extend <code>org.scalatest.Suite</code> for my test classes, like this:
+Then, I had to extend <code>org.scalatest.junit.JUnitSuite</code> for my test classes, like this:
 
-<% code(:lang => "scala") do %>import org.scalatest.Suite
+<% code(:lang => "scala") do %>import JUnitSuite
 import org.junit.Test
 
-class GivenAnEmptyQueue extends Suite {
+class GivenAnEmptyQueue extends JUnitSuite {
   @Test def thenItShouldNotHaveAnyElements() {
     assert(new Queue.empty)
   }
