@@ -1,0 +1,26 @@
+--- 
+title:      "Daemontools Best Practices"
+created_at: 2011-09-12 08:33:02
+id:         20110912083302
+tags: 
+  - sysadmin
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I sometimes have to do sysadmin work, such as when I'm the sole technical person on a probject. When I need to keep a service running, I usually turn to "daemontools":http://cr.yp.to/daemontools.html. Daemontools was written by "D. J. Bernstein":http://en.wikipedia.org/wiki/Daniel_J._Bernstein, a mathematician and author of <a href="http://cr.yp.to/unix.html">many UNIX utilities</a>.
+
+From daemontools' home page:
+
+<blockquote>
+<p>daemontools is a collection of tools for managing UNIX services.</p>
+<p class="signature"><a href="http://cr.yp.to/daemontools.html">daemontools home page</a></p>
+</blockquote>
+
+What this means is daemontools is designed to run, and keep running, a service. Daemontools also includes other utilities which I find useful, such as <a href="http://cr.yp.to/daemontools/setuidgid.html">setuidgid</a>, <a href="http://cr.yp.to/daemontools/envdir.html">envdir</a> and <a href="http://cr.yp.to/daemontools/multilog.html">multilog</a>,. I searched for an article such as this, but couldn't find it. If you find a factual error, please let me know immediately. If you have your own best practices, let me know so I can expand on the list.
+
+Read the articles themselves here:
+
+* "Daemontools: Tutorial":/pages/daemontools/tutorial.html
+* "Daemontools: Best Practices":/pages/daemontools/best-practices.html

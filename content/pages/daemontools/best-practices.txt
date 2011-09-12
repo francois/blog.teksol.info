@@ -1,0 +1,84 @@
+--- 
+title:          "Daemontools: Best Practices"
+created_at:     2011-09-12T09:00:00-0400
+content_page:   true
+needs_comments: true
+filter:
+  - erb
+  - textile
+--- 
+<blockquote href="http://cr.yp.to/daemontools.html">
+<p>daemontools is a collection of tools for managing UNIX services.</p>
+<p class="signature"><a href="http://cr.yp.to/daemontools.html">daemontools home page</a></p>
+</blockquote>
+
+These are a collection of best practices I've found useful when working with Daemontools. Use as you see fit, and please, <a href="mailto:francois@teksol.info">tell me</a> if you find a factual error or want to improve the list. There is also the comment form at the bottom of this page.
+
+<h3 id="dropping-privileges">Dropping privileges</h3>
+
+There is no need for each daemon to know how to drop privileges, unless the daemon must do privileged operations, such as opening port 80. When the daemon can be brought up with the correct credentials, things are much simpler. In other words, use "setuidgid":http://cr.yp.to/daemontools/setuidgid.html liberally.
+
+You should be aware that <code>setuidgid</code> sets both the user and group.
+
+
+<h3 id="logging-stdout-stderr">Logging STDOUT / STDERR safely</h3>
+
+Daemontools knows how to pipe <code>stdout</code> from the daemon to another process, the latter being a logging daemon. Because daemontools looks for <code>log/run</code>, the logging tool will be supervised as well, ensuring it will always run. A simple and dumb example of <code>/service/carbon/log/run</code> would be:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+exec cat > /var/log/carbon.log
+<% end %>
+
+It's simple because it works: you can tail the file from outside and know if things are running well. It's a dumb unless you setup logrotate, because the file will be unbounded. It's also a dumb because <code>cat</code> may be signaled at any time and will stop immediately, rather than delaying until it's found a newline, and may thus lose data. Instead, you're better off using <a href="http://cr.yp.to/daemontools/multilog.html"><code>multilog</code></a>:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+exec multilog t s10485760 n5 '!tai64nlocal' /var/log/carbon
+<% end %>
+
+This isolates the log file to <code>/var/log/carbon/current</code>. <code>multilog</code> also keeps metadata about it's log files in the same directory. Of course, this implies the directory already exists. We can remedy that:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+mkdir -p /var/log/carbon
+exec multilog t s10485760 n5 '!tai64nlocal' /var/log/carbon
+<% end %>
+
+And now, the only problem left is <code>multilog</code> is running as root. Again, let's remedy the situation:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+mkdir -p /var/log/carbon
+chown -R carbon:carbon
+exec setuidgid carbon multilog t s10485760 n5 '!tai64nlocal' /var/log/carbon
+<% end %>
+
+The strange incantations to <code>multilog</code> represent a script. In this case, it's a simple script, but <code>multilog</code> supports writing to multiple files and log rotations at different sizes for different directories.
+
+The script I've shown above breaks down like this:
+
+1. <code>t</code> means to prepend a "TAI":http://cr.yp.to/libtai/tai64.html#tai64n timestamp on each line;
+2. <code>s10485760 n5</code> means to rotate the log file every 10 MiB, and keep 5 history files around;
+3. <code>!tai64nlocal</code> (escaped because we're in a Shell script, and <code>!</code> has special meaning in the shell) means that on rotation, run the file through the named program.
+
+The <code>tai64nlocal</code> program simply reads <code>stdin</code> and replaces TAI timestamps with human-readable ones. If you want to gzip the file on rotation, prepend <code>'!gzip'</code> to the directory and <code>multilog</code> will take care of it.
+
+If your daemon also logs to <code>stderr</code>, you may redirect <code>stderr</code> to <code>stdout</code>:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+mkdir -p /var/log/carbon
+chown -R carbon:carbon
+exec 2>&1
+exec setuidgid carbon multilog t s10485760 n5 '!tai64nlocal' /var/log/carbon
+<% end %>
+
+The magic happens with <code>exec 2>&1</code>. This is Bash-speak for <q>redirect <code>stderr</code> to <code>stdout</code></q>, which we can then handle with <code>multilog</code>. This may be a problem because most programs write to STDOUT in a buffered manner, while they write to STDERR with no buffering. This may interleave the output of both streams in the final log file.
+
+
+<h3 id="secure-environment-variables">Secure your environment variables</h3>
+
+Your environment variables will contain passwords, and you don't want those files to be world-readable. Set your environment's directory permissions to 0700, and the individual files to 0600. Then, ensure you always setuidgid last in your <code>run</code> scripts (as illustrated above).
+
+<a href="http://cr.yp.to/daemontools/multilog.html">multilog</a>'s documentation is rather sparse, to say the least.

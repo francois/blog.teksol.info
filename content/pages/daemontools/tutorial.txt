@@ -1,0 +1,127 @@
+--- 
+title:          "Daemontools: Tutorial"
+created_at:     2011-09-12T09:00:00-0400
+content_page:   true
+needs_comments: true
+filter:
+  - erb
+  - textile
+--- 
+<blockquote href="http://cr.yp.to/daemontools.html">
+<p>daemontools is a collection of tools for managing UNIX services.</p>
+<p class="signature"><a href="http://cr.yp.to/daemontools.html">daemontools home page</a></p>
+</blockquote>
+
+Daemontools expects a collection of directories in <code>/service</code>. Each directory contains a <code>run</code> file, which must be executable. This file sets up the environment and runs the daemon. Note that all daemons will be started as root, since <code>supervise</code> runs as <code>root</code>. Each service directory may also contain a <code>log/</code> directory, which itself contains a <code>run</code>, to run a separate logging program. I'll have more to say about logging in the <a href="#logging-stdout-stderr">Logging stdout / stderr</a> section.
+
+The <code>run</code> file is whatever you want it to be: a Bash script, a Ruby script, a Scala script, a compiled binary. Daemontools itself doesn't care what it is exactly, as long as it's executable. The simplest possible <code>run</code> is:
+
+<% code do %>#!/bin/sh
+/opt/service/bin/daemon > /var/log/daemon.log
+<% end %>
+
+This has a number of problems, which I'll solve later on.
+
+
+<h3 id="installation">Installation</h3>
+
+I prefer to download and install <code>daemontools</code>, rather than using the Ubuntu provided version. I prefer to use <code>/service</code> rather than <code>/etc/service</code>. Beyond that, I have no other reasons. Maybe I should stick with my distro-provided version. YMMV.
+
+One note: on recent Ubuntus, I have to patch daemontools according to <a href="http://jamesreubenknowles.com/centos5-daemontools-143">Installing Bernstein’s daemontools on CentOS 5</a>. The problem is a missing include.
+
+Once you have daemontools compiled and installed, you still have to start <code>svcscanboot</code> somehow, and I've done so using <code>/etc/init/svscan.conf</code> (Ubuntu 11.04, using Upstart):
+
+<% code do %>start on runlevel [12345]
+respawn
+exec /command/svscanboot
+<% end %>
+
+
+<h3 id="daemon-as-service">Running a daemon as a service</h3>
+
+To make things more concrete, I'll setup carbon-cache to run under daemontools control. Carbon-cache is the daemon which accepts and writes data for the "Graphite":http://graphite.wikidot.com/ realtime graphing library.
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin
+cd /opt/graphite/
+exec setuidgid graphite /usr/bin/python bin/carbon-cache.py --debug start
+<% end %>
+
+The first line indicates this is a Bash script. The second sets up a minimal environment for running this script. The third ensures we're in the right directory. The fourth line is where the meat is, so let's take it apart:
+
+1. <code>exec</code> means to replace the Bash executable with whatever occurs next. It's the same as <a href="http://linux.die.net/man/3/exec">exec(3)</a>. I do this in order to be able to signal the underlying process myself, rather than having to jump through hoops to signal the daemon;
+2. <code>setuidgid graphite</code> is the way to drop privileges. The daemon itself doesn't need to know how to drop privileges: when it boots, it will already be running using the correct privileges;
+3. <code>/usr/bin/python bin/carbon-cache.py --debug start</code> is how I start the daemon itself.
+
+The <code>--debug</code> option to <code>carbon-cache</code> is so it doesn't daemonize itself: I want to keep it running in the foreground, again to be able to signal the process.
+
+
+<h3 id="service-directory">The service directory</h3>
+
+It is imperative the service directory (the one which contains <code>run</code>) retain its content on deploy. If you had a Rails application which you deployed using Capistrano, and you kept your service directory under version control (which you totally should), and you symlinked <code>/service/seevibes</code> to <code>/u/apps/seevibes/current/config/env</code>, then each deploy will wipe <code>supervise</code>'s metadata: the contents of <code>/service/seevibes</code> would be the contents of the new checkout, rather than the old one. If you had told <code>supervise</code> to keep the daemon down then on deploy, the <code>down</code> file won't exist anymore: it would exist in the old release directory, rather than the new one. Instead, here's how I replace my <code>run</code> script on deploy:
+
+<% code do %>cp /u/apps/seevibes/current/config/env/run /service/seevibes/run.new
+mv -f /service/seevibes/run.new /service/seevibes/run # atomically replace run
+svc -t /service/seevibes
+<% end %>
+
+And the <code>run</code> script itself is:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+RAILS_ROOT=`readlink -f /u/apps/seevibes/current`
+cd $RAILS_ROOT
+exec setuidgid deploy bundle exec thin start
+<% end %>
+
+Notice I'm calling <a href="http://www.linuxcommand.org/man_pages/readlink1.html"><code>readlink</code></a> to get an absolute path to the application's root, with no symlinks. This ensures that the environment in which the daemon runs won't suddenly change from under it's feet.
+
+Of course, these shenanigans are only necessary if the <code>run</code> file itself has changed. If it hasn't, a simple <code>svc -t /service/seevibes</code> is enough to restart the daemon (<code>-t</code> sends a <code>TERM</code> signal; send other signals using the docs at <a href="http://cr.yp.to/daemontools/svc.html"><code>svc</code></a>). But since automation makes everything much easier, why not add the appropriate task to your deployment script?
+
+
+<h3 id="daemon-environment">Setting up an environment for the daemon</h3>
+
+If you need to setup environment variables, you use "envdir":http://cr.yp.to/daemontools/envdir.html. <code>envdir</code> simply points to a directory containing a collection of files named after environment variables. The contents of the files indicates what the variable's value will be set to, before <code>envdir</code> executes the rest of it's command line.
+
+For example, here's how I'd setup a JRuby application to run under 1.9 mode:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+cd /u/apps/seevibes/current
+exec                                         \
+  envdir /etc/jruby/env                      \
+  envdir /etc/seevibes/env                   \
+  envdir /u/apps/seevibes/current/config/env \
+  setuidgid deploy                           \
+  bundle exec thin start
+<% end %>
+
+Where <code>/etc/jruby/env</code>, <code>/etc/seevibes/env</code> and <code>/u/apps/seevibes/current/config/env</code> are directories that may or may not contain files that setup the environment for the daemon. In this instance, I have a file named <code>/etc/seevibes/env/JRUBY_OPTS</code> whose sole contents is <code>--1.9</code> (with or without newline, because <code>envdir</code> will take care of it). In the final process environment, the JRUBY_OPTS environment variable will exist, with the correct value. I have three calls to <code>envdir</code> to enable a form of configuration inheritance.
+
+See the "Secure your environment variables":best-practices.html#secure-environment-variables section in the best practices document to secure the passwords you put in there.
+
+
+<h3 id="daemon-logging">Logging your daemon's output</h3>
+
+In the simplest possible log above, I simply redirect STDOUT to a file, and call it a day. It works, but has a number of issues:
+
+* You lose STDERR;
+* The log file isn't necessarily rotated and may use up all your diskspace.
+
+Daemontools supports a logger in the form of a separate daemon that you put in <code>/service/DAEMON/log</code>. The same principles apply: <code>envdir</code>, <code>setuidgid</code>, etc. Daemontools itself comes with a tool called <code>multilog</code> which is designed to not lose data when it receives a TERM signal. <code>multilog</code> expects as arguments a kind of script which tells it how to log the lines, and where to put them.
+
+For example, you can use:
+
+<% code do %>#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+
+mkdir -p /var/log/daemon
+chown deploy:deploy /var/log/daemon
+exec setuidgid deploy multilog s10485760 -n5 /var/log/daemon
+<% end %>
+
+Which will log output to <code>/var/log/daemon/current</code> 10 MiB at a time, keeping up to 5 old log files. I also ensure the daemon's output directory will exist and is writable at the same time.
+
+See the "Logging STDOUT / STDERR safely":best-practices.html#logging-stdout-stderr section of the best practices document for help on logging STDERR.
+
+If you want, continue with <a href="best-practices.html">Daemontools: Best Practices</a>.

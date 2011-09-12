@@ -107,7 +107,7 @@ filter:
 </span>
 <% end -%>
 
-<% if @page.blog_post then -%>
+<% if @page.blog_post || @page.needs_comments then -%>
         <div class="comments">
           <%= comments_form(@page) %>
         </div>
@@ -171,10 +171,6 @@ filter:
           <ul>
             <li><a href="http://francois.github.com/piston">Piston</a></li>
             <li><a href="http://xlsuite.org/">XLSuite.org : CRM and CMS</a></li>
-            <li><a href="http://weputuplights.com">We Put Up Lights.com: Specialty Lighting Installation for all Occasions</a></li>
-            <li><a href="http://smrty.com/">SMRTY.com: issue tracking, time management, billing</a></li>
-            <li><a href="http://ixld.com/">iXLd.com: XLellent application development</a></li>
-            <li><a href="http://undernet.ca/">undernet.ca: VOIP</a></li>
           </ul>
         </div>
         <!--END CATEGORIES-->
