@@ -16,7 +16,7 @@ h2. Schedule
 
 * 2:00 PM Doors open
 * 2:30 PM Hackaton &mdash; Analyzing Twitter Social Data using Scala and Akka Actors
-* 5:00 PM Beer & Pizza, sponsored by Seevibes
+* 5:00 PM Beer & Pizza, sponsored by <a href="http://seevibes.com/">Seevibes</a>
 * 6:30 PM Workshop &mdash; Social Media Metrics using SQL Engines
 * 9:00 PM Socializing
 
