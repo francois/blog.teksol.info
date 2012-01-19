@@ -1,0 +1,68 @@
+--- 
+title:      "Announcing Scala and SQL Event on February 2nd in Montreal"
+created_at: 2012-01-18 22:14:54
+id:         20120118221454
+tags: 
+  - scala
+  - sql
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I would like to invite you to attend one or two events on February 2nd: <em>Analyzing Twitter Social Data using Scala and Akka Actors</em> and <em>Social Media Metrics using SQL Engines</em>.
+
+h2. Schedule
+
+* 2:00 PM Doors open
+* 2:30 PM Hackaton &mdash; Analyzing Twitter Social Data using Scala and Akka Actors
+* 5:00 PM Beer & Pizza, sponsored by Seevibes
+* 6:30 PM Workshop &mdash; Social Media Metrics using SQL Engines
+* 9:00 PM Socializing
+
+The event will be at the <a href="http://notman.org/en/contact/">Notman House, 51 Sherbrooke W</a>. We have a limited number of places available, so be sure to reserve your seat now. There are two events, both are free to attend, and both are bilingual French and English.
+
+h2. Registration
+
+* Reserve for <a href="http://www.eventbrite.ca/event/2803777173">Analyzing Twitter Social Data using Scala and Akka Actors</a>
+* Reserve for <a href="http://www.eventbrite.ca/event/2806810245">Social Media Metrics using SQL Engines</a>
+
+h2. Setup
+
+Before you come in, please be sure to follow these instructions to get you started:
+
+h3. Scala Hackaton
+
+The Scala Hackaton is an event where you'll build whatever you wish: word counter, word frequency, hashtag frequency, etc. You get to choose. There will be people more familiar with Scala at the event which can help you. The first 30 minutes of the event will be reserved for a quick introduction to Scala.
+
+* Clone the <a href="https://github.com/seevibes/scala-hackaton">scala-hackaton</a> Git repository, or download a <a href="https://github.com/seevibes/scala-hackaton/zipball/master">ZIP</a>
+* In the repository / project, run <code>mvn test</code> and <code>mvn exec:java -Dexec.mainClass=seevibes.HelloActor</code>
+
+The two Maven steps are to download all necessary dependencies. If you don't, you'll lose a lot of time at the event downloading your dependencies.
+
+If you are unfamiliar with Java and Scala, I strongly recommend you use an IDE, which will help with code completion and syntax awareness. I happen to prefer <a href="http://www.jetbrains.com/idea/download/index.html">JetBrains' IDEA</a>, but this is like Vim vs Emacs. You can use <a href="http://www.eclipse.org/downloads/">Eclipse</a> if you prefer. If you use Eclipse, be sure to use the <a href="http://scala-ide.org/">Scala IDE</a> extension. In the case of IDEA, download and install the <a href="http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA">Scala plugin</a>.
+
+If you have any issues, please email me, <a href="mailto:francois@seevibes.com">François Beausoleil</a>, and I'll help you out. I'll post updates to this page if common errors pop up.
+
+h3. SQL Workshop
+
+The SQL workshop will be a series of directed examples:
+
+1. I will present a problem, a report or a question we want answered, and some details on how you can accomplish the goal;
+2. You will answer the question with the knowledge you have;
+3. I'll ask people to present their solutions;
+4. I'll present my solution and discuss specifics
+
+I have 6 exercises planned out, from 15 to 45 minutes each. The topics range from indexing to joining to using intersections and unions and ending with windowing functions. The workshop is for people who wish to learn more about SQL and how to more effectively use thecapabilites of their favorite SQL engines.
+
+* Install PostgreSQL 9.1 (latest is currently 9.1.2)
+* Load this PostgreSQL database dump <a href="http://bit.ly/svworkshop">svworkshop.sql.bz2</a> (315 MiB) in your cluster using the following command:
+
+<% code do %>bzcat svworkshop.sql.bz2 | psql
+<% end %>
+
+The dump file expects to create a new database named <code>svworkshop</code> using your default user.
+
+* Familiarize yourself with the <a href="<%= same_folder_url("seevibes-erd-sql-workshop.pdf") %>">entity-relationship diagram</a> (PDF) of the dump
+
+Hope to see you there!
