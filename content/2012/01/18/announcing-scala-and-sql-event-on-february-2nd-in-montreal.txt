@@ -33,7 +33,7 @@ Before you come in, please be sure to follow these instructions to get you start
 
 h3. Scala Hackaton
 
-The Scala Hackaton is an event where you'll build whatever you wish: word counter, word frequency, hashtag frequency, etc. You get to choose. There will be people more familiar with Scala at the event which can help you. The first 30 minutes of the event will be reserved for a quick introduction to Scala.
+The <a href="http://scala-lang.org/">Scala</a> Hackaton is an event where you'll build whatever you wish: word counter, word frequency, hashtag frequency, etc. You get to choose. There will be people more familiar with Scala and <a href="http://akka.io/">Akka</a> at the event which can help you. The first 30 minutes of the event will be reserved for a quick introduction to Scala.
 
 * Clone the <a href="https://github.com/seevibes/scala-hackaton">scala-hackaton</a> Git repository, or download a <a href="https://github.com/seevibes/scala-hackaton/zipball/master">ZIP</a>
 * In the repository / project, run <code>mvn test</code> and <code>mvn exec:java -Dexec.mainClass=seevibes.HelloActor</code>
@@ -55,7 +55,7 @@ The SQL workshop will be a series of directed examples:
 
 I have 6 exercises planned out, from 15 to 45 minutes each. The topics range from indexing to joining to using intersections and unions and ending with windowing functions. The workshop is for people who wish to learn more about SQL and how to more effectively use thecapabilites of their favorite SQL engines.
 
-* Install PostgreSQL 9.1 (latest is currently 9.1.2)
+* Install <a href="http://www.postgresql.org/download/">PostgreSQL 9.1</a> (latest is currently 9.1.2)
 * Load this PostgreSQL database dump <a href="http://bit.ly/svworkshop">svworkshop.sql.bz2</a> (315 MiB) in your cluster using the following command:
 
 <% code do %>bzcat svworkshop.sql.bz2 | psql
