@@ -10,7 +10,7 @@ filter:
   - erb
   - textile
 --- 
-I just learned this morning that Needium will join Seevibes in sponsoring the beer at the Scala Hackaton and SQL Workshop. Both events are on February 2nd. If you haven't already done so and wish to join us, please register at EventBrite:
+I just learned this morning that <a href="http://http://needium.com/">Needium</a> will join <a href="http://seevibes.com/">Seevibes</a> in sponsoring the beer at the <a href="http://blog.teksol.info/2012/01/18/announcing-scala-and-sql-event-on-february-2nd-in-montreal.html">Scala Hackaton and SQL Workshop</a>. Both events are on February 2nd. If you haven't already done so and wish to join us, please register at EventBrite:
 
 * <a href="http://www.eventbrite.ca/event/2806810245">Analyzing Twitter Social Data using Scala and Akka Actors</a>
 * <a href="http://www.eventbrite.ca/event/2806810245">Social Media Metrics using SQL Engines</a>
