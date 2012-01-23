@@ -1,0 +1,18 @@
+--- 
+title:      "Needium Joins Seevibes for Beer"
+created_at: 2012-01-23 10:02:05
+id:         20120123100205
+tags: 
+  - scala
+  - sql
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I just learned this morning that Needium will join Seevibes in sponsoring the beer at the Scala Hackaton and SQL Workshop. Both events are on February 2nd. If you haven't already done so and wish to join us, please register at EventBrite:
+
+* <a href="http://www.eventbrite.ca/event/2806810245">Analyzing Twitter Social Data using Scala and Akka Actors</a>
+* <a href="http://www.eventbrite.ca/event/2806810245">Social Media Metrics using SQL Engines</a>
+
+Hope to see you there!
