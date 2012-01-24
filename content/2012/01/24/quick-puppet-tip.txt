@@ -1,0 +1,19 @@
+--- 
+title:      "Quick Puppet Tip"
+created_at: 2012-01-24 09:46:14
+id:         20120124094614
+tags: 
+  - tips
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+While testing my "Puppet":http://puppetlabs.com/ recipes, I usually boot a new instance then apply configuration manually. I have a base configuration, which is extended with other things. I just noticed I could apply a manifest using STDIN:
+
+<% code do %># ( echo "include sysbase" ; echo "include rabbitmq" ) | puppet apply -v
+<% end %>
+
+Viva the Unix tradition!
+
+If you do any kind of configuration management, I highly recommend Puppet.
