@@ -1,0 +1,43 @@
+--- 
+title:      "Scala Hackaton and SQL Workshop Wrap Up"
+created_at: 2012-02-06 14:19:51
+id:         20120206141951
+tags: 
+  - scala
+  - sql
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+A great time was had by all!
+
+Seriously, the Scala workshop was very cool. The actor model was new to almost all attendants and needed some explaining. Looking back, I should have explained a bit more about how the this works. From what I saw, nobody stumbled upon the Scala syntax that much. The people that were there were all experienced programmers, thus may not have needed much hand-holding regarding syntax.
+
+"Martin Provencher":http://www.linkedin.com/pub/martin-provencher/22/7a7/561, organizer of "Montreal.rb":http://www.montrealonrails.com/, and his teammate, "Olivier Melcher":http://www.linkedin.com/in/omelcher, wrote an actor-based histogram producing word counter that counted which programming languages were most spoken of. In their tests, Ruby and PHP were the most frequent ones.
+
+The SQL Workshop was more difficult for all. The first exercise was much harder than I anticipated. The first question was:
+
+<blockquote>
+
+Calculate the top 5 shows, ordered by social impressions, for the period between 2011-10-17 and 2011-10-23. Return an answer under 3 seconds.
+
+</blockquote>
+
+First, people had to get familiar with the data model. I asked people to get the data in under 3 seconds, thus was more of an optimization problem, rather than just getting the correct query. I allowed about 40 minutes for this exercise, and most of the time was used in getting a correct query. Nobody had time to get to the optimization part. Looking back, I'd make this question be two parts: first write the query, then optimize it, or provide the correct query and let people optimize it.
+
+I hope everybody learned a lot by coming to the hackaton.
+
+A big "Thank You" to the event's sponsors for the beer and pizza:
+
+<a title="Seevibes: TV Ratings for the Social Media Audience" href="http://seevibes.com/"><img src="http://seevibes.com/images/logo_seevibes-trans.png"></a>
+
+<a title="Needium: Tap the Need Medium" href="http://needium.com/"><img src="http://needium.com/wp-content/uploads/needium-logo-name.png"></a>
+
+h3. Notes for Hackaton organizers
+
+If you can, provide a starter application or package. All attendees were happy they could get up and running with little to no fuss. It saved a lot of time because they didn't have to resolve dependency nightmares.
+
+Move around the room, look over everybody's shoulders. Without fail, when I walked up to a team, they'd have a question for me.
+
+Speaking of teams, it's useful for people to work in teams. I'd say this harkens back to Pair Programming with a Novice / Novice pair. Two novices working together can get further along than a single novice. One of the members will have an insight that the other member didn't have, and both can move forward from there.
