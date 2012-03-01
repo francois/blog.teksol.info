@@ -9,7 +9,7 @@ filter:
   - erb
   - textile
 --- 
-At Seevibes we use the Twitter Streaming API to harvest what people say about television shows. The Twitter Streaming API docs state that:
+At "Seevibes":http://www.seevibes.com/ we use the "Twitter Streaming API":https://dev.twitter.com/docs/streaming-api to harvest what people say about television shows. The Twitter Streaming API docs state that:
 
 bq. Upon a change, reconnect immediately if no changes have occurred for some time. For example, reconnect no more than twice every four minutes, or three times per six minutes, or some similar metric.
 
@@ -47,7 +47,7 @@ class StreamingStateMachineTest extends Assertions {
 }
 <% end %>
 
-For the Rubyists out there, case classes are a kind of class that has a few nice properties:
+For the Rubyists out there, "case classes":http://www.scala-lang.org/node/107 are a kind of class that has a few nice properties:
 
 * They act like methods, thus we can call the <code>Streaming</code> method (which the compiler turns into a call of <code>Streaming.apply()</code>);
 * They have an <code>unapply()</code> method, which enables pattern-matching (which I won't use in this case);
