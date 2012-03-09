@@ -1,0 +1,27 @@
+--- 
+title:      "Puppet Debugging: --noop"
+created_at: 2012-03-09 00:05:43
+id:         20120309000543
+tags: 
+  - puppet
+blog_post:  true
+filter:
+  - erb
+  - textile
+--- 
+I do more and more "Puppet":http://puppetlabs.com/, and I really like it. It's a simple way to declare the desired state of the world. As I do more and more with Puppet, I needed to debug my manifests: check that they were doing the expected thing. I was looking for some kind of dry run option, similar to <code>apt-get</code>'s or other tools, but <code>puppet help apply</code> didn't provide any helpful hints. Until I stumbled upon "Puppet dry run":http://bitfieldconsulting.com/puppet-dry-run.
+
+A direct run with <code>--noop --test</code> failed because <code>--test</code> was not recognized, but <code>--noop</code> was!. A sample run with <code>--noop</code> looks like this:
+
+<% code do %># puppet apply puppet/hosts/db03.staging.internal.pp  --noop
+notice: /Stage[main]//Postgresql::Database[svreporting_staging]/Exec[createdb svreporting_staging]/returns: current_value notrun, should be 0 (noop)
+notice: Postgresql::Database[svreporting_staging]: Would have triggered 'refresh' from 1 events
+notice: /Stage[main]//Cron[replace svreporting_staging with svanalytics_staging]/ensure: current_value absent, should be present (noop)
+notice: Class[Main]: Would have triggered 'refresh' from 2 events
+notice: Stage[main]: Would have triggered 'refresh' from 1 events
+notice: Finished catalog run in 10.86 seconds
+<% end %>
+
+Check the wording: <q>Would have triggered</q>, and <q>should be</q>. These are great ways to know what Puppet will do for you. There is only one caveat: when you need to spend more than a few minutes debugging your recipes, disable the automatic run. The scheduled run from puppet agent may go behind your back and apply your recipe, which you're just debugging. In my case, this is very easy to do since I host my puppet manifests in a Git repository, which is pulled hourly and applied.
+
+I'm only waiting for my "pull request":https://github.com/puppetlabs/puppet/pull/570 to be applied so you don't have to go through the same process as I did.
