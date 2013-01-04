@@ -69,7 +69,7 @@ If your daemon also logs to <code>stderr</code>, you may redirect <code>stderr</
 <% code do %>#!/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
 mkdir -p /var/log/carbon
-chown -R carbon:carbon
+chown -R carbon:carbon /var/log/carbon
 exec 2>&1
 exec setuidgid carbon multilog t s10485760 n5 '!tai64nlocal' /var/log/carbon
 <% end %>
