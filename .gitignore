@@ -1,3 +1,2 @@
-output
-db
-content/tags.txt
+_site
+.jekyll-metadata

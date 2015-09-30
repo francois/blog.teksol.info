@@ -1,11 +1,6 @@
 --- 
-title:          "Daemontools: Best Practices"
-created_at:     2011-09-12T09:00:00-0400
-content_page:   true
-needs_comments: true
-filter:
-  - erb
-  - textile
+title: "Daemontools: Best Practices"
+layout: "default"
 --- 
 <blockquote href="http://cr.yp.to/daemontools.html">
 <p>daemontools is a collection of tools for managing UNIX services.</p>
@@ -30,7 +25,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 exec cat > /var/log/carbon.log
 <% end %>
 
-It's simple because it works: you can tail the file from outside and know if things are running well. It's a dumb unless you setup logrotate, because the file will be unbounded. It's also a dumb because <code>cat</code> may be signaled at any time and will stop immediately, rather than delaying until it's found a newline, and may thus lose data. Instead, you're better off using <a href="http://cr.yp.to/daemontools/multilog.html"><code>multilog</code></a>:
+It's simple because it works: you can tail the file from outside and know if things are running well. It's dumb unless you setup logrotate, because the file will be unbounded. It's also dumb because <code>cat</code> may be signaled at any time and will stop immediately, rather than delaying until it's found a newline, and may thus lose data. Instead, you're better off using <a href="http://cr.yp.to/daemontools/multilog.html"><code>multilog</code></a>:
 
 <% code do %>#!/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin

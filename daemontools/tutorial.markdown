@@ -1,11 +1,6 @@
 --- 
-title:          "Daemontools: Tutorial"
-created_at:     2011-09-12T09:00:00-0400
-content_page:   true
-needs_comments: true
-filter:
-  - erb
-  - textile
+title: "Daemontools: Tutorial"
+layout: "default"
 --- 
 <blockquote href="http://cr.yp.to/daemontools.html">
 <p>daemontools is a collection of tools for managing UNIX services.</p>

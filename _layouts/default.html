@@ -1,0 +1,58 @@
+--- 
+extension: html
+--- 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>A Single Programmer's Blog</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/highlight.css">
+  <link href="http://feeds.feedburner.com/teksol" rel="alternate" type="application/atom+xml">
+  <link rel="canonical" href="{{ site.url }}/">
+  <meta name="google-site-verification" content="MtsT3-W0bRZ5BEqf1jGuk5Z9H2Zr5v-X7qJchRFd_Vs" />
+</head>
+<body>
+  <div id="outer">
+    <div id="upbg"></div>
+    <div id="inner">
+      <div id="header">
+        <h1><a href="{{ site.url }}{{ page.url }}"><span>A Single Programmer's Blog</span></a></h1>
+        <h2>by Fran&ccedil;ois Beausoleil</h2>
+      </div>
+      <div id="splash"></div>
+      <div id="primarycontent">
+        <!-- primary content start -->
+        <div class="header">
+          <h3><%= link_to_page(@page.title) %></h3>
+          <div class="date"><%= @page.created_at[0, 10]%></div>
+        </div>
+        {{ content }}
+
+        <!-- primary content end -->
+      </div>
+      <div id="secondarycontent">
+        <!-- secondary content start -->
+        <h3>Your Host</h3>
+        <div class="content">
+          <img src="/images/francois.jpg" class="picB" alt="A picture of me" />
+          <p>I am <strong><a href="mailto:francois@teksol.info">Fran&ccedil;ois Beausoleil</a></strong>, a <a href="http://rubyonrails.com/">Ruby on Rails</a> and <a href="http://www.scala-lang.org/">Scala</a> developer.  During the day, I work on <a href="http://www.seevibes.com/">Seevibes</a>, a platform to measure social interactions.  At night, I am interested many things.  Read my <a href="bio.html">biography</a>.</p>
+        </div>
+        <!--tags-->
+        <h3>Links</h3>
+        <div class="content">
+          <ul>
+            <li><a href="/bio.html">Author Biography</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <!-- secondary content end -->
+      </div>
+      <div id="footer">
+        Design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree</a>, Ported by <a href="http://www.railsgrunt.com/">RailsGrunt</a>, Powered by <a href="http://webby.rubyforge.org/">Webby</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
